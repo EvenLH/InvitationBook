@@ -18,8 +18,7 @@ public class InvitationBook {
 
     public static void opening() {
         System.out.println("----------------------------------------------------------------\n" +
-                "Welcome to the Invitation Book!\n\n" +
-                "Opening:");
+                "Opening the Invitation Book:");
         thePersonList = new PersonList("storedPersons.txt");
         theEventList = new EventList("storedEvents.txt");
 
@@ -48,8 +47,7 @@ public class InvitationBook {
 
     public static void closing() {
         System.out.println("\n--------------------------------\n" +
-                "Closing:");
-
+                "Closing the Invitation Book:");
         thePersonList.storePersons();
         theEventList.storeEvents();
 

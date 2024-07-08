@@ -12,11 +12,15 @@ public class EventList {
     boolean guaranteedInChronologicalOrder;
     PersonList correspondingPersonList;
 
+    String[] possibleInvitationStatuses;
+
     public EventList(String eventFile) {
         theEventArray = new ArrayList<>();
         eventFileName = eventFile;
         guaranteedInChronologicalOrder = false; //Will be true when loaded?
         correspondingPersonList = null;
+
+        possibleInvitationStatuses = new String[]{"Accepted", "Arriving late", "Waiting for answer", "Declined"};
 
         loadEvents(eventFile);
 
@@ -73,6 +77,57 @@ public class EventList {
 
         return true;
     }//Method isValidEventArrayIndex
+
+    public boolean isValidYear(String s) {
+        if(s == null || s.length() != 4) return false;
+
+        for(char c : s.toCharArray()) {
+            if(!Character.isDigit(c)) return false;
+        }
+
+        return true;
+    }//Method isValidYear
+
+    public boolean isValidTimeUnit(String s, int min, int max) {
+        if(s == null || s.isEmpty() || 2 < s.length()) return false;
+
+        for(char c: s.toCharArray()) {
+            if(!Character.isDigit(c)) return false;
+        }
+
+        int value = Integer.parseInt(s);
+        if(value < min || max < value) return false;
+
+        return true;
+    }//Method isValidTimeUnit
+
+    public boolean isValidEventName(String s) {
+        if(s == null || s.isEmpty()) return false;
+
+        return true;
+    }//Method isValidEventName
+
+    public boolean isValidText(String s) {
+        if(s == null) return false;
+
+        return true;
+    }//Method isValidText
+
+    public boolean isValidInvName(String s) {
+        return correspondingPersonList.thePersonMap.containsKey(s);
+    }//Method isValidInvName
+
+    public boolean isValidInvStatus(String s) {
+        if(s == null) return false;
+
+        for(int i = 0; i < possibleInvitationStatuses.length; i++) {
+            if(s.equalsIgnoreCase(possibleInvitationStatuses[i])) {
+                return true;
+            }
+        }
+
+        return false;
+    }//Method isValidInvStatus
 
 //----------------------------------------------------------------
     public void storeEvents() {

@@ -63,46 +63,46 @@ public class PersonList {
     public void makePerson() {}//Method makePerson
 
 //----------------------------------------------------------------
-    public boolean isValidHandle(String h) {
-        if(h == null
-        || h.equalsIgnoreCase("null")
-        || h.isEmpty()) {
+    public boolean isValidHandle(String s) {
+        if(s == null
+        || s.equalsIgnoreCase("null")
+        || s.isEmpty()) {
             return false;
         }
 
         for(String key: thePersonMap.keySet()) {
-            if(h.equalsIgnoreCase(key)) return false;
+            if(s.equalsIgnoreCase(key)) return false;
         }
 
         return true;
     }//Method isValidHandle
 
-    public boolean isValidName(String n) {
-        if(n == null
-        || n.equalsIgnoreCase("null")) {
+    public boolean isValidName(String s) {
+        if(s == null
+        || s.equalsIgnoreCase("null")) {
             return false;
         }
 
         return true;
     }//Method isValidName
 
-    public boolean isValidInterestName(String i) {
-        if(i == null
-        || i.equalsIgnoreCase("null")
-        || i.isEmpty()) {
+    public boolean isValidInterestName(String s) {
+        if(s == null
+        || s.equalsIgnoreCase("null")
+        || s.isEmpty()) {
             return false;
         }
 
         return true;
     }//Method isValidInterestName
 
-    public boolean isValidInterestValue(String v) {
-        if(v.length() != 1) return false;
+    public boolean isValidInterestValue(String s) {
+        if(s == null || s.length() != 1) return false;
 
-        char[] c = v.toCharArray();
+        char[] c = s.toCharArray();
         if(!Character.isDigit(c[0])) return false;
 
-        int value = Integer.parseInt(v);
+        int value = Integer.parseInt(s);
         if(value < 0 || 3 < value) return false;
 
         return true;
