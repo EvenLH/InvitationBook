@@ -5,18 +5,20 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class PersonList {
+public class PersonList implements CommonValidations {
 
     HashMap<String, Person> thePersonMap;
     String personFileName;
     EventList correspondingEventList;
+    Scanner userEntry;
 
-    public PersonList(String personFile) {
+    public PersonList(String pfn) {
         thePersonMap = new HashMap<>();
-        personFileName = personFile;
+        personFileName = pfn;
         correspondingEventList = null;
+        userEntry = null;
 
-        loadPersons(personFile);
+        loadPersons();
 
     }//Method constructor
 
@@ -32,9 +34,9 @@ public class PersonList {
         return returnString;
     }//Method toString
 
-    public void loadPersons(String fileName) {
+    public void loadPersons() {
 
-        File personFile = new File(fileName);
+        File personFile = new File(personFileName);
         Scanner personReader;
 
         try {
@@ -55,12 +57,45 @@ public class PersonList {
         personReader.close();
     }//Method loadPersons
 
-    public void setCorrespondingEventList(EventList el) {
+    public void setResourcePointers(EventList el, Scanner ue) {
         correspondingEventList = el;
+        userEntry = ue;
     }//Method setCorrespondingEventList
 
 //----------------------------------------------------------------
-    public void makePerson() {}//Method makePerson
+    public void makePerson() {
+
+        String handle = null;
+        while(!isValidPersonHandle(handle)) {
+            System.out.print("- Enter handle name: ");
+            handle = userEntry.nextLine().strip();
+        }
+
+        String first = null;
+        while(!isValidString(first)) {
+            System.out.print("- Enter first names: ");
+            first = userEntry.nextLine().strip();
+        }
+
+        String middle = null;
+        while(!isValidString(middle)) {
+            System.out.print("- Enter middle names: ");
+            middle = userEntry.nextLine().strip();
+        }
+
+        String last = null;
+        while(!isValidString(last)) {
+            System.out.print("- Enter last name: ");
+            last = userEntry.nextLine().strip();
+        }
+
+        Person newPerson = new Person(handle, first, middle, last, this);
+
+        //Currently, this constructor calls the method to add interests.
+        //Maybe I should instead have this method offer to add interest.
+    }//Method makePerson
+
+    public void makeInterest() {}//Method makeInterest
 
 //----------------------------------------------------------------
     public boolean isValidPersonHandle(String s) {

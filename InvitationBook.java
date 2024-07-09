@@ -5,7 +5,7 @@ public class InvitationBook {
     static PersonList thePersonList;
     static EventList theEventList;
 
-    static Scanner userWrites;
+    static Scanner userEntry;
     static String[] entryArray;
 
     public static void main(String[] args) {
@@ -22,8 +22,11 @@ public class InvitationBook {
         thePersonList = new PersonList("storedPersons.txt");
         theEventList = new EventList("storedEvents.txt");
 
-        thePersonList.setCorrespondingEventList(theEventList);
-        theEventList.setCorrespondingPersonList(thePersonList);
+        userEntry = new Scanner(System.in);
+        entryArray = new String[]{"-", "-", "-"};
+
+        thePersonList.setResourcePointers(theEventList, userEntry);
+        theEventList.setResourcePointers(thePersonList, userEntry);
     }//Method opening
 
     public static void readingAndWriting() {
@@ -33,14 +36,13 @@ public class InvitationBook {
         System.out.println("Main menu commands");
         listCommands();
 
-        userWrites = new Scanner(System.in);
-        entryArray = new String[]{"-", "-", "-"};
-
-        while(!entryArray[0].toLowerCase().startsWith("c")) {
+        String mainEntry = "?";
+        while(!mainEntry.toLowerCase().startsWith("c")) {
             System.out.print("\nMain menu entry: ");
-            entryArray = userWrites.nextLine().strip().toLowerCase().split(" ");
+            mainEntry = userEntry.nextLine().strip();
+            entryArray = mainEntry.toLowerCase().split(" ");
 
-            if(entryArray.length == 0) {}
+            if(mainEntry.isEmpty()) listCommands();
             else if(entryArray[0].startsWith("m")) make();
         }//Loop while
     }//Method readingAndWriting
@@ -56,7 +58,17 @@ public class InvitationBook {
 
 //----------------------------------------------------------------
 
-    public static void make() {}//Method make
+    public static void make() {
+        if(entryArray.length >= 2 && entryArray[1].startsWith("p")) thePersonList.makePerson();
+        else if(entryArray.length >= 2 && entryArray[1].startsWith("e")) theEventList.makeEvent();
+        else if(entryArray.length >= 2 && entryArray[1].startsWith("i")) thePersonList.makeInterest();
+        else {
+            System.out.println("Valid 'make' entries:\n" +
+                    "Make person (make a new person)\n" +
+                    "Make event (make a new event)\n" +
+                    "Make interest (define a new or existing interest for every person)");
+        }
+    }//Method make
 
     public static void listCommands() {
         System.out.println("- Make person|event|interest\n");

@@ -11,6 +11,7 @@ public class EventList {
     String eventFileName;
     boolean guaranteedInChronologicalOrder;
     PersonList correspondingPersonList;
+    Scanner userEntry;
 
     String[] possibleInvitationStatuses;
 
@@ -19,8 +20,9 @@ public class EventList {
         eventFileName = eventFile;
         guaranteedInChronologicalOrder = false; //Will be true when loaded?
         correspondingPersonList = null;
+        userEntry = null;
 
-        possibleInvitationStatuses = new String[]{"Accepted", "Arriving late", "Waiting for answer", "Declined"};
+        possibleInvitationStatuses = new String[]{"Accepted", "Invited", "Declined"};
 
         loadEvents(eventFile);
 
@@ -58,9 +60,13 @@ public class EventList {
         eventReader.close();
     }//Method loadEvents
 
-    public void setCorrespondingPersonList(PersonList pl) {
+    public void setResourcePointers(PersonList pl, Scanner ue) {
         correspondingPersonList = pl;
+        userEntry = ue;
     }//Method setCorrespondingPersonList
+
+//----------------------------------------------------------------
+    public void makeEvent() {}//Method makeEvent
 
 //----------------------------------------------------------------
     public boolean isValidEventArrayIndex(String s) {

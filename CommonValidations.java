@@ -1,7 +1,7 @@
 public interface CommonValidations {
 
     //Used to validate entries for
-    //year, month, day, hour, minute and interest level.
+    //year, month, day, hour, minute, as well as interest level.
     default boolean isValidNumberValue(String s, int min, int max) {
         if(s == null || s.isEmpty()) return false;
 
@@ -26,7 +26,7 @@ public interface CommonValidations {
     }//Method isValidString
 
     //Used to validate entries for
-    //interest name and event name.
+    //interest name, as well as event name.
     default boolean isValidStringWithLength(String s) {
         if(s == null || s.equalsIgnoreCase("null") || s.isEmpty()) {
             return false;
