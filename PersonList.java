@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -60,39 +61,44 @@ public class PersonList implements CommonValidations {
     public void setResourcePointers(EventList el, Scanner ue) {
         correspondingEventList = el;
         userEntry = ue;
-    }//Method setCorrespondingEventList
+    }//Method setResourcePointers
 
 //----------------------------------------------------------------
     public void makePerson() {
+        ArrayList<String> enteredNames = new ArrayList<>(4);
 
-        String handle = null;
-        while(!isValidPersonHandle(handle)) {
+        System.out.println("Enter one handle name, any number of first names and middle names, and at most one last name.");
+
+        do {
             System.out.print("- Enter handle name: ");
-            handle = userEntry.nextLine().strip();
+            enteredNames.add(0, userEntry.nextLine().strip());
         }
+        while(!isValidPersonHandle(enteredNames.get(0)));
 
-        String first = null;
-        while(!isValidString(first)) {
+        do {
             System.out.print("- Enter first names: ");
-            first = userEntry.nextLine().strip();
+            enteredNames.add(1, userEntry.nextLine().strip());
         }
+        while(!isValidString(enteredNames.get(1)));
 
-        String middle = null;
-        while(!isValidString(middle)) {
+        do {
             System.out.print("- Enter middle names: ");
-            middle = userEntry.nextLine().strip();
+            enteredNames.add(2, userEntry.nextLine().strip());
         }
+        while(!isValidString(enteredNames.get(2)));
 
-        String last = null;
-        while(!isValidString(last)) {
+        do {
             System.out.print("- Enter last name: ");
-            last = userEntry.nextLine().strip();
+            enteredNames.add(3, userEntry.nextLine().strip());
         }
+        while(!(isValidString(enteredNames.get(3)))
+                || enteredNames.get(3).contains(" "));
 
-        Person newPerson = new Person(handle, first, middle, last, this);
+        Person newPerson = new Person(enteredNames, this);
+        thePersonMap.put(enteredNames.get(0), newPerson);
 
-        //Currently, this constructor calls the method to add interests.
-        //Maybe I should instead have this method offer to add interest.
+        newPerson.editInterests(userEntry);
+
     }//Method makePerson
 
     public void makeInterest() {}//Method makeInterest
@@ -101,7 +107,8 @@ public class PersonList implements CommonValidations {
     public boolean isValidPersonHandle(String s) {
         if(s == null
         || s.equalsIgnoreCase("null")
-        || s.isEmpty()) {
+        || s.isEmpty()
+        || s.contains(" ")) {
             return false;
         }
 

@@ -32,26 +32,21 @@ public class Person implements CommonValidations {
 
     }//Method constructor 1
 
-    public Person(String h, String f, String m, String l, PersonList pl) {
+    public Person(ArrayList<String> en, PersonList pl) {
         nameArray = new ArrayList<>(4);
         personalInterests = new HashMap<>();
         myPersonList = pl;
 
         //Filling the name array.
-        nameArray.add(0, h);
-        nameArray.add(1, f);
-        nameArray.add(2, m);
-        nameArray.add(3, l);
-
-        //This one may not be needed if I always send in null instead of empty string.
-        for(int i = 0; i <= 3; i ++) {
-            if(nameArray.get(i).equalsIgnoreCase("")) {
+        for(int i = 0; i <= 3; i++) {
+            if(en.get(i).isEmpty()) {
                 nameArray.add(i, null);
+            }
+            else {
+                nameArray.add(i, en.get(i));
             }
         }
 
-        editInterests(myPersonList.userEntry);
-        System.out.println("Made new person " + nameArray.get(0) + "!");
     }//Method constructor 2
 
     public String toString() {
@@ -74,24 +69,65 @@ public class Person implements CommonValidations {
 
 //----------------------------------------------------------------
     public void setInterest(String i, int v) {
+        if(personalInterests.containsKey(i)) {
+            System.out.println("Updated interest: " + i + " " + v);
+        }
+        else if(hasInterestIgnoreCase(i)) {
+            personalInterests.remove(getInterestCorrectCase(i));
+            System.out.println("Updated interest: " + i + " " + v);
+        }
+        else {
+            System.out.println("Added interest: " + i + " " + v);
+        }
+
         personalInterests.put(i, v);
     }//Method setInterest
 
+    public boolean hasInterestIgnoreCase(String i) {
+        for(String key: personalInterests.keySet()) {
+            if(key.equalsIgnoreCase(i)) return true;
+        }
+
+        return false;
+    }//Method hasInterest
+
+    public String getInterestCorrectCase(String i) {
+        for(String key: personalInterests.keySet()) {
+            if(key.equalsIgnoreCase(i)) return key;
+        }
+
+        return null;
+    }//Method getInterestString
+
     public void removeInterest(String i) {
-        personalInterests.remove(i);
-    }
+        String discoveredInterest = getInterestCorrectCase(i);
+
+        if(discoveredInterest == null) {
+            System.out.println("No such interest: " + i);
+        }
+        else {
+            personalInterests.remove(discoveredInterest);
+            System.out.println("Removed interest: " + discoveredInterest);
+        }
+
+    }//Method removeInterest
 
     public void wipeInterests() {
         personalInterests.clear();
     }//Method wipeInterests
 
     public void showInterests() {
-        System.out.println(nameArray.get(0) + "'s interests:");
+        if(personalInterests.isEmpty()) {
+            System.out.println(nameArray.get(0) + " has no interests.");
+        }
+        else {
+            System.out.println(nameArray.get(0) + "'s interests:");
 
-        for(int v = 3; v >= 0; v--) {
-            for(String key: personalInterests.keySet()) {
-                if(personalInterests.get(key) == v) {
-                    System.out.println("- " + key + ": " + personalInterests.get(key));
+            for(int v = 3; v >= 0; v--) {
+                for(String key: personalInterests.keySet()) {
+                    if(personalInterests.get(key) == v) {
+                        System.out.println("- " + key + ": " + personalInterests.get(key));
+                    }
                 }
             }
         }
@@ -99,47 +135,59 @@ public class Person implements CommonValidations {
     }//Method showInterests
 
     public void editInterests(Scanner ue) {
-        System.out.println("Editing " + nameArray.get(0) + "'s interests.");
         showInterestEditingOptions();
 
-        String editEntry = "-";
-        while(isValidStringWithLength(editEntry)) {
+        System.out.print("Personal interest entry: ");
+        String editEntry = ue.nextLine().strip();
+        String[] editArray = editEntry.split(" ");
+
+        while(!editEntry.toLowerCase().startsWith("c")) {
+
+            if(editArray.length >= 3
+            && editEntry.toLowerCase().startsWith("m")
+            && isValidStringWithLength(editArray[1])
+            && isValidNumberValue(editArray[editArray.length-1], 0, 3)) {
+                StringBuilder madeInterestBuilder = new StringBuilder(editArray[1]);
+                for(int i = 2; i < editArray.length-1; i++) {
+                    madeInterestBuilder.append(" ").append(editArray[i]);
+                }
+
+                setInterest(madeInterestBuilder.toString(), Integer.parseInt(editArray[editArray.length-1]));
+            }
+            else if(editArray.length >= 2
+            && editEntry.toLowerCase().startsWith("r")
+            && isValidStringWithLength(editArray[1])) {
+                StringBuilder namedInterestBuilder = new StringBuilder(editArray[1]);
+                for(int i = 2; i < editArray.length; i++) {
+                    namedInterestBuilder.append(" ").append(editArray[i]);
+                }
+
+                removeInterest(namedInterestBuilder.toString());
+            }
+            else if(editArray.length > 0 && editEntry.toLowerCase().startsWith("l")) {
+                showInterests();
+            }
+            else if(editArray.length > 0 && editEntry.toLowerCase().startsWith("w")) {
+                personalInterests.clear();
+                System.out.println(nameArray.get(0) + "'s interests have been wiped.");
+            }
+            else showInterestEditingOptions();
 
             System.out.print("Personal interest entry: ");
             editEntry = ue.nextLine().strip();
-            String[] editArray = editEntry.split(" ");
-
-            if(editEntry.isEmpty()) {
-                System.out.println("Done editing " + nameArray.get(0) + "'s interests.");
-            }
-            else if(editArray[0].toLowerCase().startsWith("m") && editArray.length >= 3) {
-                if(isValidStringWithLength(editArray[1]) && isValidNumberValue(editArray[2], 0, 3)) {
-                    personalInterests.put(editArray[1], Integer.parseInt(editArray[2]));
-                }
-            }
-            else if(editArray[0].toLowerCase().startsWith("l")) {
-                showInterests();
-            }
-            else if(editArray[0].toLowerCase().startsWith("r") && editArray.length >= 2) {
-                if(isValidStringWithLength(editArray[1])) {
-                    personalInterests.remove(editArray[1]);
-                }
-            }
-            else if(editArray[0].toLowerCase().startsWith("w")) {
-                personalInterests.clear();
-            }
-            else showInterestEditingOptions();
-        }
+            editArray = editEntry.split(" ");
+        }//Loop while
 
     }//Method editInterests
 
     public void showInterestEditingOptions() {
         System.out.println("Editing options:\n" +
                 "- Make [interest] [value] (add or update an interest)\n" +
-                "- List (lists all interests for this person)\n" +
                 "- Remove [interest] (removes an interest if it exists)\n" +
+                "- List (lists all interests for this person)\n" +
                 "- Wipe (removes all interests for this person)\n" +
-                "* Enter nothing to finish editing interests");
+                "- Close (concludes interest entry for this person)\n" +
+                "- Options (shows these options)");
     }
 
 //----------------------------------------------------------------
@@ -157,8 +205,7 @@ public class Person implements CommonValidations {
         }
 
         //TEST PRINT
-        System.out.println("Test print - person storage string:\n" +
-                storageString);
+        System.out.println("Test print - person storage string: " + storageString);
 
         return storageString;
     }//Method getStorageString

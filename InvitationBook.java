@@ -6,7 +6,7 @@ public class InvitationBook {
     static EventList theEventList;
 
     static Scanner userEntry;
-    static String[] entryArray;
+    static String[] mainEntryArray;
 
     public static void main(String[] args) {
         opening();
@@ -23,7 +23,7 @@ public class InvitationBook {
         theEventList = new EventList("storedEvents.txt");
 
         userEntry = new Scanner(System.in);
-        entryArray = new String[]{"-", "-", "-"};
+        mainEntryArray = new String[]{"-", "-", "-"};
 
         thePersonList.setResourcePointers(theEventList, userEntry);
         theEventList.setResourcePointers(thePersonList, userEntry);
@@ -40,10 +40,10 @@ public class InvitationBook {
         while(!mainEntry.toLowerCase().startsWith("c")) {
             System.out.print("\nMain menu entry: ");
             mainEntry = userEntry.nextLine().strip();
-            entryArray = mainEntry.toLowerCase().split(" ");
+            mainEntryArray = mainEntry.toLowerCase().split(" ");
 
             if(mainEntry.isEmpty()) listCommands();
-            else if(entryArray[0].startsWith("m")) make();
+            else if(mainEntryArray[0].startsWith("m")) make();
         }//Loop while
     }//Method readingAndWriting
 
@@ -59,9 +59,9 @@ public class InvitationBook {
 //----------------------------------------------------------------
 
     public static void make() {
-        if(entryArray.length >= 2 && entryArray[1].startsWith("p")) thePersonList.makePerson();
-        else if(entryArray.length >= 2 && entryArray[1].startsWith("e")) theEventList.makeEvent();
-        else if(entryArray.length >= 2 && entryArray[1].startsWith("i")) thePersonList.makeInterest();
+        if(mainEntryArray.length >= 2 && mainEntryArray[1].startsWith("p")) thePersonList.makePerson();
+        else if(mainEntryArray.length >= 2 && mainEntryArray[1].startsWith("e")) theEventList.makeEvent();
+        else if(mainEntryArray.length >= 2 && mainEntryArray[1].startsWith("i")) thePersonList.makeInterest();
         else {
             System.out.println("Valid 'make' entries:\n" +
                     "Make person (make a new person)\n" +
@@ -71,7 +71,7 @@ public class InvitationBook {
     }//Method make
 
     public static void listCommands() {
-        System.out.println("- Make person|event|interest\n");
+        System.out.println("- Make person|event|interest");
     }//Method listCommands
 
 }//Class InvitationBook

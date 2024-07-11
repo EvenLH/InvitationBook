@@ -26,6 +26,8 @@ public class EventList {
 
         loadEvents(eventFile);
 
+        //nameArray.trimToSize(); Maybe for the eventList somewhere.
+
     }//Method constructor
 
     public String toString() {
@@ -63,7 +65,7 @@ public class EventList {
     public void setResourcePointers(PersonList pl, Scanner ue) {
         correspondingPersonList = pl;
         userEntry = ue;
-    }//Method setCorrespondingPersonList
+    }//Method setResourcePointers
 
 //----------------------------------------------------------------
     public void makeEvent() {}//Method makeEvent
