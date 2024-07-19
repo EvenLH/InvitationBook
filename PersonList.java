@@ -67,46 +67,83 @@ public class PersonList implements CommonValidations {
     public void makePerson() {
         ArrayList<String> enteredNames = new ArrayList<>(4);
 
-        System.out.println("Enter one handle name, any number of first names and middle names, and at most one last name.");
+        System.out.println("Enter one handle name, any number of first names and middle names, and at most one last name.\n" +
+                "Commands:\n" +
+                "/cancel (stops making this person, and returns you to the main menu)");
 
         do {
             System.out.print("- Enter handle name: ");
             enteredNames.add(0, userEntry.nextLine().strip());
+            if(enteredNames.get(0).toLowerCase().startsWith("/c")) return;
         }
         while(!isValidPersonHandle(enteredNames.get(0)));
 
         do {
             System.out.print("- Enter first names: ");
             enteredNames.add(1, userEntry.nextLine().strip());
+            if(enteredNames.get(1).toLowerCase().startsWith("/c")) return;
         }
         while(!isValidString(enteredNames.get(1)));
 
         do {
             System.out.print("- Enter middle names: ");
             enteredNames.add(2, userEntry.nextLine().strip());
+            if(enteredNames.get(2).toLowerCase().startsWith("/c")) return;
         }
         while(!isValidString(enteredNames.get(2)));
 
         do {
             System.out.print("- Enter last name: ");
             enteredNames.add(3, userEntry.nextLine().strip());
+            if(enteredNames.get(3).toLowerCase().startsWith("/c")) return;
         }
         while(!(isValidString(enteredNames.get(3)))
                 || enteredNames.get(3).contains(" "));
 
         Person newPerson = new Person(enteredNames, this);
         thePersonMap.put(enteredNames.get(0), newPerson);
+        System.out.println("Person made: " + newPerson);
 
         newPerson.editInterests(userEntry);
 
     }//Method makePerson
 
-    public void makeInterest() {}//Method makeInterest
+    public void makeInterest() {
+
+        System.out.println("Enter an interest, then enter a value (0 to 3) for every person.\n" +
+                "Commands:\n" +
+                "/conclude (returns you to the main menu)");
+
+        String interestName;
+
+        do {
+            System.out.print("- Enter interest name: ");
+            interestName = userEntry.nextLine().strip();
+            if(interestName.toLowerCase().startsWith("/c")) return;
+        }
+        while(!isValidStringWithLength(interestName));
+
+        for(String handle: thePersonMap.keySet()) {
+            String interestLevel;
+
+            do {
+                System.out.print("- Enter interest level for " + handle + ": ");
+                interestLevel = userEntry.nextLine().strip();
+                if(interestLevel.toLowerCase().startsWith("/c")) return;
+            }
+            while(!isValidNumberValue(interestLevel, 0, 3));
+
+            thePersonMap.get(handle).setInterest(interestName, Integer.parseInt(interestLevel));
+        }
+
+        System.out.println("All persons have received a value for their interest in " + interestName + ".");
+    }//Method makeInterest
 
 //----------------------------------------------------------------
     public boolean isValidPersonHandle(String s) {
         if(s == null
         || s.equalsIgnoreCase("null")
+        || s.toLowerCase().startsWith("/")
         || s.isEmpty()
         || s.contains(" ")) {
             return false;

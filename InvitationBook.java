@@ -37,13 +37,13 @@ public class InvitationBook {
         listCommands();
 
         String mainEntry = "?";
-        while(!mainEntry.toLowerCase().startsWith("c")) {
+        while(!mainEntry.toLowerCase().startsWith("/c")) {
             System.out.print("\nMain menu entry: ");
             mainEntry = userEntry.nextLine().strip();
             mainEntryArray = mainEntry.toLowerCase().split(" ");
 
             if(mainEntry.isEmpty()) listCommands();
-            else if(mainEntryArray[0].startsWith("m")) make();
+            else if(mainEntryArray[0].startsWith("/m")) make();
         }//Loop while
     }//Method readingAndWriting
 
@@ -64,14 +64,14 @@ public class InvitationBook {
         else if(mainEntryArray.length >= 2 && mainEntryArray[1].startsWith("i")) thePersonList.makeInterest();
         else {
             System.out.println("Valid 'make' entries:\n" +
-                    "Make person (make a new person)\n" +
-                    "Make event (make a new event)\n" +
-                    "Make interest (define a new or existing interest for every person)");
+                    "/make person (make a new person)\n" +
+                    "/make event (make a new event)\n" +
+                    "/make interest (define a new or existing interest for every person)");
         }
     }//Method make
 
     public static void listCommands() {
-        System.out.println("- Make person|event|interest");
+        System.out.println("/make person|event|interest");
     }//Method listCommands
 
 }//Class InvitationBook

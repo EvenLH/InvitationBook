@@ -86,9 +86,9 @@ public class EventList {
         return true;
     }//Method isValidEventArrayIndex
 
-    public boolean isValidInvName(String s) {
+    public boolean isExistingPersonHandle(String s) {
         return correspondingPersonList.thePersonMap.containsKey(s);
-    }//Method isValidInvName
+    }//Method isExistingPersonHandle
 
     public boolean isValidInvStatus(String s) {
         if(s == null) return false;

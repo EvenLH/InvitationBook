@@ -18,7 +18,9 @@ public interface CommonValidations {
     //Used to validate entries for
     //first, middle and last name, as well as event type and description.
     default boolean isValidString(String s) {
-        if(s == null || s.equalsIgnoreCase("null")) {
+        if(s == null
+        || s.equalsIgnoreCase("null")
+        || s.toLowerCase().startsWith("/")) {
             return false;
         }
 
@@ -28,7 +30,10 @@ public interface CommonValidations {
     //Used to validate entries for
     //interest name, as well as event name.
     default boolean isValidStringWithLength(String s) {
-        if(s == null || s.equalsIgnoreCase("null") || s.isEmpty()) {
+        if(s == null
+        || s.equalsIgnoreCase("null")
+        || s.toLowerCase().startsWith("/")
+        || s.isEmpty()) {
             return false;
         }
 

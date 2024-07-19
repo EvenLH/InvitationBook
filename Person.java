@@ -141,10 +141,10 @@ public class Person implements CommonValidations {
         String editEntry = ue.nextLine().strip();
         String[] editArray = editEntry.split(" ");
 
-        while(!editEntry.toLowerCase().startsWith("c")) {
+        while(!editEntry.toLowerCase().startsWith("/c")) {
 
             if(editArray.length >= 3
-            && editEntry.toLowerCase().startsWith("m")
+            && editEntry.toLowerCase().startsWith("/m")
             && isValidStringWithLength(editArray[1])
             && isValidNumberValue(editArray[editArray.length-1], 0, 3)) {
                 StringBuilder madeInterestBuilder = new StringBuilder(editArray[1]);
@@ -155,7 +155,7 @@ public class Person implements CommonValidations {
                 setInterest(madeInterestBuilder.toString(), Integer.parseInt(editArray[editArray.length-1]));
             }
             else if(editArray.length >= 2
-            && editEntry.toLowerCase().startsWith("r")
+            && editEntry.toLowerCase().startsWith("/r")
             && isValidStringWithLength(editArray[1])) {
                 StringBuilder namedInterestBuilder = new StringBuilder(editArray[1]);
                 for(int i = 2; i < editArray.length; i++) {
@@ -164,10 +164,10 @@ public class Person implements CommonValidations {
 
                 removeInterest(namedInterestBuilder.toString());
             }
-            else if(editArray.length > 0 && editEntry.toLowerCase().startsWith("l")) {
+            else if(editArray.length > 0 && editEntry.toLowerCase().startsWith("/l")) {
                 showInterests();
             }
-            else if(editArray.length > 0 && editEntry.toLowerCase().startsWith("w")) {
+            else if(editArray.length > 0 && editEntry.toLowerCase().startsWith("/w")) {
                 personalInterests.clear();
                 System.out.println(nameArray.get(0) + "'s interests have been wiped.");
             }
@@ -182,12 +182,12 @@ public class Person implements CommonValidations {
 
     public void showInterestEditingOptions() {
         System.out.println("Editing options:\n" +
-                "- Make [interest] [value] (add or update an interest)\n" +
-                "- Remove [interest] (removes an interest if it exists)\n" +
-                "- List (lists all interests for this person)\n" +
-                "- Wipe (removes all interests for this person)\n" +
-                "- Close (concludes interest entry for this person)\n" +
-                "- Options (shows these options)");
+                "- /make [interest] [value] (add or update an interest)\n" +
+                "- /remove [interest] (removes an interest if it exists)\n" +
+                "- /list (lists all interests for this person)\n" +
+                "- /wipe (removes all interests for this person)\n" +
+                "- /close (concludes interest entry for this person)\n" +
+                "- /options (shows these options)");
     }
 
 //----------------------------------------------------------------
