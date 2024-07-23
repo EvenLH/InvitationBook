@@ -71,34 +71,40 @@ public class PersonList implements CommonValidations {
                 "Commands:\n" +
                 "/cancel (stops making this person, and returns you to the main menu)");
 
+        String enteredString;
+
         do {
             System.out.print("- Enter handle name: ");
-            enteredNames.add(0, userEntry.nextLine().strip());
-            if(enteredNames.get(0).toLowerCase().startsWith("/c")) return;
+            enteredString = userEntry.nextLine().strip();
+            if(enteredString.toLowerCase().startsWith("/c")) return;
         }
-        while(!isValidPersonHandle(enteredNames.get(0)));
+        while(!isValidPersonHandle(enteredString));
+        enteredNames.add(0, enteredString);
 
         do {
             System.out.print("- Enter first names: ");
-            enteredNames.add(1, userEntry.nextLine().strip());
-            if(enteredNames.get(1).toLowerCase().startsWith("/c")) return;
+            enteredString = userEntry.nextLine().strip();
+            if(enteredString.toLowerCase().startsWith("/c")) return;
         }
-        while(!isValidString(enteredNames.get(1)));
+        while(!isValidString(enteredString));
+        enteredNames.add(1, enteredString);
 
         do {
             System.out.print("- Enter middle names: ");
-            enteredNames.add(2, userEntry.nextLine().strip());
-            if(enteredNames.get(2).toLowerCase().startsWith("/c")) return;
+            enteredString = userEntry.nextLine().strip();
+            if(enteredString.toLowerCase().startsWith("/c")) return;
         }
-        while(!isValidString(enteredNames.get(2)));
+        while(!isValidString(enteredString));
+        enteredNames.add(2, enteredString);
 
         do {
             System.out.print("- Enter last name: ");
-            enteredNames.add(3, userEntry.nextLine().strip());
-            if(enteredNames.get(3).toLowerCase().startsWith("/c")) return;
+            enteredString = userEntry.nextLine().strip();
+            if(enteredString.toLowerCase().startsWith("/c")) return;
         }
-        while(!(isValidString(enteredNames.get(3)))
-                || enteredNames.get(3).contains(" "));
+        while(!(isValidString(enteredString))
+                || enteredString.contains(" "));
+        enteredNames.add(3, enteredString);
 
         Person newPerson = new Person(enteredNames, this);
         thePersonMap.put(enteredNames.get(0), newPerson);
@@ -142,9 +148,10 @@ public class PersonList implements CommonValidations {
 //----------------------------------------------------------------
     public boolean isValidPersonHandle(String s) {
         if(s == null
+        || s.isEmpty()
         || s.equalsIgnoreCase("null")
         || s.toLowerCase().startsWith("/")
-        || s.isEmpty()
+        || s.contains(";")
         || s.contains(" ")) {
             return false;
         }

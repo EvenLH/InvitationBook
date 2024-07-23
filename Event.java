@@ -1,18 +1,19 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Event {
 
-    ArrayList<Integer> startTimeUnits; //Year, month, day, hour, minute.
     ArrayList<String> eventStrings; //Name, type, description
+    ArrayList<Integer> eventStartTimeUnits; //Year, month, day, hour, minute.
     HashMap<String, String> invitations; //Handle name, invitation status
 
     EventList myEventList;
 
     public Event(String storageString, EventList el) {
-        startTimeUnits = new ArrayList<>(5);
         eventStrings = new ArrayList<>(3);
+        eventStartTimeUnits = new ArrayList<>(5);
         invitations = new HashMap<>();
         myEventList = el;
 
@@ -20,8 +21,8 @@ public class Event {
 
         //Filling start time units
         for(int i = 0; i <= 4; i++) {
-            if(temp[i].equalsIgnoreCase("null")) startTimeUnits.add(i, null);
-            else startTimeUnits.add(i, Integer.parseInt(temp[i]));
+            if(temp[i].equalsIgnoreCase("null")) eventStartTimeUnits.add(i, null);
+            else eventStartTimeUnits.add(i, Integer.parseInt(temp[i]));
         }
 
         //Filling event strings
@@ -37,39 +38,37 @@ public class Event {
 
     }//Method constructor 1
 
-    public Event(Integer y, Integer m, Integer d, Integer h, Integer min, String en, EventList el) {
-        startTimeUnits = new ArrayList<>(5);
+    public Event(ArrayList<String> es, ArrayList<Integer> et, EventList el) {
         eventStrings = new ArrayList<>(3);
+        eventStartTimeUnits = new ArrayList<>(5);
         invitations = new HashMap<>();
         myEventList = el;
 
-        //Filling start time units
-        startTimeUnits.add(0, y);
-        startTimeUnits.add(1, m);
-        startTimeUnits.add(2, d);
-        startTimeUnits.add(3, h);
-        startTimeUnits.add(4, min);
-
         //Filling event strings
-        eventStrings.add(0, en);
-        eventStrings.add(1, null);
-        eventStrings.add(2, null);
+        for(int i = 0; i <= 2; i++) {
+            if(es.get(i).isEmpty())
+                eventStrings.add(i, null);
+            else eventStrings.add(i, es.get(i));
+        }
 
-        //ADD SOMETHING HERE TO ASK USER FOR TYPE, DESCRIPTION?
-
-        //ADD SOMETHING HERE TO ASK USER FOR INVITATIONS?
+        //Filling start time units
+        for(int i = 0; i <= 4; i++) {
+            if(et.get(i) == null)
+                eventStrings.add(i, null);
+            else eventStrings.add(i, es.get(i));
+        }
 
     }//Method constructor 2
 
     public String toString() {
         String returnString;
 
-        if(startTimeUnits.get(0) == null) returnString = "????";
-        else returnString = String.valueOf(startTimeUnits.get(0));
+        if(eventStartTimeUnits.get(0) == null) returnString = "????";
+        else returnString = String.valueOf(eventStartTimeUnits.get(0));
 
         for(int i = 1; i <= 2; i++) {
-            if(startTimeUnits.get(i) == null) returnString = returnString.concat("-??");
-            else returnString = returnString.concat("-" + startTimeUnits.get(i));
+            if(eventStartTimeUnits.get(i) == null) returnString = returnString.concat("-??");
+            else returnString = returnString.concat("-" + eventStartTimeUnits.get(i));
         }
 
         returnString = returnString.concat(eventStrings.get(0));
@@ -78,12 +77,43 @@ public class Event {
     }//Method toString
 
 //----------------------------------------------------------------
+    public void setInvitation(String p, String s) {
+        if(invitations.containsKey(p)) {
+            System.out.println("Updated invitation: " + p + ": " + s);
+        }
+    }
 
+    public void removeInvitation(String p) {}
+
+    public void wipeInvitations() {}
+
+    public void showInvitations() {}
+
+    public void editInvitations(Scanner ue) {}
+
+//----------------------------------------------------------------
+    public boolean hasPersonIgnoreCase(String p) {
+        for(String key: invitations.keySet()) {
+            if(key.equalsIgnoreCase(p)) return true;
+        }
+
+        return false;
+    }//Method hasPersonIgnoreCase
+
+    public String getPersonHandleCorrectCase(String p) {
+        for(String key: invitations.keySet()) {
+            if(key.equalsIgnoreCase(p)) return key;
+        }
+
+        return null;
+    }//Method getPersonHandleCorrectCase
+
+//----------------------------------------------------------------
     public String getStorageString() {
-        String storageString = String.valueOf(startTimeUnits.get(0));
+        String storageString = String.valueOf(eventStartTimeUnits.get(0));
 
         for(int i = 1; i <= 4; i++) {
-            storageString = storageString.concat(";" + startTimeUnits.get(i));
+            storageString = storageString.concat(";" + eventStartTimeUnits.get(i));
         }
 
         for(int i = 0; i <= 2; i++) {

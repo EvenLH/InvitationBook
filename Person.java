@@ -39,12 +39,9 @@ public class Person implements CommonValidations {
 
         //Filling the name array.
         for(int i = 0; i <= 3; i++) {
-            if(en.get(i).isEmpty()) {
+            if(en.get(i).isEmpty())
                 nameArray.add(i, null);
-            }
-            else {
-                nameArray.add(i, en.get(i));
-            }
+            else nameArray.add(i, en.get(i));
         }
 
     }//Method constructor 2
@@ -70,34 +67,18 @@ public class Person implements CommonValidations {
 //----------------------------------------------------------------
     public void setInterest(String i, int v) {
         if(personalInterests.containsKey(i)) {
-            System.out.println("Updated interest: " + i + " " + v);
+            System.out.println("Updated interest: " + i + " - " + v);
         }
         else if(hasInterestIgnoreCase(i)) {
             personalInterests.remove(getInterestCorrectCase(i));
-            System.out.println("Updated interest: " + i + " " + v);
+            System.out.println("Updated interest: " + i + " - " + v);
         }
         else {
-            System.out.println("Added interest: " + i + " " + v);
+            System.out.println("Added interest: " + i + " - " + v);
         }
 
         personalInterests.put(i, v);
     }//Method setInterest
-
-    public boolean hasInterestIgnoreCase(String i) {
-        for(String key: personalInterests.keySet()) {
-            if(key.equalsIgnoreCase(i)) return true;
-        }
-
-        return false;
-    }//Method hasInterest
-
-    public String getInterestCorrectCase(String i) {
-        for(String key: personalInterests.keySet()) {
-            if(key.equalsIgnoreCase(i)) return key;
-        }
-
-        return null;
-    }//Method getInterestString
 
     public void removeInterest(String i) {
         String discoveredInterest = getInterestCorrectCase(i);
@@ -191,6 +172,21 @@ public class Person implements CommonValidations {
     }
 
 //----------------------------------------------------------------
+public boolean hasInterestIgnoreCase(String i) {
+    for(String key: personalInterests.keySet()) {
+        if(key.equalsIgnoreCase(i)) return true;
+    }
+
+    return false;
+}//Method hasInterest
+
+    public String getInterestCorrectCase(String i) {
+        for(String key: personalInterests.keySet()) {
+            if(key.equalsIgnoreCase(i)) return key;
+        }
+
+        return null;
+    }//Method getInterestString
 
 //----------------------------------------------------------------
     public String getStorageString() {
@@ -203,9 +199,6 @@ public class Person implements CommonValidations {
         for(Map.Entry<String, Integer> entry: personalInterests.entrySet()) {
             storageString = storageString.concat(";" + entry.getKey() + ";" + entry.getValue());
         }
-
-        //TEST PRINT
-        System.out.println("Test print - person storage string: " + storageString);
 
         return storageString;
     }//Method getStorageString

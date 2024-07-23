@@ -20,7 +20,8 @@ public interface CommonValidations {
     default boolean isValidString(String s) {
         if(s == null
         || s.equalsIgnoreCase("null")
-        || s.toLowerCase().startsWith("/")) {
+        || s.startsWith("/")
+        || s.contains(";")) {
             return false;
         }
 
@@ -31,9 +32,10 @@ public interface CommonValidations {
     //interest name, as well as event name.
     default boolean isValidStringWithLength(String s) {
         if(s == null
+        || s.isEmpty()
         || s.equalsIgnoreCase("null")
-        || s.toLowerCase().startsWith("/")
-        || s.isEmpty()) {
+        || s.startsWith("/")
+        || s.contains(";")) {
             return false;
         }
 

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class EventList {
+public class EventList implements CommonValidations {
 
     ArrayList<Event> theEventArray;
     String eventFileName;
@@ -68,7 +68,92 @@ public class EventList {
     }//Method setResourcePointers
 
 //----------------------------------------------------------------
-    public void makeEvent() {}//Method makeEvent
+    public void makeEvent() {
+
+        ArrayList<String> enteredTexts = new ArrayList<>(3);
+        ArrayList<Integer> validatedTimeInts = new ArrayList<>(5);
+
+        System.out.println("Enter event name. Type, description and all the time fields may be left blank.\n" +
+                "Commands:\n" +
+                "/cancel (stops making this event, and returns you to the main menu)");
+
+        String enteredString;
+
+        //Entering strings: Name, type (optionally), description (optionally).
+        do {
+            System.out.print("- Enter event name: ");
+            enteredString = userEntry.nextLine().strip();
+            if(enteredString.toLowerCase().startsWith("/c")) return;
+        }
+        while(!isValidStringWithLength(enteredString));
+        enteredTexts.add(0, enteredString);
+
+        do {
+            System.out.print("- Enter event type: ");
+            enteredString = userEntry.nextLine().strip();
+            if(enteredString.toLowerCase().startsWith("/c")) return;
+        }
+        while(!isValidString(enteredString));
+        enteredTexts.add(1, enteredString);
+
+        do {
+            System.out.print("- Enter event description: ");
+            enteredString = userEntry.nextLine().strip();
+            if(enteredString.toLowerCase().startsWith("/c")) return;
+        }
+        while(!isValidString(enteredString));
+        enteredTexts.add(2, enteredString);
+
+        //Entering numbers: Year, month, day, hour, minute (all optionally).
+        do {
+            System.out.print("- Enter starting year: ");
+            enteredString = userEntry.nextLine().strip();
+            if(enteredString.toLowerCase().startsWith("/c")) return;
+        }
+        while(!isValidNumberValue(enteredString, 1000, 9999));
+        validatedTimeInts.add(0, Integer.parseInt(enteredString));
+
+        do {
+            System.out.print("- Enter starting month: ");
+            enteredString = userEntry.nextLine().strip();
+            if(enteredString.toLowerCase().startsWith("/c")) return;
+        }
+        while(!isValidNumberValue(enteredString, 1, 12));
+        validatedTimeInts.add(1, Integer.parseInt(enteredString));
+
+        do {
+            System.out.print("- Enter starting day: ");
+            enteredString = userEntry.nextLine().strip();
+            if(enteredString.toLowerCase().startsWith("/c")) return;
+        }
+        while(!isValidNumberValue(enteredString, 1, 31));
+        validatedTimeInts.add(2, Integer.parseInt(enteredString));
+
+        do {
+            System.out.print("- Enter starting hour: ");
+            enteredString = userEntry.nextLine().strip();
+            if(enteredString.toLowerCase().startsWith("/c")) return;
+        }
+        while(!isValidNumberValue(enteredString, 0, 23));
+        validatedTimeInts.add(3, Integer.parseInt(enteredString));
+
+        do {
+            System.out.print("- Enter starting minute: ");
+            enteredString = userEntry.nextLine().strip();
+            if(enteredString.toLowerCase().startsWith("/c")) return;
+        }
+        while(!isValidNumberValue(enteredString, 0, 59));
+        validatedTimeInts.add(4, Integer.parseInt(enteredString));
+
+        //Instantiation and storage
+        Event newEvent = new Event(enteredTexts, validatedTimeInts, this);
+        theEventArray.add(newEvent);
+        System.out.println("Event made: " + newEvent);
+
+        //Letting the user add invitations.
+        newEvent.editInvitations(userEntry);
+
+    }//Method makeEvent
 
 //----------------------------------------------------------------
     public boolean isValidEventArrayIndex(String s) {
