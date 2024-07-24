@@ -78,7 +78,7 @@ public class PersonList implements CommonValidations {
             enteredString = userEntry.nextLine().strip();
             if(enteredString.toLowerCase().startsWith("/c")) return;
         }
-        while(!isValidPersonHandle(enteredString));
+        while(!isValidNewPersonHandle(enteredString));
         enteredNames.add(0, enteredString);
 
         do {
@@ -146,7 +146,7 @@ public class PersonList implements CommonValidations {
     }//Method makeInterest
 
 //----------------------------------------------------------------
-    public boolean isValidPersonHandle(String s) {
+    public boolean isValidNewPersonHandle(String s) {
         if(s == null
         || s.isEmpty()
         || s.equalsIgnoreCase("null")
@@ -161,7 +161,23 @@ public class PersonList implements CommonValidations {
         }
 
         return true;
-    }//Method isValidPersonHandle
+    }//Method isValidNewPersonHandle
+
+    public boolean isExistingPersonHandleIgnoreCase(String s) {
+        for(String key: thePersonMap.keySet()) {
+            if(key.equalsIgnoreCase(s)) return true;
+        }
+
+        return false;
+    }//Method isExistingPersonHandleIgnoreCase
+
+    public String getPersonHandleCorrectCase(String s) {
+        for(String key: thePersonMap.keySet()) {
+            if(key.equalsIgnoreCase(s)) return key;
+        }
+
+        return null;
+    }//Method getPersonHandleCorrectCase
 
 //----------------------------------------------------------------
     public void storePersons() {

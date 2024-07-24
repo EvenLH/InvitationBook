@@ -118,7 +118,7 @@ public class Person implements CommonValidations {
     public void editInterests(Scanner ue) {
         showInterestEditingOptions();
 
-        System.out.print("Personal interest entry: ");
+        System.out.print("- Personal interest entry: ");
         String editEntry = ue.nextLine().strip();
         String[] editArray = editEntry.split(" ");
 
@@ -145,16 +145,18 @@ public class Person implements CommonValidations {
 
                 removeInterest(namedInterestBuilder.toString());
             }
-            else if(editArray.length > 0 && editEntry.toLowerCase().startsWith("/l")) {
+            else if(editArray.length >= 1
+            && editEntry.toLowerCase().startsWith("/l")) {
                 showInterests();
             }
-            else if(editArray.length > 0 && editEntry.toLowerCase().startsWith("/w")) {
+            else if(editArray.length >= 1
+            && editEntry.toLowerCase().startsWith("/w")) {
                 personalInterests.clear();
                 System.out.println(nameArray.get(0) + "'s interests have been wiped.");
             }
             else showInterestEditingOptions();
 
-            System.out.print("Personal interest entry: ");
+            System.out.print("- Personal interest entry: ");
             editEntry = ue.nextLine().strip();
             editArray = editEntry.split(" ");
         }//Loop while
@@ -164,12 +166,12 @@ public class Person implements CommonValidations {
     public void showInterestEditingOptions() {
         System.out.println("Editing options:\n" +
                 "- /make [interest] [value] (add or update an interest)\n" +
-                "- /remove [interest] (removes an interest if it exists)\n" +
+                "- /remove [interest] (removes an interest)\n" +
                 "- /list (lists all interests for this person)\n" +
                 "- /wipe (removes all interests for this person)\n" +
-                "- /close (concludes interest entry for this person)\n" +
+                "- /close (concludes interest entry)\n" +
                 "- /options (shows these options)");
-    }
+    }//Method showInterestEditingOptions
 
 //----------------------------------------------------------------
 public boolean hasInterestIgnoreCase(String i) {

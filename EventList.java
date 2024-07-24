@@ -13,16 +13,12 @@ public class EventList implements CommonValidations {
     PersonList correspondingPersonList;
     Scanner userEntry;
 
-    String[] possibleInvitationStatuses;
-
     public EventList(String eventFile) {
         theEventArray = new ArrayList<>();
         eventFileName = eventFile;
         guaranteedInChronologicalOrder = false; //Will be true when loaded?
         correspondingPersonList = null;
         userEntry = null;
-
-        possibleInvitationStatuses = new String[]{"Accepted", "Invited", "Declined"};
 
         loadEvents(eventFile);
 
@@ -79,7 +75,7 @@ public class EventList implements CommonValidations {
 
         String enteredString;
 
-        //Entering strings: Name, type (optionally), description (optionally).
+        //Entering strings: Name, type (optional), description (optional).
         do {
             System.out.print("- Enter event name: ");
             enteredString = userEntry.nextLine().strip();
@@ -104,7 +100,7 @@ public class EventList implements CommonValidations {
         while(!isValidString(enteredString));
         enteredTexts.add(2, enteredString);
 
-        //Entering numbers: Year, month, day, hour, minute (all optionally).
+        //Entering numbers: Year, month, day, hour, minute (all optional).
         do {
             System.out.print("- Enter starting year: ");
             enteredString = userEntry.nextLine().strip();
@@ -156,7 +152,7 @@ public class EventList implements CommonValidations {
     }//Method makeEvent
 
 //----------------------------------------------------------------
-    public boolean isValidEventArrayIndex(String s) {
+    public boolean isExistingEventIndex(String s) {
         if(s == null || s.isEmpty()) return false;
 
         char[] c = s.toCharArray();
@@ -174,18 +170,6 @@ public class EventList implements CommonValidations {
     public boolean isExistingPersonHandle(String s) {
         return correspondingPersonList.thePersonMap.containsKey(s);
     }//Method isExistingPersonHandle
-
-    public boolean isValidInvStatus(String s) {
-        if(s == null) return false;
-
-        for(int i = 0; i < possibleInvitationStatuses.length; i++) {
-            if(s.equalsIgnoreCase(possibleInvitationStatuses[i])) {
-                return true;
-            }
-        }
-
-        return false;
-    }//Method isValidInvStatus
 
 //----------------------------------------------------------------
     public void storeEvents() {

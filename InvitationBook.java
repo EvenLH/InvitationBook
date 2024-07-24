@@ -44,6 +44,7 @@ public class InvitationBook {
 
             if(mainEntry.isEmpty()) listCommands();
             else if(mainEntryArray[0].startsWith("/m")) make();
+            else if(mainEntryArray[0].startsWith("/e")) edit();
         }//Loop while
     }//Method readingAndWriting
 
@@ -59,9 +60,12 @@ public class InvitationBook {
 //----------------------------------------------------------------
 
     public static void make() {
-        if(mainEntryArray.length >= 2 && mainEntryArray[1].startsWith("p")) thePersonList.makePerson();
-        else if(mainEntryArray.length >= 2 && mainEntryArray[1].startsWith("e")) theEventList.makeEvent();
-        else if(mainEntryArray.length >= 2 && mainEntryArray[1].startsWith("i")) thePersonList.makeInterest();
+        if(mainEntryArray.length >= 2 && mainEntryArray[1].startsWith("p"))
+            thePersonList.makePerson();
+        else if(mainEntryArray.length >= 2 && mainEntryArray[1].startsWith("e"))
+            theEventList.makeEvent();
+        else if(mainEntryArray.length >= 2 && mainEntryArray[1].startsWith("i"))
+            thePersonList.makeInterest();
         else {
             System.out.println("Valid 'make' entries:\n" +
                     "/make person (make a new person)\n" +
@@ -70,8 +74,17 @@ public class InvitationBook {
         }
     }//Method make
 
+    public static void edit() {
+        if(mainEntryArray.length >= 3 && mainEntryArray[1].startsWith("p") && thePersonList.isExistingPersonHandleIgnoreCase(mainEntryArray[2])) {}
+        else if(mainEntryArray.length >= 3 && mainEntryArray[1].startsWith("e") && theEventList.isExistingEventIndex(mainEntryArray[2])) {}
+        else if(mainEntryArray.length >= 2 && mainEntryArray[1].startsWith("p")) {}
+        else if(mainEntryArray.length >= 2 && mainEntryArray[1].startsWith("e")) {}
+        else {}
+    }//Method edit
+
     public static void listCommands() {
-        System.out.println("/make person|event|interest");
+        System.out.println("/make person|event|interest\n" +
+                "/edit person|event [personHandle|index]");
     }//Method listCommands
 
 }//Class InvitationBook
