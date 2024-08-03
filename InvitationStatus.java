@@ -21,6 +21,6 @@ public enum InvitationStatus {
         }
 
         return null;
-    }//Method getInvStatusStringCorrectCase
+    }//Method getInvStatusEnum
 
 }//Enum InvitationStatus

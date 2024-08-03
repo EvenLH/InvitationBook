@@ -21,14 +21,14 @@ public class Event implements CommonValidations {
 
         //Filling start time units
         for(int i = 0; i <= 4; i++) {
-            if(temp[i].equalsIgnoreCase("null")) eventStartTimeUnits.add(i, null);
-            else eventStartTimeUnits.add(i, Integer.parseInt(temp[i]));
+            if(temp[i].equalsIgnoreCase("null")) eventStartTimeUnits.set(i, null);
+            else eventStartTimeUnits.set(i, Integer.parseInt(temp[i]));
         }
 
         //Filling event strings
         for(int i = 5; i <= 7; i++) {
-            if(temp[i].equalsIgnoreCase("null")) eventStrings.add(i-5, null);
-            else eventStrings.add(i-5, temp[i]);
+            if(temp[i].equalsIgnoreCase("null")) eventStrings.set(i-5, null);
+            else eventStrings.set(i-5, temp[i]);
         }
 
         //Filling invitations
@@ -47,15 +47,15 @@ public class Event implements CommonValidations {
         //Filling event strings
         for(int i = 0; i <= 2; i++) {
             if(es.get(i).isEmpty())
-                eventStrings.add(i, null);
-            else eventStrings.add(i, es.get(i));
+                eventStrings.set(i, null);
+            else eventStrings.set(i, es.get(i));
         }
 
         //Filling start time units
         for(int i = 0; i <= 4; i++) {
             if(et.get(i) == null)
-                eventStartTimeUnits.add(i, null);
-            else eventStartTimeUnits.add(i, et.get(i));
+                eventStartTimeUnits.set(i, null);
+            else eventStartTimeUnits.set(i, et.get(i));
         }
 
     }//Method constructor 2
@@ -67,8 +67,8 @@ public class Event implements CommonValidations {
         else returnString = String.valueOf(eventStartTimeUnits.get(0));
 
         for(int i = 1; i <= 2; i++) {
-            if(eventStartTimeUnits.get(i) == null) returnString = returnString.concat("-??");
-            else returnString = returnString.concat("-" + eventStartTimeUnits.get(i));
+            if(eventStartTimeUnits.get(i) == null) returnString += "-??";
+            else returnString += "-" + eventStartTimeUnits.get(i);
         }
 
         returnString = returnString.concat(" " + eventStrings.get(0));
@@ -79,18 +79,25 @@ public class Event implements CommonValidations {
 //----------------------------------------------------------------
     public void setInvitation(String p, String s) {
         if(invitations.containsKey(p)) {
-            System.out.println("Updated invitation status: " + p + ": " + s);
+            System.out.println("Updated invitation: " + p + ": " + s);
         }
         else if(personHandleIsInvitedIgnoreCase(p)) {
             invitations.remove(getPersonHandleCorrectCase(p));
-            System.out.println("Updated invitation status: " + p + ": " + s);
+            System.out.println("Updated invitation: " + p + ": " + s);
         }
         else {
-            System.out.println("Added invitation status: " + p + ": " + s);
+            System.out.println("Added invitation: " + p + ": " + s);
         }
 
         invitations.put(p, InvitationStatus.getInvStatusEnum(s));
     }//Method setInvitations
+
+    public void updateHandleIfInvited(String oldHandle, String newHandle) {
+        if(personHandleIsInvitedIgnoreCase(oldHandle)) {
+            invitations.put(newHandle,
+                    invitations.remove(getPersonHandleCorrectCase(oldHandle)));
+        }
+    }//Method updateHandleIfInvited
 
     public void removeInvitation(String p) {
         String invitedPerson = getPersonHandleCorrectCase(p);
@@ -167,12 +174,12 @@ public class Event implements CommonValidations {
 
     public void showInvitationEditingOptions() {
         System.out.println("Editing options:\n" +
-                "- /make [personHandle] [status] (add or update an invitation)\n" +
-                "- /remove [personHandle] (removes an invitation)\n" +
-                "- /list (lists all invitations for this event)\n" +
-                "- /wipe (removes all invitations for this event)\n" +
-                "- /close (concludes invitation entry)\n" +
-                "- /options (shows these options)");
+                "/make [personHandle] [status] (add or update an invitation)\n" +
+                "/remove [personHandle] (removes an invitation)\n" +
+                "/list (lists all invitations for this event)\n" +
+                "/wipe (removes all invitations for this event)\n" +
+                "/close (concludes invitation entry)\n" +
+                "/options (shows these options)");
     }//Method showInvitationEditingOptions
 
 //----------------------------------------------------------------

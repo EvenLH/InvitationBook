@@ -114,21 +114,28 @@ public class PersonList implements CommonValidations {
 
     }//Method makePerson
 
-    public void makeInterest() {
+    public void makeInterest(String i) {
 
-        System.out.println("Enter an interest, then enter a value (0 to 3) for every person.\n" +
-                "Commands:\n" +
-                "/conclude (returns you to the main menu)");
+        //Should interests of only different capitalisations be possible?
+        //If not, need to change this and some methods in the person class,
+        //and make validation methods.
 
-        String interestName;
+        String interestName = i;
 
-        do {
-            System.out.print("- Enter interest name: ");
-            interestName = userEntry.nextLine().strip();
-            if(interestName.toLowerCase().startsWith("/c")) return;
+        //If not already provided, user enters the name of an interest.
+        if(!isValidStringWithLength(interestName)) {
+            System.out.println("Enter an interest, or /conclude (return to main menu without making any changes)");
+
+            do {
+                System.out.print("- Enter interest name: ");
+                interestName = userEntry.nextLine().strip();
+                if(interestName.toLowerCase().startsWith("/c")) return;
+            }
+            while(!isValidStringWithLength(interestName));
         }
-        while(!isValidStringWithLength(interestName));
 
+        //User enters interest level from 0 to 3 for each person.
+        System.out.println("Enter interest value (0 to 3) for each person, or /conclude (keep changes made and return to main menu)");
         for(String handle: thePersonMap.keySet()) {
             String interestLevel;
 
@@ -137,7 +144,7 @@ public class PersonList implements CommonValidations {
                 interestLevel = userEntry.nextLine().strip();
                 if(interestLevel.toLowerCase().startsWith("/c")) return;
             }
-            while(!isValidNumberValue(interestLevel, 0, 3));
+            while(!isValidIntInRange(interestLevel, 0, 3));
 
             thePersonMap.get(handle).setInterest(interestName, Integer.parseInt(interestLevel));
         }
@@ -145,13 +152,59 @@ public class PersonList implements CommonValidations {
         System.out.println("All persons have received a value for their interest in " + interestName + ".");
     }//Method makeInterest
 
+    public void editPerson(String p) {
+
+        String currentHandle = getPersonHandleCorrectCase(p);
+
+        //If not already given, asking user for the handle of the person to be edited.
+        if(!isExistingPersonHandleIgnoreCase(currentHandle)) {
+            System.out.println("Persons:");
+            listPersons();
+
+            System.out.println("Enter the handle of a person, or /cancel (return to main menu)");
+            do {
+                System.out.print("- Enter handle name: ");
+                currentHandle = userEntry.nextLine().strip();
+                if(currentHandle.toLowerCase().startsWith("/c")) return;
+            }
+            while(!isExistingPersonHandleIgnoreCase(currentHandle));
+        }
+
+        Person personObject = thePersonMap.get(currentHandle);
+
+        //Editing handle and names
+        String newHandle = personObject.editNames(userEntry);
+
+        //If handle was changed, we need to tell other data structures about it.
+        if(!(currentHandle.equals(newHandle))) {
+            updateHandleOutsidePerson(currentHandle, newHandle);
+        }
+
+        //Editing interests
+        personObject.editInterests(userEntry);
+
+        System.out.println("Done editing " + personObject + ". Returning to main menu.");
+    }//Method editPerson
+
+    public void updateHandleOutsidePerson(String oldHandle, String newHandle) {
+
+        //Making the actual change.
+        thePersonMap.put(newHandle, thePersonMap.remove(oldHandle));
+
+        //Updating handle everywhere else.
+        correspondingEventList.updateHandleWhereInvited(oldHandle, newHandle);
+
+    }//Method updateHandleOutsidePerson
+
+    public void listPersons() {
+        for(String key: thePersonMap.keySet()) {
+            System.out.println("- " + thePersonMap.get(key));
+        }
+    }//Method listPersons
+
 //----------------------------------------------------------------
     public boolean isValidNewPersonHandle(String s) {
-        if(s == null
-        || s.isEmpty()
-        || s.equalsIgnoreCase("null")
-        || s.toLowerCase().startsWith("/")
-        || s.contains(";")
+        if(isValidStringWithLength(s)
         || s.contains(" ")) {
             return false;
         }

@@ -1,13 +1,20 @@
 public interface CommonValidations {
 
+    default boolean stringIsInt(String s) {
+        try {
+            Integer.parseInt(s);
+        }
+        catch(NumberFormatException nfe) {
+            return false;
+        }
+
+        return true;
+    }//Method stringIsInt
+
     //Used to validate entries for
     //year, month, day, hour, minute, as well as interest level.
-    default boolean isValidNumberValue(String s, int min, int max) {
-        if(s == null || s.isEmpty()) return false;
-
-        for(char c: s.toCharArray()) {
-            if(!Character.isDigit(c)) return false;
-        }
+    default boolean isValidIntInRange(String s, int min, int max) {
+        if(!stringIsInt(s)) return false;
 
         int value = Integer.parseInt(s);
         if(value < min || max < value) return false;
@@ -31,11 +38,8 @@ public interface CommonValidations {
     //Used to validate entries for
     //interest name, as well as event name.
     default boolean isValidStringWithLength(String s) {
-        if(s == null
-        || s.isEmpty()
-        || s.equalsIgnoreCase("null")
-        || s.startsWith("/")
-        || s.contains(";")) {
+        if(!isValidString(s)
+        || s.isEmpty()) {
             return false;
         }
 

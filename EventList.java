@@ -82,7 +82,7 @@ public class EventList implements CommonValidations {
             if(enteredString.toLowerCase().startsWith("/c")) return;
         }
         while(!isValidStringWithLength(enteredString));
-        enteredTexts.add(0, enteredString);
+        enteredTexts.set(0, enteredString);
 
         do {
             System.out.print("- Enter event type: ");
@@ -90,7 +90,7 @@ public class EventList implements CommonValidations {
             if(enteredString.toLowerCase().startsWith("/c")) return;
         }
         while(!isValidString(enteredString));
-        enteredTexts.add(1, enteredString);
+        enteredTexts.set(1, enteredString);
 
         do {
             System.out.print("- Enter event description: ");
@@ -98,7 +98,7 @@ public class EventList implements CommonValidations {
             if(enteredString.toLowerCase().startsWith("/c")) return;
         }
         while(!isValidString(enteredString));
-        enteredTexts.add(2, enteredString);
+        enteredTexts.set(2, enteredString);
 
         //Entering numbers: Year, month, day, hour, minute (all optional).
         do {
@@ -106,40 +106,40 @@ public class EventList implements CommonValidations {
             enteredString = userEntry.nextLine().strip();
             if(enteredString.toLowerCase().startsWith("/c")) return;
         }
-        while(!isValidNumberValue(enteredString, 1000, 9999));
-        validatedTimeInts.add(0, Integer.parseInt(enteredString));
+        while(!isValidIntInRange(enteredString, 1000, 9999));
+        validatedTimeInts.set(0, Integer.parseInt(enteredString));
 
         do {
             System.out.print("- Enter starting month: ");
             enteredString = userEntry.nextLine().strip();
             if(enteredString.toLowerCase().startsWith("/c")) return;
         }
-        while(!isValidNumberValue(enteredString, 1, 12));
-        validatedTimeInts.add(1, Integer.parseInt(enteredString));
+        while(!isValidIntInRange(enteredString, 1, 12));
+        validatedTimeInts.set(1, Integer.parseInt(enteredString));
 
         do {
             System.out.print("- Enter starting day: ");
             enteredString = userEntry.nextLine().strip();
             if(enteredString.toLowerCase().startsWith("/c")) return;
         }
-        while(!isValidNumberValue(enteredString, 1, 31));
-        validatedTimeInts.add(2, Integer.parseInt(enteredString));
+        while(!isValidIntInRange(enteredString, 1, 31));
+        validatedTimeInts.set(2, Integer.parseInt(enteredString));
 
         do {
             System.out.print("- Enter starting hour: ");
             enteredString = userEntry.nextLine().strip();
             if(enteredString.toLowerCase().startsWith("/c")) return;
         }
-        while(!isValidNumberValue(enteredString, 0, 23));
-        validatedTimeInts.add(3, Integer.parseInt(enteredString));
+        while(!isValidIntInRange(enteredString, 0, 23));
+        validatedTimeInts.set(3, Integer.parseInt(enteredString));
 
         do {
             System.out.print("- Enter starting minute: ");
             enteredString = userEntry.nextLine().strip();
             if(enteredString.toLowerCase().startsWith("/c")) return;
         }
-        while(!isValidNumberValue(enteredString, 0, 59));
-        validatedTimeInts.add(4, Integer.parseInt(enteredString));
+        while(!isValidIntInRange(enteredString, 0, 59));
+        validatedTimeInts.set(4, Integer.parseInt(enteredString));
 
         //Instantiation and storage
         Event newEvent = new Event(enteredTexts, validatedTimeInts, this);
@@ -151,22 +151,35 @@ public class EventList implements CommonValidations {
 
     }//Method makeEvent
 
+    public void editEvent(String e) {}//Method editEvent
+
+    public void updateHandleWhereInvited(String o, String n) {
+        for(int ei = 0; ei <= theEventArray.size(); ei++) {
+            if(isExistingEventIndex(ei)) {
+                theEventArray.get(ei).updateHandleIfInvited(o, n);
+            }
+        }
+    }//Method updateHandleWhereInvited
+
 //----------------------------------------------------------------
     public boolean isExistingEventIndex(String s) {
-        if(s == null || s.isEmpty()) return false;
+        if(!stringIsInt(s)) return false;
+        int index = Integer.parseInt(s);
 
-        char[] c = s.toCharArray();
-        for(int i = 0; i < c.length; i++) {
-            if(!Character.isDigit(c[0])) return false;
-        }
-
-        int indexValue = Integer.parseInt(s);
-        if(indexValue < 0 || theEventArray.size() <= indexValue) return false;
-        if(theEventArray.get(indexValue) == null) return false;
+        if(index < 0 || theEventArray.size() <= index) return false;
+        if(theEventArray.get(index) == null) return false;
 
         return true;
     }//Method isValidEventArrayIndex
 
+    public boolean isExistingEventIndex(int i) {
+        if(i < 0 || theEventArray.size() <= i) return false;
+        if(theEventArray.get(i) == null) return false;
+
+        return true;
+    }
+
+    //This method is never called. That is weird.
     public boolean isExistingPersonHandle(String s) {
         return correspondingPersonList.thePersonMap.containsKey(s);
     }//Method isExistingPersonHandle
