@@ -31,7 +31,7 @@ public class Person implements Comparable<Person> {
 
         //Filling the interest hash map
         for(int j = 4; j < temp.length; j = j+2) {
-            interestMap.put(temp[j], Integer.parseInt(temp[j+1]));
+            interestMap.put(temp[j].toLowerCase(), Integer.parseInt(temp[j+1]));
         }
 
     }//Method Person constructor 1
@@ -52,6 +52,7 @@ public class Person implements Comparable<Person> {
         userEntry = ue;
     }//Method setResourcePointers
 
+//----------------------------------------------------------------
     public String toString() {
         String repString = nameArray.get(0);
 
@@ -72,11 +73,14 @@ public class Person implements Comparable<Person> {
         return repString;
     }//Method toString
 
-//----------------------------------------------------------------
     @Override
     public int compareTo(Person p) {
         return this.nameArray.get(0).compareTo(p.nameArray.get(0));
     }//Method compareTo
+
+    public HashMap<String, Integer> getInterestMap() {
+        return interestMap;
+    }//Method getInterestMap
 
 //----------------------------------------------------------------
     public String getStorageString() {

@@ -25,21 +25,6 @@ public class EventCollection {
         loadEvents();
     }//Method EventCollection constructor
 
-    public String toString() {
-        int numberOfEvents = theEventArray.size();
-        if(numberOfEvents == 0) return "Events: NONE";
-
-        String returnString;
-        if(numberOfEvents == 1) returnString = "Event (1):";
-        else returnString = "Events (" + numberOfEvents + "):";
-
-        for(int i = 0; i < numberOfEvents; i++) {
-            returnString += "\n" + theEventArray.get(i);
-        }
-
-        return returnString;
-    }//Method toString
-
     public void loadEvents() {
         File eventFile = new File(eventFileName);
         Scanner eventReader;
@@ -66,6 +51,29 @@ public class EventCollection {
     }//Method setResourcePointers
 
 //----------------------------------------------------------------
+    public String toString() {
+        int numberOfEvents = theEventArray.size();
+
+        if(numberOfEvents == 0) return "Events: NONE";
+        else if(numberOfEvents == 1) return "Event: 1";
+        else return "Events: " + numberOfEvents;
+    }//Method toString
+
+    public void listEvents() {
+        int numberOfEvents = theEventArray.size();
+
+        if(numberOfEvents == 0) System.out.println("Events: NONE");
+        else if(numberOfEvents == 1) System.out.println("Event (1):");
+        else System.out.println("Events (" + numberOfEvents + "):");
+
+        for(int i = 0; i < numberOfEvents; i++) {
+            System.out.println(
+                    "* " + theEventArray.get(i)
+            );
+        }
+    }//Method listEvents
+
+//----------------------------------------------------------------
     public void storeEvents() {
         FileWriter storageFile;
 
@@ -83,7 +91,7 @@ public class EventCollection {
         }
         catch(IOException ioe) {
             System.out.println("* Event file: Possibly failed or incomplete update\n" +
-                    "   *" + ioe
+                    "   * " + ioe
             );
         }
     }//Method storeEvents

@@ -19,7 +19,7 @@ public class InvitationBook {
         System.out.println("----------------------------------------------------------------\n" +
                 "Invitation Book opening");
 
-        thePersonCollection = new PersonCollection("storedPersons.txt");
+        thePersonCollection = new PersonCollection("storedPersons.txt", "storedInterests.txt");
         theEventCollection = new EventCollection("storedEvents.txt");
 
         userEntry = new Scanner(System.in);
@@ -29,18 +29,61 @@ public class InvitationBook {
         theEventCollection.setResourcePointers(thePersonCollection, userEntry);
     }//Method open
 
-    public static void readAndWrite() {}//Method readAndWrite
+    public static void readAndWrite() {
+        System.out.println("\n----------------\n" +
+                "Reading and writing\n");
+
+        listCommands();
+
+        do {
+            //Taking main menu commands from the user.
+            System.out.print("\n- Main menu entry: ");
+            mainEntryArray =
+                    userEntry.nextLine().strip().toLowerCase().split(" ");
+
+            //Handling main menu commands from the user.
+            if(mainEntryArray.length == 0) listCommands();
+            else if(mainEntryArray[0].startsWith("/c")) {}
+            else if(mainEntryArray[0].startsWith("/m")) make();
+            else if(mainEntryArray[0].startsWith("/e")) edit();
+            else if(mainEntryArray[0].startsWith("/l")) list();
+            else listCommands();
+        }
+        while(!mainEntryArray[0].startsWith("/c"));
+    }//Method readAndWrite
 
     public static void close() {
         System.out.println("\n----------------\n" +
                 "Invitation Book closing");
         userEntry.close();
         thePersonCollection.storePersons();
+        thePersonCollection.storeInterests();
         theEventCollection.storeEvents();
 
         System.out.println("\n----------------------------------------------------------------");
     }//Method close
 
 //----------------------------------------------------------------
+    public static void make() {}//Method make
+
+    public static void edit() {}//Method edit
+
+    public static void list() {
+        if(mainEntryArray.length <= 1) {}
+        else if(mainEntryArray[1].startsWith("p")) thePersonCollection.listPersons();
+        else if(mainEntryArray[1].startsWith("i")) thePersonCollection.listInterests();
+        else if(mainEntryArray[1].startsWith("e")) theEventCollection.listEvents();
+        else if(mainEntryArray[1].startsWith("c")) listCommands();
+        else {}
+    }//Method list
+
+    public static void listCommands() {
+        System.out.println("Main menu commands:\n" +
+                "/make person|interest|event\n" +
+                "/edit person|interest|event [opt: handle|interest name|index]\n" +
+                "/list persons|interests|events|commands"
+        );
+    }//Method listCommands
+
 //----------------------------------------------------------------
 }//Class InvitationBook

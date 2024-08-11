@@ -73,6 +73,7 @@ public class Event implements Comparable<Event> {
         userEntry = ue;
     }//Method setResourcePointers
 
+//----------------------------------------------------------------
     public String toString() {
         String repString;
 
@@ -89,7 +90,6 @@ public class Event implements Comparable<Event> {
         return repString;
     }//Method toString
 
-//----------------------------------------------------------------
     @Override
     public int compareTo(Event e) {
         return this.comparableString.compareTo(e.comparableString);
