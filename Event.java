@@ -19,6 +19,7 @@ public class Event implements Comparable<Event> {
         eventStrings = new ArrayList<>(3);
         invitationMap = new HashMap<>();
 
+        //Utilities
         myEventCollection = ec;
         userEntry = null;
 
@@ -69,9 +70,9 @@ public class Event implements Comparable<Event> {
 
     }//Method Event constructor 2
 
-    public void setResourcePointers(Scanner ue) {
+    public void completeEventSetup(Scanner ue) {
         userEntry = ue;
-    }//Method setResourcePointers
+    }//Method completeEventSetup
 
 //----------------------------------------------------------------
     public String toString() {
@@ -81,7 +82,9 @@ public class Event implements Comparable<Event> {
         else repString = String.valueOf(startTimeUnits.get(0));
 
         for(int i = 1; i <= 2; i++) {
-            if(startTimeUnits.get(i) == null) repString += "-??";
+            Integer theTimeUnit = startTimeUnits.get(i);
+            if(theTimeUnit == null) repString += "-??";
+            else if(theTimeUnit <= 9) repString += "-0" + theTimeUnit;
             else repString += "-" + startTimeUnits.get(i);
         }
 

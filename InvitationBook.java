@@ -21,12 +21,15 @@ public class InvitationBook {
 
         thePersonCollection = new PersonCollection("storedPersons.txt", "storedInterests.txt");
         theEventCollection = new EventCollection("storedEvents.txt");
+        thePersonCollection.loadPersons();
+        thePersonCollection.loadInterests();
+        theEventCollection.loadEvents();
 
         userEntry = new Scanner(System.in);
         mainEntryArray = new String[]{"?"};
 
-        thePersonCollection.setResourcePointers(theEventCollection, userEntry);
-        theEventCollection.setResourcePointers(thePersonCollection, userEntry);
+        thePersonCollection.completeSetup(theEventCollection, userEntry);
+        theEventCollection.completeSetup(thePersonCollection, userEntry);
     }//Method open
 
     public static void readAndWrite() {
@@ -79,9 +82,9 @@ public class InvitationBook {
 
     public static void listCommands() {
         System.out.println("Main menu commands:\n" +
-                "/make person|interest|event\n" +
-                "/edit person|interest|event [opt: handle|interest name|index]\n" +
-                "/list persons|interests|events|commands"
+                "[C] /make person|interest|event\n" +
+                "[C] /edit person|interest|event [opt: handle|interest name|index]\n" +
+                "[C] /list persons|interests|events|commands"
         );
     }//Method listCommands
 

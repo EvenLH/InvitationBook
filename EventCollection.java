@@ -8,10 +8,11 @@ import java.util.Scanner;
 public class EventCollection {
 
     ArrayList<Event> theEventArray;
+
+    //Utilities
     String eventFileName;
     PersonCollection correspondingPersonCollection;
     Scanner userEntry;
-    boolean certainlyInChronologicalOrder;
 
     public EventCollection(String efn) {
         theEventArray = new ArrayList<>();
@@ -20,9 +21,6 @@ public class EventCollection {
         eventFileName = efn;
         correspondingPersonCollection = null;
         userEntry = null;
-        certainlyInChronologicalOrder = false;
-
-        loadEvents();
     }//Method EventCollection constructor
 
     public void loadEvents() {
@@ -37,18 +35,44 @@ public class EventCollection {
             return;
         }
 
-        while(eventReader.hasNextLine()) {
-            theEventArray.add(new Event(eventReader.nextLine().strip(), this));
+        //Loading the 1st stored Event.
+        if(eventReader.hasNextLine()) {
+            Event firstLoadedEvent = new Event(eventReader.nextLine().strip(), this);
+            firstLoadedEvent.setComparableString();
+            theEventArray.add(firstLoadedEvent);
         }
+
+        //Loading any events after the 1st.
+        while(eventReader.hasNextLine()) {
+            Event loadedEvent = new Event(eventReader.nextLine().strip(), this);
+            loadedEvent.setComparableString();
+            int numberOfLoadedEvents = theEventArray.size();
+
+            /*Small optimization: Since events should be stored in order in the .txt file,
+            each new event should be added on at the end of the list. We check for that first.
+            More optimizations could be done, but JVM might do those on its own. Not sure.*/
+            if(loadedEvent.compareTo(theEventArray.get(numberOfLoadedEvents -1)) >= 0) {
+                theEventArray.add(loadedEvent);
+            }
+            else {
+                for(int i = 0; i < numberOfLoadedEvents; i++) {
+                    if(loadedEvent.compareTo(theEventArray.get(i)) < 0) {
+                        theEventArray.add(i, loadedEvent);
+                        break;
+                    }
+                }
+            }
+
+        }//Loop while
         System.out.println("* Event file: Found and loaded");
 
         eventReader.close();
     }//Method loadEvents
 
-    public void setResourcePointers(PersonCollection pc, Scanner ue) {
+    public void completeSetup(PersonCollection pc, Scanner ue) {
         correspondingPersonCollection = pc;
         userEntry = ue;
-    }//Method setResourcePointers
+    }//Method completeSetup
 
 //----------------------------------------------------------------
     public String toString() {
@@ -68,7 +92,7 @@ public class EventCollection {
 
         for(int i = 0; i < numberOfEvents; i++) {
             System.out.println(
-                    "* " + theEventArray.get(i)
+                    "[" + i + "] " + theEventArray.get(i)
             );
         }
     }//Method listEvents

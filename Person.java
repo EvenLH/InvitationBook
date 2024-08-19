@@ -16,6 +16,7 @@ public class Person implements Comparable<Person> {
         nameArray = new ArrayList<>(4);
         interestMap = new HashMap<>();
 
+        //Utilities
         myPersonCollection = pc;
         userEntry = null;
 
@@ -48,9 +49,9 @@ public class Person implements Comparable<Person> {
             nameArray.add(i, null);
     }//Method Person constructor 2
 
-    public void setResourcePointers(Scanner ue) {
+    public void completePersonSetup(Scanner ue) {
         userEntry = ue;
-    }//Method setResourcePointers
+    }//Method completePersonSetup
 
 //----------------------------------------------------------------
     public String toString() {
