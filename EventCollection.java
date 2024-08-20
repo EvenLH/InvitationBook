@@ -14,13 +14,13 @@ public class EventCollection {
     PersonCollection correspondingPersonCollection;
     Scanner userEntry;
 
-    public EventCollection(String efn) {
+    public EventCollection(String efn, Scanner ue) {
         theEventArray = new ArrayList<>();
 
         //Utilities
         eventFileName = efn;
         correspondingPersonCollection = null;
-        userEntry = null;
+        userEntry = ue;
     }//Method EventCollection constructor
 
     public void loadEvents() {
@@ -37,14 +37,14 @@ public class EventCollection {
 
         //Loading the 1st stored Event.
         if(eventReader.hasNextLine()) {
-            Event firstLoadedEvent = new Event(eventReader.nextLine().strip(), this);
+            Event firstLoadedEvent = new Event(eventReader.nextLine().strip(), this, userEntry);
             firstLoadedEvent.setComparableString();
             theEventArray.add(firstLoadedEvent);
         }
 
         //Loading any events after the 1st.
         while(eventReader.hasNextLine()) {
-            Event loadedEvent = new Event(eventReader.nextLine().strip(), this);
+            Event loadedEvent = new Event(eventReader.nextLine().strip(), this, userEntry);
             loadedEvent.setComparableString();
             int numberOfLoadedEvents = theEventArray.size();
 
@@ -69,9 +69,8 @@ public class EventCollection {
         eventReader.close();
     }//Method loadEvents
 
-    public void completeSetup(PersonCollection pc, Scanner ue) {
+    public void completeSetup(PersonCollection pc) {
         correspondingPersonCollection = pc;
-        userEntry = ue;
     }//Method completeSetup
 
 //----------------------------------------------------------------

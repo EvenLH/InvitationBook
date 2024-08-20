@@ -15,7 +15,7 @@ public class PersonCollection {
     EventCollection correspondingEventCollection;
     Scanner userEntry;
 
-    public PersonCollection(String pfn, String ifn) {
+    public PersonCollection(String pfn, String ifn, Scanner ue) {
         thePersonMap = new HashMap<>();
         theInterestSpellingMap = new HashMap<>();
 
@@ -23,7 +23,7 @@ public class PersonCollection {
         personFileName = pfn;
         interestFileName = ifn;
         correspondingEventCollection = null;
-        userEntry = null;
+        userEntry = ue;
     }//Method PersonCollection constructor
 
     public void loadPersons() {
@@ -41,7 +41,7 @@ public class PersonCollection {
         while(personReader.hasNextLine()) {
             String loadString = personReader.nextLine().strip();
             thePersonMap.put(loadString.split(";")[0],
-                    new Person(loadString, this));
+                    new Person(loadString, this, userEntry));
         }
         System.out.println("* Person file: Found and loaded");
 
@@ -69,13 +69,8 @@ public class PersonCollection {
         interestReader.close();
     }//Methods loadInterests
 
-    public void completeSetup(EventCollection ec, Scanner ue) {
+    public void completeSetup(EventCollection ec) {
         correspondingEventCollection = ec;
-        userEntry = ue;
-
-        for(String handle: thePersonMap.keySet()) {
-            thePersonMap.get(handle).completePersonSetup(ue);
-        }
     }//Method completeSetup
 
     //----------------------------------------------------------------

@@ -14,14 +14,14 @@ public class Event implements Comparable<Event> {
     String comparableString;
     Scanner userEntry;
 
-    public Event(String storageString, EventCollection ec) {
+    public Event(String storageString, EventCollection ec, Scanner ue) {
         startTimeUnits = new ArrayList<>(5);
         eventStrings = new ArrayList<>(3);
         invitationMap = new HashMap<>();
 
         //Utilities
         myEventCollection = ec;
-        userEntry = null;
+        userEntry = ue;
 
         String[] temp = storageString.strip().split(";");
         int tIndex = 0;
@@ -53,9 +53,9 @@ public class Event implements Comparable<Event> {
 
     }//Method Event constructor 1
 
-    public Event(String n, EventCollection ec, Scanner ue) {
+    public Event(ArrayList<String> es, EventCollection ec, Scanner ue) {
         startTimeUnits = new ArrayList<>(5);
-        eventStrings = new ArrayList<>(3);
+        eventStrings = es;
         invitationMap = new HashMap<>();
 
         myEventCollection = ec;
@@ -63,16 +63,9 @@ public class Event implements Comparable<Event> {
 
         for(int i = 0; i <= 4; i++) {
             startTimeUnits.add(null);
-            if(i <= 2) eventStrings.add(null);
         }
 
-        eventStrings.set(0, n);
-
     }//Method Event constructor 2
-
-    public void completeEventSetup(Scanner ue) {
-        userEntry = ue;
-    }//Method completeEventSetup
 
 //----------------------------------------------------------------
     public String toString() {

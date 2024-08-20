@@ -12,13 +12,13 @@ public class Person implements Comparable<Person> {
     PersonCollection myPersonCollection;
     Scanner userEntry;
 
-    public Person(String storageString, PersonCollection pc) {
+    public Person(String storageString, PersonCollection pc, Scanner ue) {
         nameArray = new ArrayList<>(4);
         interestMap = new HashMap<>();
 
         //Utilities
         myPersonCollection = pc;
-        userEntry = null;
+        userEntry = ue;
 
         String[] temp = storageString.strip().split(";");
 
@@ -37,21 +37,13 @@ public class Person implements Comparable<Person> {
 
     }//Method Person constructor 1
 
-    public Person(String h, PersonCollection pc, Scanner ue) {
-        nameArray = new ArrayList<>(4);
+    public Person(ArrayList<String> names, PersonCollection pc, Scanner ue) {
+        nameArray = names;
         interestMap = new HashMap<>();
 
         myPersonCollection = pc;
         userEntry = ue;
-
-        nameArray.add(h);
-        for(int i = 1; i <= 3; i++)
-            nameArray.add(i, null);
     }//Method Person constructor 2
-
-    public void completePersonSetup(Scanner ue) {
-        userEntry = ue;
-    }//Method completePersonSetup
 
 //----------------------------------------------------------------
     public String toString() {

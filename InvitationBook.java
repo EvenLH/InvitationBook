@@ -19,17 +19,18 @@ public class InvitationBook {
         System.out.println("----------------------------------------------------------------\n" +
                 "Invitation Book opening");
 
-        thePersonCollection = new PersonCollection("storedPersons.txt", "storedInterests.txt");
-        theEventCollection = new EventCollection("storedEvents.txt");
+        userEntry = new Scanner(System.in);
+        mainEntryArray = new String[]{"?"};
+
+        thePersonCollection = new PersonCollection("storedPersons.txt", "storedInterests.txt", userEntry);
+        theEventCollection = new EventCollection("storedEvents.txt", userEntry);
+
         thePersonCollection.loadPersons();
         thePersonCollection.loadInterests();
         theEventCollection.loadEvents();
 
-        userEntry = new Scanner(System.in);
-        mainEntryArray = new String[]{"?"};
-
-        thePersonCollection.completeSetup(theEventCollection, userEntry);
-        theEventCollection.completeSetup(thePersonCollection, userEntry);
+        thePersonCollection.completeSetup(theEventCollection);
+        theEventCollection.completeSetup(thePersonCollection);
     }//Method open
 
     public static void readAndWrite() {
