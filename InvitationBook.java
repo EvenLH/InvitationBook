@@ -20,7 +20,7 @@ public class InvitationBook {
                 "Invitation Book opening");
 
         userEntry = new Scanner(System.in);
-        mainEntryArray = new String[]{"?"};
+        mainEntryArray = new String[3];
 
         thePersonCollection = new PersonCollection("storedPersons.txt", "storedInterests.txt", userEntry);
         theEventCollection = new EventCollection("storedEvents.txt", userEntry);
@@ -42,14 +42,14 @@ public class InvitationBook {
         do {
             //Taking main menu commands from the user.
             System.out.print("\n- Main menu entry: ");
-            mainEntryArray =
-                    userEntry.nextLine().strip().toLowerCase().split(" ");
+            mainEntryArray = CommonMethods.commandStringToArray(userEntry.nextLine(), 3);
 
             //Handling main menu commands from the user.
             if(mainEntryArray.length == 0) listCommands();
             else if(mainEntryArray[0].startsWith("/c")) {}
             else if(mainEntryArray[0].startsWith("/m")) make();
             else if(mainEntryArray[0].startsWith("/e")) edit();
+            else if(mainEntryArray[0].startsWith("/v")) view();
             else if(mainEntryArray[0].startsWith("/l")) list();
             else listCommands();
         }
@@ -72,19 +72,80 @@ public class InvitationBook {
 
     public static void edit() {}//Method edit
 
+    public static void view() {
+        if(mainEntryArray.length <= 1) viewCommandView();
+        else if(mainEntryArray[1].startsWith("p")) {
+            if(mainEntryArray.length == 2) thePersonCollection.viewPerson(null);
+            else thePersonCollection.viewPerson(mainEntryArray[2]);
+        }
+        else if(mainEntryArray[1].startsWith("i")) {
+            if(mainEntryArray.length == 2) thePersonCollection.viewInterest(null);
+            else thePersonCollection.viewInterest(mainEntryArray[2]);
+        }
+        else if(mainEntryArray[1].startsWith("e")) {
+            if(mainEntryArray.length == 2) theEventCollection.viewEvent(null);
+            else theEventCollection.viewEvent(mainEntryArray[2]);
+        }
+        else if(mainEntryArray[1].startsWith("c")) {
+            if(mainEntryArray.length == 2) viewCommand(null);
+            else viewCommand(mainEntryArray[2]);
+        }
+        else viewCommandView();
+
+        CommonMethods.returnToMainPrint();
+    }//Method view
+
+    public static void viewCommandView() {
+        System.out.println("Command: VIEW\n" +
+                "This command shows all information about a given entry." +
+                "The /view command should be followed by a space and one of these words:\n" +
+                "[*] person\n" +
+                "[*] interest\n" +
+                "[*] event\n" +
+                "[*] command\n" +
+                "The chosen word may be followed by a space and an entry:\n" +
+                "[*] For 'person': The handle name of an existing person.\n" +
+                "[*] For 'interest': The name of an existing interest.\n" +
+                "[*] For 'event': The index of an existing event.\n" +
+                "[*] For 'command': The name of an existing command.\n" +
+                "Examples:\n" +
+                "[*] /view person\n" +
+                "[*] /view person Odin");
+    }//Method viewCommandView
+
     public static void list() {
-        if(mainEntryArray.length <= 1) {}
+        if(mainEntryArray.length <= 1) viewCommandList();
         else if(mainEntryArray[1].startsWith("p")) thePersonCollection.listPersons();
         else if(mainEntryArray[1].startsWith("i")) thePersonCollection.listInterests();
         else if(mainEntryArray[1].startsWith("e")) theEventCollection.listEvents();
         else if(mainEntryArray[1].startsWith("c")) listCommands();
-        else {}
+        else viewCommandList();
+
+        CommonMethods.returnToMainPrint();
     }//Method list
+
+    public static void viewCommandList() {
+        System.out.println("Command: LIST\n" +
+                "This command lists all entries of a given type.\n" +
+                "The /list command should be followed by a space and one of these words:\n" +
+                "[*] persons\n" +
+                "[*] interests\n" +
+                "[*] events\n" +
+                "[*] commands\n" +
+                "Example:\n" +
+                "[*] /list events");
+    }//Method viewCommandList
+
+    public static void viewCommand(String enteredCommand) {
+        //I'll write this method last.
+        System.out.println("Method not implemented: viewCommand(String enteredCommand)");
+    }//Method viewCommand
 
     public static void listCommands() {
         System.out.println("Main menu commands:\n" +
                 "[C] /make person|interest|event\n" +
                 "[C] /edit person|interest|event [opt: handle|interest name|index]\n" +
+                "[C] /view person|interest|event|command [opt: handle|interest name|index|command]\n" +
                 "[C] /list persons|interests|events|commands"
         );
     }//Method listCommands

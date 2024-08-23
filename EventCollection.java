@@ -82,6 +82,8 @@ public class EventCollection {
         else return "Events: " + numberOfEvents;
     }//Method toString
 
+    public void viewEvent(String enteredIndex) {}//Method viewEvent
+
     public void listEvents() {
         int numberOfEvents = theEventArray.size();
 

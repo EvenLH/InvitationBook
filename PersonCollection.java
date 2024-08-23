@@ -40,7 +40,7 @@ public class PersonCollection {
 
         while(personReader.hasNextLine()) {
             String loadString = personReader.nextLine().strip();
-            thePersonMap.put(loadString.split(";")[0],
+            thePersonMap.put(loadString.split(";")[0].strip().toLowerCase(),
                     new Person(loadString, this, userEntry));
         }
         System.out.println("* Person file: Found and loaded");
@@ -81,6 +81,32 @@ public class PersonCollection {
         else if(numberOfPersons == 1) return "Person: 1";
         else return "Persons: " + numberOfPersons;
     }//Method toString
+
+    public void viewPerson(String enteredHandle) {
+
+        Set<String> handleNameSet = thePersonMap.keySet();
+
+        if(CommonMethods.keyExistsIgnoreCase(enteredHandle, handleNameSet)) {
+            thePersonMap.get(enteredHandle).viewThisPerson(theInterestSpellingMap);
+        }
+        else {
+            listPersons();
+            System.out.println("\nView person (/cancel to return to main menu)");
+
+            do {
+                System.out.print("- Enter handle: ");
+                enteredHandle = userEntry.nextLine().strip().toLowerCase();
+                if(CommonMethods.keyExistsIgnoreCase(enteredHandle, handleNameSet)) {
+                    thePersonMap.get(enteredHandle).viewThisPerson(theInterestSpellingMap);
+                    break;
+                }
+            }
+            while(!enteredHandle.startsWith("/c"));
+        }
+
+    }//Method viewPerson
+
+    public void viewInterest(String enteredInterest) {}//Method viewInterest
 
     public void listPersons() {
         int numberOfPersons = thePersonMap.size();

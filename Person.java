@@ -66,6 +66,39 @@ public class Person implements Comparable<Person> {
         return repString;
     }//Method toString
 
+    public void viewThisPerson(HashMap<String, String> spellingMap) {
+
+        //Printing headline and handle name
+        System.out.println("Person: " + nameArray.get(0) + "\n" +
+                "Names\n" +
+                "[*] Handle: " + nameArray.get(0));
+
+        //Printing actual names
+        if(nameArray.get(1) == null) System.out.println("[*] First:");
+        else System.out.println("[*] First: " + nameArray.get(1));
+
+        if(nameArray.get(2) == null) System.out.println("[*] Middle:");
+        else System.out.println("[*] Middle: " + nameArray.get(2));
+
+        if(nameArray.get(3) == null) System.out.println("[*] Last:");
+        else System.out.println("[*] Last: " + nameArray.get(3));
+
+        //Printing interests - headline
+        int numberOfInterestEntries = interestMap.size();
+        if(numberOfInterestEntries == 0) System.out.println("\nInterests: NONE");
+        else if(numberOfInterestEntries == 1) System.out.println("\nInterest (1)");
+        else System.out.println("\nInterests (" + numberOfInterestEntries + ")");
+
+        //Printing interests - each interest
+        for(String interestKey: interestMap.keySet()) {
+            String personalInterestString = "[*] " + interestKey + ": ";
+            if(spellingMap.containsKey(interestKey)) personalInterestString = "[*] " + spellingMap.get(interestKey) + ": ";
+            personalInterestString = personalInterestString.concat(String.valueOf(interestMap.get(interestKey)));
+
+            System.out.println(personalInterestString);
+        }
+    }//Method viewThisPerson
+
     @Override
     public int compareTo(Person p) {
         return this.nameArray.get(0).compareTo(p.nameArray.get(0));
