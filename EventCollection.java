@@ -82,7 +82,28 @@ public class EventCollection {
         else return "Events: " + numberOfEvents;
     }//Method toString
 
-    public void viewEvent(String enteredIndex) {}//Method viewEvent
+    public void viewEvent(String enteredIndex) {
+
+        if(CommonMethods.stringIsIntInRange(enteredIndex, 0, theEventArray.size()-1)) {
+            int eventIndex = Integer.parseInt(enteredIndex);
+            theEventArray.get(eventIndex).viewThisEvent(eventIndex);
+        }
+        else {
+            listEvents();
+            System.out.println("\nView event (/cancel to return to main menu)");
+
+            do {
+                System.out.print("- Enter index: ");
+                enteredIndex = userEntry.nextLine().strip().toLowerCase();
+                if(CommonMethods.stringIsIntInRange(enteredIndex, 0, theEventArray.size()-1)) {
+                    int eventIndex = Integer.parseInt(enteredIndex);
+                    theEventArray.get(eventIndex).viewThisEvent(eventIndex);
+                    break;
+                }
+            }
+            while(!enteredIndex.startsWith("/c"));
+        }
+    }//Method viewEvent
 
     public void listEvents() {
         int numberOfEvents = theEventArray.size();

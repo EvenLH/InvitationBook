@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Person implements Comparable<Person> {
 
@@ -66,7 +63,7 @@ public class Person implements Comparable<Person> {
         return repString;
     }//Method toString
 
-    public void viewThisPerson(HashMap<String, String> spellingMap) {
+    public void viewThisPerson(HashMap<String, String> interestSpellingMap) {
 
         //Printing headline and handle name
         System.out.println("Person: " + nameArray.get(0) + "\n" +
@@ -90,13 +87,65 @@ public class Person implements Comparable<Person> {
         else System.out.println("\nInterests (" + numberOfInterestEntries + ")");
 
         //Printing interests - each interest
-        for(String interestKey: interestMap.keySet()) {
-            String personalInterestString = "[*] " + interestKey + ": ";
-            if(spellingMap.containsKey(interestKey)) personalInterestString = "[*] " + spellingMap.get(interestKey) + ": ";
-            personalInterestString = personalInterestString.concat(String.valueOf(interestMap.get(interestKey)));
+        HashSet<String> highlyInterestedSet = new HashSet<>();
+        HashSet<String> interestedSet = new HashSet<>();
+        HashSet<String> willingSet = new HashSet<>();
+        HashSet<String> uninterestedSet = new HashSet<>();
 
-            System.out.println(personalInterestString);
+        for(Map.Entry<String, Integer> theEntry: interestMap.entrySet()) {
+            switch(theEntry.getValue()) {
+                case 0:
+                    uninterestedSet.add(theEntry.getKey());
+                    break;
+                case 1:
+                    willingSet.add(theEntry.getKey());
+                    break;
+                case 2:
+                    interestedSet.add(theEntry.getKey());
+                    break;
+                case 3:
+                    highlyInterestedSet.add(theEntry.getKey());
+            }
         }
+
+        ArrayList<String> highlyInterestedOrdered = CommonMethods.stringSetToOrderedArrayList(highlyInterestedSet);
+        ArrayList<String> interestedOrdered = CommonMethods.stringSetToOrderedArrayList(interestedSet);
+        ArrayList<String> willingOrdered = CommonMethods.stringSetToOrderedArrayList(willingSet);
+        ArrayList<String> uninterestedOrdered = CommonMethods.stringSetToOrderedArrayList(uninterestedSet);
+
+        if(!highlyInterestedOrdered.isEmpty()) {
+            System.out.println("Highly interested:");
+
+            for(int i = 0; i < highlyInterestedOrdered.size(); i++) {
+                System.out.println("[3] " + highlyInterestedOrdered.get(i));
+            }
+        }
+
+        if(!interestedOrdered.isEmpty()) {
+            System.out.println("Interested:");
+
+            for(int i = 0; i < interestedOrdered.size(); i++) {
+                System.out.println("[2] " + interestedOrdered.get(i));
+            }
+        }
+
+        if(!willingOrdered.isEmpty()) {
+            System.out.println("Willing:");
+
+            for(int i = 0; i < willingOrdered.size(); i++) {
+                System.out.println("[1] " + willingOrdered.get(i));
+            }
+        }
+
+        if(!uninterestedOrdered.isEmpty()) {
+            System.out.println("\nUninterested:");
+            for(int i = 0; i < uninterestedOrdered.size(); i++) {
+                System.out.println("[0] " + uninterestedOrdered.get(i));
+            }
+        }
+
+        //This method could be made a lot shorter if interests were objects in an already ordered ArrayList.
+
     }//Method viewThisPerson
 
     @Override

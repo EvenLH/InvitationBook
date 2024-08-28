@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Event implements Comparable<Event> {
 
@@ -69,22 +66,113 @@ public class Event implements Comparable<Event> {
 
 //----------------------------------------------------------------
     public String toString() {
-        String repString;
-
-        if(startTimeUnits.get(0) == null) repString = "????";
-        else repString = String.valueOf(startTimeUnits.get(0));
-
-        for(int i = 1; i <= 2; i++) {
-            Integer theTimeUnit = startTimeUnits.get(i);
-            if(theTimeUnit == null) repString += "-??";
-            else if(theTimeUnit <= 9) repString += "-0" + theTimeUnit;
-            else repString += "-" + startTimeUnits.get(i);
-        }
+        String repString = getDateString();
 
         repString += " " + eventStrings.get(0);
 
         return repString;
     }//Method toString
+
+    public String getDateString() {
+        String dateString;
+
+        if(startTimeUnits.get(0) == null) dateString = "????";
+        else dateString = String.valueOf(startTimeUnits.get(0));
+
+        for(int i = 1; i <= 2; i++) {
+            Integer theTimeUnit = startTimeUnits.get(i);
+            if(theTimeUnit == null) dateString += "-??";
+            else if(theTimeUnit <= 9) dateString += "-0" + theTimeUnit;
+            else dateString += "-" + startTimeUnits.get(i);
+        }
+
+        return dateString;
+    }//Method getDateString
+
+    public String getClockString() {
+        String clockString;
+
+        if(startTimeUnits.get(3) == null) clockString = "??";
+        else if(startTimeUnits.get(3) <= 9) clockString = "0" + startTimeUnits.get(3);
+        else clockString = String.valueOf(startTimeUnits.get(3));
+
+        if(startTimeUnits.get(4) == null) clockString += ".??";
+        else if(startTimeUnits.get(4) <= 9) clockString += ".0" + startTimeUnits.get(4);
+        else clockString = String.valueOf(startTimeUnits.get(4));
+
+        return clockString;
+    }
+
+    public void viewThisEvent(int myIndex) {
+        System.out.println("Event: " + eventStrings.get(0) +
+                "\n[*] Name: " + eventStrings.get(0));
+
+        if(eventStrings.get(1) == null) System.out.println("[*] Type:");
+        else System.out.println("[*] Type: " + eventStrings.get(1));
+
+        System.out.println("[*] Date: " + getDateString());
+        System.out.println("[*] Time: " + getClockString());
+        System.out.println("[*] Index: " + myIndex);
+
+        if(eventStrings.get(2) != null) System.out.println("\n" + eventStrings.get(2) + "\n");
+
+        //Printing invited persons - headline
+        int numberOfInvitations = invitationMap.size();
+        if(numberOfInvitations == 0) return;
+        else if(numberOfInvitations == 1) System.out.println("Invited person (1)");
+        else System.out.println("Invited persons (" + numberOfInvitations + ")");
+
+        //Printing invitations - each invitation
+        HashSet<String> attendingSet = new HashSet<>();
+        HashSet<String> pendingSet = new HashSet<>();
+        HashSet<String> declinedSet = new HashSet<>();
+
+        for(Map.Entry<String, InvitationState> invEntry: invitationMap.entrySet()) {
+            switch(invEntry.getValue().toString()) {
+                case "Attending":
+                    attendingSet.add(invEntry.getKey());
+                    break;
+                case "Pending":
+                    pendingSet.add(invEntry.getKey());
+                    break;
+                case "Declined":
+                    declinedSet.add(invEntry.getKey());
+                    break;
+            }
+        }
+
+        ArrayList<String> attendingOrdered = CommonMethods.stringSetToOrderedArrayList(attendingSet);
+        ArrayList<String> pendingOrdered = CommonMethods.stringSetToOrderedArrayList(pendingSet);
+        ArrayList<String> declinedOrdered = CommonMethods.stringSetToOrderedArrayList(declinedSet);
+
+        if(!attendingOrdered.isEmpty()) {
+            System.out.println("Attending (" + attendingOrdered.size() + "):");
+
+            for(int i = 0; i < attendingOrdered.size(); i++) {
+                String handleCorrectCase = myEventCollection.correspondingPersonCollection.getPersonsToString(attendingOrdered.get(i));
+                System.out.println("[A] " + handleCorrectCase);
+            }
+        }
+
+        if(!pendingOrdered.isEmpty()) {
+            System.out.println("\nAnswer pending (" + pendingOrdered.size() + "):");
+
+            for(int i = 0; i < pendingOrdered.size(); i++) {
+                String handleCorrectCase = myEventCollection.correspondingPersonCollection.getPersonsToString(pendingOrdered.get(i));
+                System.out.println("[P] " + handleCorrectCase);
+            }
+        }
+
+        if(!declinedOrdered.isEmpty()) {
+            System.out.println("\nDeclined (" + declinedOrdered.size() + "):");
+
+            for(int i = 0; i < declinedOrdered.size(); i++) {
+                String handleCorrectCase = myEventCollection.correspondingPersonCollection.getPersonsToString(declinedOrdered.get(i));
+                System.out.println("[D] " + handleCorrectCase);
+            }
+        }
+
+    }//Method viewThisEvent
 
     @Override
     public int compareTo(Event e) {

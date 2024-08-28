@@ -1,5 +1,5 @@
 public enum InvitationState {
-    Accepted,
-    Invited,
+    Attending,
+    Pending,
     Declined;
 }//Enum InvitationState

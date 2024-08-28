@@ -117,11 +117,15 @@ public class PersonCollection {
         else System.out.println("Persons (" + numberOfPersons + "):");
 
         //Printing each person
-        ArrayList<String> sortedKeyArray = sortKeys(thePersonMap.keySet());
+        ArrayList<String> sortedKeyArray = CommonMethods.stringSetToOrderedArrayList(thePersonMap.keySet());
         for(int kIndex = 0; kIndex < sortedKeyArray.size(); kIndex++) {
             System.out.println("[P] " + thePersonMap.get(sortedKeyArray.get(kIndex)));
         }
     }//Method listPersons
+
+    public String getPersonsToString(String p) {
+        return thePersonMap.get(p).toString();
+    }//Method getPersonsToString
 
     public void listInterests() {
         HashMap<String, Integer> tempCountMap = new HashMap<>();
@@ -145,7 +149,7 @@ public class PersonCollection {
         else System.out.println("Interests (with number of willing, interested or highly interested people):");
 
         //Printing each interest
-        ArrayList<String> sortedKeyArray = sortKeys(tempCountMap.keySet());
+        ArrayList<String> sortedKeyArray = CommonMethods.stringSetToOrderedArrayList(tempCountMap.keySet());
         for(int kIndex = 0; kIndex < sortedKeyArray.size(); kIndex++) {
             String lowerCaseKey = sortedKeyArray.get(kIndex);
             String printCaseKey = lowerCaseKey;
@@ -157,26 +161,6 @@ public class PersonCollection {
         }
 
     }//Method listInterests
-
-    public ArrayList<String> sortKeys(Set<String> ks) {
-        int numberOfElements = ks.size();
-        ArrayList<String> sortedKeys = new ArrayList<>(numberOfElements);
-
-        for(String key: ks) {
-            if(sortedKeys.isEmpty()) sortedKeys.add(key);
-            else if(key.compareTo(sortedKeys.get(sortedKeys.size() -1)) >= 0) sortedKeys.add(key);
-            else {
-                for(int i = 0; i < sortedKeys.size(); i++) {
-                    if(key.compareTo(sortedKeys.get(i)) < 0) {
-                        sortedKeys.add(i, key);
-                        break;
-                    }
-                }//Loop for (inner)
-            }
-        }//Loop for (outer)
-
-        return sortedKeys;
-    }//Method sortKeys
 
 //----------------------------------------------------------------
     public void storePersons() {

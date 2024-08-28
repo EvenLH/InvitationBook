@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Set;
 
 public abstract class CommonMethods {
@@ -26,6 +27,25 @@ public abstract class CommonMethods {
 
         return correctedArray;
     }//Method removeExtraSpacesFromString
+
+    public static ArrayList<String> stringSetToOrderedArrayList(Set<String> stringSet) {
+        ArrayList<String> orderedStrings = new ArrayList<>(stringSet.size());
+
+        for(String currentString: stringSet) {
+            if(orderedStrings.isEmpty()) orderedStrings.add(currentString);
+            else if(currentString.compareTo(orderedStrings.get(orderedStrings.size() -1)) >= 0) orderedStrings.add(currentString);
+            else {
+                for(int i = 0; i < orderedStrings.size(); i++) {
+                    if(currentString.compareTo(orderedStrings.get(i)) < 0) {
+                        orderedStrings.add(i, currentString);
+                        break;
+                    }
+                }//Loop for (inner)
+            }
+        }//Loop for (outer)
+
+        return orderedStrings;
+    }//Method stringSetToOrderedArrayList
 
     public static boolean stringIsInt(String s) {
         try {
