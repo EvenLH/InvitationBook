@@ -47,6 +47,23 @@ public abstract class CommonMethods {
         return orderedStrings;
     }//Method stringSetToOrderedArrayList
 
+    public static void stringIntoOrderedArrayList(String s, ArrayList<String> l) {
+        String sLower = s.toLowerCase();
+
+        if(l.isEmpty()
+        || sLower.compareTo(l.get(l.size()-1)) >= 0) {
+            l.add(sLower);
+            return;
+        }
+
+        for(int i = 0; i < l.size(); i++) {
+            if(sLower.compareTo(l.get(i)) < 0) {
+                l.add(i, sLower);
+                break;
+            }
+        }
+    }//Method stringIntoOrderedArrayList
+
     public static boolean stringIsInt(String s) {
         try {
             Integer.parseInt(s);

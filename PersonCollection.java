@@ -91,7 +91,10 @@ public class PersonCollection {
         }
         else {
             listPersons();
-            System.out.println("\nView person (/cancel to return to main menu)");
+            if(CommonMethods.stringIsValidNewHandleName(enteredHandle, handleNameSet)) {
+                System.out.println("\nThere is no such person: " + enteredHandle);
+            }
+            System.out.println("View person from the list above (/cancel to return to main menu)");
 
             do {
                 System.out.print("- Enter handle: ");
@@ -106,7 +109,122 @@ public class PersonCollection {
 
     }//Method viewPerson
 
-    public void viewInterest(String enteredInterest) {}//Method viewInterest
+    public void viewInterest(String enteredInterest) {
+
+        /*If the entered interest string could possibly represent an interest,
+        check whether any person actually has an entry for it.
+        If any of them does, call viewExistingInterest and then return to main menu.*/
+        if(CommonMethods.stringIsSafeWithLength(enteredInterest)) {
+            String enteredInterestLowerCase = enteredInterest.toLowerCase();
+
+            for(Person p: thePersonMap.values()) {
+                if(p.getInterestExistence(enteredInterestLowerCase)) {
+                    viewExistingInterest(enteredInterestLowerCase);
+                    return;
+                }
+            }
+        }
+
+        /*If no valid and existing interest entry was entered, we show the user all existing interests,
+        then ask them to enter one of them (any case).
+        This could possibly be written cleaner, but testing seems to show that it works as intended.
+        Probably not important.*/
+        listInterests();
+        System.out.println("View interest from the list above (/cancel to return to main menu)");
+
+        String enteredInterestLowerCase;
+        do {
+            System.out.print("- Enter interest: ");
+            enteredInterestLowerCase = userEntry.nextLine().strip().toLowerCase();
+
+            if(!enteredInterestLowerCase.startsWith("/c")) {
+                for(Person p: thePersonMap.values()) {
+                    if(p.getInterestExistence(enteredInterestLowerCase)) {
+                        viewExistingInterest(enteredInterestLowerCase);
+                        return;
+                    }
+                }
+            }
+        }
+        while(!enteredInterestLowerCase.startsWith("/c"));
+    }//Method viewInterest
+
+    public void viewExistingInterest(String existingInterestLowerCase) {
+
+        ArrayList<String> int3Ordered = new ArrayList<>();
+        ArrayList<String> int2Ordered = new ArrayList<>();
+        ArrayList<String> int1Ordered = new ArrayList<>();
+        ArrayList<String> int0Ordered = new ArrayList<>();
+        ArrayList<String> notFoundOrdered = new ArrayList<>();
+
+        for(Map.Entry<String, Person> interestedPerson: thePersonMap.entrySet()) {
+            Integer interestValue = interestedPerson.getValue().getInterestValue(existingInterestLowerCase);
+
+            if(interestValue == null) {
+                CommonMethods.stringIntoOrderedArrayList(interestedPerson.getKey(), notFoundOrdered);
+                continue;
+            }
+
+            switch(interestValue) {
+                case 3:
+                    CommonMethods.stringIntoOrderedArrayList(interestedPerson.getKey(), int3Ordered);
+                    break;
+                case 2:
+                    CommonMethods.stringIntoOrderedArrayList(interestedPerson.getKey(), int2Ordered);
+                    break;
+                case 1:
+                    CommonMethods.stringIntoOrderedArrayList(interestedPerson.getKey(), int1Ordered);
+                    break;
+                case 0:
+                    CommonMethods.stringIntoOrderedArrayList(interestedPerson.getKey(), int0Ordered);
+                    break;
+            }
+        }
+
+        //Printing headline
+        System.out.println("Interest: " + theInterestSpellingMap.getOrDefault(existingInterestLowerCase, existingInterestLowerCase));
+
+        //Printing information
+        if(!int3Ordered.isEmpty()) {
+            int numberOfInterestedPersons = int3Ordered.size();
+            System.out.println("Highly interested (" + numberOfInterestedPersons + "):");
+            for(int i = 0; i < numberOfInterestedPersons; i++) {
+                System.out.println("[3] " + thePersonMap.get(int3Ordered.get(i)));
+            }
+        }
+
+        if(!int2Ordered.isEmpty()) {
+            int numberOfInterestedPersons = int2Ordered.size();
+            System.out.println("Interested (" + numberOfInterestedPersons + "):");
+            for(int i = 0; i < numberOfInterestedPersons; i++) {
+                System.out.println("[2] " + thePersonMap.get(int2Ordered.get(i)));
+            }
+        }
+
+        if(!int1Ordered.isEmpty()) {
+            int numberOfInterestedPersons = int1Ordered.size();
+            System.out.println("Willing (" + numberOfInterestedPersons + "):");
+            for(int i = 0; i < numberOfInterestedPersons; i++) {
+                System.out.println("[1] " + thePersonMap.get(int1Ordered.get(i)));
+            }
+        }
+
+        if(!int0Ordered.isEmpty()) {
+            int numberOfUninterestedPersons = int0Ordered.size();
+            System.out.println("\nUninterested (" + numberOfUninterestedPersons + "):");
+            for(int i = 0; i < numberOfUninterestedPersons; i++) {
+                System.out.println("[0] " + thePersonMap.get(int0Ordered.get(i)));
+            }
+        }
+
+        if(!notFoundOrdered.isEmpty()) {
+            int numberOfUnknownPersons = notFoundOrdered.size();
+            System.out.println("\nUnknown interest (" + numberOfUnknownPersons + "):");
+            for(int i = 0; i < numberOfUnknownPersons; i++) {
+                System.out.println("[?] " + thePersonMap.get(notFoundOrdered.get(i)));
+            }
+        }
+    }//Method viewExistingInterest
 
     public void listPersons() {
         int numberOfPersons = thePersonMap.size();
@@ -161,6 +279,10 @@ public class PersonCollection {
         }
 
     }//Method listInterests
+
+    public String getInterestCorrectCase(String i) {
+        return theInterestSpellingMap.getOrDefault(i, i);
+    }//Method getInterestCorrectCase
 
 //----------------------------------------------------------------
     public void storePersons() {

@@ -117,7 +117,7 @@ public class Person implements Comparable<Person> {
             System.out.println("Highly interested:");
 
             for(int i = 0; i < highlyInterestedOrdered.size(); i++) {
-                System.out.println("[3] " + highlyInterestedOrdered.get(i));
+                System.out.println("[3] " + myPersonCollection.getInterestCorrectCase(highlyInterestedOrdered.get(i)));
             }
         }
 
@@ -125,7 +125,7 @@ public class Person implements Comparable<Person> {
             System.out.println("Interested:");
 
             for(int i = 0; i < interestedOrdered.size(); i++) {
-                System.out.println("[2] " + interestedOrdered.get(i));
+                System.out.println("[2] " + myPersonCollection.getInterestCorrectCase(interestedOrdered.get(i)));
             }
         }
 
@@ -133,14 +133,14 @@ public class Person implements Comparable<Person> {
             System.out.println("Willing:");
 
             for(int i = 0; i < willingOrdered.size(); i++) {
-                System.out.println("[1] " + willingOrdered.get(i));
+                System.out.println("[1] " + myPersonCollection.getInterestCorrectCase(willingOrdered.get(i)));
             }
         }
 
         if(!uninterestedOrdered.isEmpty()) {
             System.out.println("\nUninterested:");
             for(int i = 0; i < uninterestedOrdered.size(); i++) {
-                System.out.println("[0] " + uninterestedOrdered.get(i));
+                System.out.println("[0] " + myPersonCollection.getInterestCorrectCase(uninterestedOrdered.get(i)));
             }
         }
 
@@ -148,9 +148,17 @@ public class Person implements Comparable<Person> {
 
     }//Method viewThisPerson
 
+    public Integer getInterestValue(String interestLowerCase) {
+        return interestMap.getOrDefault(interestLowerCase, null);
+    }//Method getInterestValue
+
+    public boolean getInterestExistence(String interestLowerCase) {
+        return interestMap.containsKey(interestLowerCase);
+    }//Method getInterestExistence
+
     @Override
     public int compareTo(Person p) {
-        return this.nameArray.get(0).compareTo(p.nameArray.get(0));
+        return this.nameArray.get(0).toLowerCase().compareTo(p.nameArray.get(0).toLowerCase());
     }//Method compareTo
 
     public HashMap<String, Integer> getInterestMap() {
