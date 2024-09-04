@@ -73,7 +73,7 @@ public class PersonCollection {
         correspondingEventCollection = ec;
     }//Method completeSetup
 
-    //----------------------------------------------------------------
+//----------------------------------------------------------------
     public String toString() {
         int numberOfPersons = thePersonMap.size();
 
@@ -88,7 +88,7 @@ public class PersonCollection {
 
         System.out.println("Enter an eligible handle name for the new person (/list to view persons, /cancel to return to main menu)");
         do {
-            System.out.print("- Enter new handle: ");
+            System.out.print("- Enter handle: ");
             newHandle = userEntry.nextLine().strip();
 
             if(newHandle.toLowerCase().startsWith("/l")) {

@@ -26,7 +26,7 @@ public abstract class CommonMethods {
             correctedArray[maxSize -1] = correctedArray[maxSize -1].concat(" " + initialArray[i]);
 
         return correctedArray;
-    }//Method removeExtraSpacesFromString
+    }//Method commandStringToArray
 
     public static ArrayList<String> stringSetToOrderedArrayList(Set<String> stringSet) {
         ArrayList<String> orderedStrings = new ArrayList<>(stringSet.size());
@@ -103,13 +103,6 @@ public abstract class CommonMethods {
     public static boolean keyExistsIgnoreCase(String s, Set<String> keys) {
         if(s == null) return false;
         return keys.contains(s.toLowerCase());
-
-        /*String candidateKey = s.toLowerCase();
-        for(String k: keys) {
-            if(k.equals(candidateKey)) return true;
-        }
-
-        return false;*/
     }//Method keyExistsIgnoreCase
 
     public static boolean stringIsValidNewHandleName(String suggestedKey, String originalKey, Set<String> keys) {

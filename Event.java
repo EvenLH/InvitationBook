@@ -111,6 +111,26 @@ public class Event implements Comparable<Event> {
         return clockString;
     }
 
+    public boolean editThisEvent() {
+        final String initialComparisonString = comparableString;
+    }//Method editThisEvent
+
+    public void listCommandsEditEvent() {
+        System.out.println("Commands: Edit event\n" +
+                "[C] /name [new name]\n" +
+                "[C] /type [new type]\n" +
+                "[C] /about [new text]\n" +
+                "[C] /year [number from 1000 to 9999]\n" +
+                "[C] /month [number from 1 to 12]\n" +
+                "[C] /day [number from 1 to 31]\n" +
+                "[C] /hourminute [number from 0 to 23] [number from 0 to 59]\n" +
+                "[C] /invite [personHandle] Opt:Attending|Pending|Declined\n" +
+                "[C] /remove type|about|year|month|day|hourminute|invite [invite: personHandle]\n" +
+                "[C] /wipe texts|when|invitations|all\n" +
+                "[C] /view\n" +
+                "[C] /conclude\n");
+    }//Method listCommandsEditEvent
+
     public void viewThisEvent(int myIndex) {
         System.out.println("Event: " + eventStrings.get(0) +
                 "\n[*] Name: " + eventStrings.get(0));

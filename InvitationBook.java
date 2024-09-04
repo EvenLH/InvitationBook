@@ -74,7 +74,7 @@ public class InvitationBook {
         if(mainEntryArray.length <= 1) viewCommandMake();
         else if(mainEntryArray[1].startsWith("p")) thePersonCollection.makePerson();
         else if(mainEntryArray[1].startsWith("i")) {}
-        else if(mainEntryArray[1].startsWith("e")) {}
+        else if(mainEntryArray[1].startsWith("e")) theEventCollection.makeEvent();
         else viewCommandMake();
 
         CommonMethods.returnToMainPrint();
@@ -93,8 +93,8 @@ public class InvitationBook {
             else {}
         }
         else if(mainEntryArray[1].startsWith("e")) {
-            if(mainEntryArray.length == 2) {}
-            else {}
+            if(mainEntryArray.length == 2) theEventCollection.editEvent(null);
+            else theEventCollection.editEvent(mainEntryArray[2]);
         }
         else viewCommandEdit();
 

@@ -223,7 +223,7 @@ public class Person implements Comparable<Person> {
                 viewThisPerson(myPersonCollection.getTheInterestSpellingMap());
             }
 
-            else if(!editEntryArray[0].startsWith("/c")) listInternalCommandsEditPerson();
+            else if(!editEntryArray[0].startsWith("/c")) listCommandsEditPerson();
 
         }
         while(!editEntryArray[0].startsWith("/c"));
@@ -232,8 +232,8 @@ public class Person implements Comparable<Person> {
         return nameArray.get(0);
     }//Method editThisPerson
 
-    public void listInternalCommandsEditPerson() {
-        System.out.println("Internal commands: Edit person\n" +
+    public void listCommandsEditPerson() {
+        System.out.println("Commands: Edit person\n" +
                 "[C] /handle [handleName]\n" +
                 "[C] /first [first names]\n" +
                 "[C] /middle [middle names]\n" +
@@ -243,7 +243,7 @@ public class Person implements Comparable<Person> {
                 "[C] /wipe names|interests|both\n" +
                 "[C] /view\n" +
                 "[C] /conclude");
-    }
+    }//Method listCommandsEditPerson
 
     public void viewThisPerson(HashMap<String, String> interestSpellingMap) {
 

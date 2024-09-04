@@ -90,6 +90,56 @@ public class EventCollection {
         for(Event e: theEventArray) e.updateHandleIfInvited(oldHandle, updatedHandle);
     }//Method updateHandleWhereInvited
 
+    public void makeEvent() {
+
+        String initialName;
+
+        System.out.println("Enter a name for the new event (/list to view events, /cancel to return to main menu)");
+        do {
+            System.out.println("- Enter name: ");
+            initialName = userEntry.nextLine().strip();
+
+            if(initialName.toLowerCase().startsWith("/l")) {
+                listEvents();
+                continue;
+            }
+            else if(initialName.toLowerCase().startsWith("/c")) {
+                System.out.println("Canceling making a new event.");
+                return;
+            }
+        }
+        while(!CommonMethods.stringIsSafeWithLength(initialName));
+
+        ArrayList<String> initialStrings = new ArrayList<>(3);
+        initialStrings.add(initialName);
+        for(int i = 1; i <= 2; i++) initialStrings.add(null);
+
+        Event newEvent = new Event(initialStrings, this, userEntry);
+        newEvent.editThisEvent();
+        newEvent.setComparableString(); //Should be in editThisEvent() in the end.
+
+        insertEventIntoEventArray(newEvent);
+
+        System.out.println("New event made: " + newEvent);
+    }//Method makeEvent
+
+    public void editEvent(String eventIndexString) {}//Method editEvent
+
+    public void insertEventIntoEventArray(Event theEvent) {
+        if(theEventArray.isEmpty()) theEventArray.add(theEvent);
+        else if(theEvent.compareTo(theEventArray.get(theEventArray.size() -1)) >= 0) {
+            theEventArray.add(theEvent);
+        }
+        else {
+            for(int i = 0; i < theEventArray.size(); i++) {
+                if(theEvent.compareTo(theEventArray.get(i)) < 0) {
+                    theEventArray.add(i, theEvent);
+                    break;
+                }
+            }
+        }
+    }//Method insertEventIntoEventArray
+
     public void viewEvent(String enteredIndex) {
 
         if(CommonMethods.stringIsIntInRange(enteredIndex, 0, theEventArray.size()-1)) {
