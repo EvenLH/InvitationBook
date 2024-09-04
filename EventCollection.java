@@ -82,6 +82,14 @@ public class EventCollection {
         else return "Events: " + numberOfEvents;
     }//Method toString
 
+    public void removePersonWhereInvited(String p) {
+        for(Event e: theEventArray) e.removePersonIfInvited(p);
+    }//Method removePersonWhereInvited
+
+    public void updateHandleWhereInvited(String oldHandle, String updatedHandle) {
+        for(Event e: theEventArray) e.updateHandleIfInvited(oldHandle, updatedHandle);
+    }//Method updateHandleWhereInvited
+
     public void viewEvent(String enteredIndex) {
 
         if(CommonMethods.stringIsIntInRange(enteredIndex, 0, theEventArray.size()-1)) {

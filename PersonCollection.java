@@ -82,31 +82,59 @@ public class PersonCollection {
         else return "Persons: " + numberOfPersons;
     }//Method toString
 
-    public void viewPerson(String enteredHandle) {
+    public void makePerson() {
 
-        Set<String> handleNameSet = thePersonMap.keySet();
+        String newHandle;
 
-        if(CommonMethods.keyExistsIgnoreCase(enteredHandle, handleNameSet)) {
-            thePersonMap.get(enteredHandle).viewThisPerson(theInterestSpellingMap);
+        System.out.println("Enter an eligible handle name for the new person (/list to view persons, /cancel to return to main menu)");
+        do {
+            System.out.print("- Enter new handle: ");
+            newHandle = userEntry.nextLine().strip();
+
+            if(newHandle.toLowerCase().startsWith("/l")) {
+                listPersons();
+                continue;
+            }
+            else if(newHandle.toLowerCase().startsWith("/c")) {
+                System.out.println("Canceling making a new person.");
+                return;
+            }
+        }
+        while(!CommonMethods.stringIsValidNewHandleName(newHandle, null, thePersonMap.keySet()));
+
+        ArrayList<String> newNames = new ArrayList<>(4);
+        newNames.add(newHandle);
+        for(int i = 1; i <= 3; i++) newNames.add(null);
+
+        Person newPerson = new Person(newNames, this, userEntry);
+        String newKeyAfterEdit = newPerson.editThisPerson(thePersonMap.keySet());
+
+        thePersonMap.put(newKeyAfterEdit.toLowerCase(), newPerson);
+        System.out.println("New person made: " + newPerson);
+    }//Method makePerson
+
+    public void editPerson(String enteredHandle) {
+        final String existingPersonKey = userFindsExistingPersonKey(enteredHandle); //Always lower case unless null.
+
+        if(existingPersonKey == null) return;
+        String newKeyAfterEdit = thePersonMap.get(existingPersonKey).editThisPerson(thePersonMap.keySet()).toLowerCase();
+
+        if(newKeyAfterEdit.equals(existingPersonKey)) {
+            System.out.println("Person edited: " + thePersonMap.get(existingPersonKey));
         }
         else {
-            listPersons();
-            if(CommonMethods.stringIsValidNewHandleName(enteredHandle, handleNameSet)) {
-                System.out.println("\nThere is no such person: " + enteredHandle);
-            }
-            System.out.println("View person from the list above (/cancel to return to main menu)");
-
-            do {
-                System.out.print("- Enter handle: ");
-                enteredHandle = userEntry.nextLine().strip().toLowerCase();
-                if(CommonMethods.keyExistsIgnoreCase(enteredHandle, handleNameSet)) {
-                    thePersonMap.get(enteredHandle).viewThisPerson(theInterestSpellingMap);
-                    break;
-                }
-            }
-            while(!enteredHandle.startsWith("/c"));
+            thePersonMap.put(newKeyAfterEdit, thePersonMap.remove(existingPersonKey));
+            correspondingEventCollection.updateHandleWhereInvited(existingPersonKey, newKeyAfterEdit);
+            System.out.println("Person edited: " + thePersonMap.get(newKeyAfterEdit));
         }
+    }//Method editPerson
 
+    public void viewPerson(String enteredHandle) {
+        String existingPersonKey = userFindsExistingPersonKey(enteredHandle);
+
+        if(existingPersonKey == null) return;
+
+        thePersonMap.get(existingPersonKey).viewThisPerson(theInterestSpellingMap);
     }//Method viewPerson
 
     public void viewInterest(String enteredInterest) {
@@ -161,22 +189,22 @@ public class PersonCollection {
             Integer interestValue = interestedPerson.getValue().getInterestValue(existingInterestLowerCase);
 
             if(interestValue == null) {
-                CommonMethods.stringIntoOrderedArrayList(interestedPerson.getKey(), notFoundOrdered);
+                CommonMethods.stringInsertedIntoOrderedArrayList(interestedPerson.getKey(), notFoundOrdered);
                 continue;
             }
 
             switch(interestValue) {
                 case 3:
-                    CommonMethods.stringIntoOrderedArrayList(interestedPerson.getKey(), int3Ordered);
+                    CommonMethods.stringInsertedIntoOrderedArrayList(interestedPerson.getKey(), int3Ordered);
                     break;
                 case 2:
-                    CommonMethods.stringIntoOrderedArrayList(interestedPerson.getKey(), int2Ordered);
+                    CommonMethods.stringInsertedIntoOrderedArrayList(interestedPerson.getKey(), int2Ordered);
                     break;
                 case 1:
-                    CommonMethods.stringIntoOrderedArrayList(interestedPerson.getKey(), int1Ordered);
+                    CommonMethods.stringInsertedIntoOrderedArrayList(interestedPerson.getKey(), int1Ordered);
                     break;
                 case 0:
-                    CommonMethods.stringIntoOrderedArrayList(interestedPerson.getKey(), int0Ordered);
+                    CommonMethods.stringInsertedIntoOrderedArrayList(interestedPerson.getKey(), int0Ordered);
                     break;
             }
         }
@@ -187,7 +215,7 @@ public class PersonCollection {
         //Printing information
         if(!int3Ordered.isEmpty()) {
             int numberOfInterestedPersons = int3Ordered.size();
-            System.out.println("Highly interested (" + numberOfInterestedPersons + "):");
+            System.out.println("\nHighly interested (" + numberOfInterestedPersons + "):");
             for(int i = 0; i < numberOfInterestedPersons; i++) {
                 System.out.println("[3] " + thePersonMap.get(int3Ordered.get(i)));
             }
@@ -195,7 +223,7 @@ public class PersonCollection {
 
         if(!int2Ordered.isEmpty()) {
             int numberOfInterestedPersons = int2Ordered.size();
-            System.out.println("Interested (" + numberOfInterestedPersons + "):");
+            System.out.println("\nInterested (" + numberOfInterestedPersons + "):");
             for(int i = 0; i < numberOfInterestedPersons; i++) {
                 System.out.println("[2] " + thePersonMap.get(int2Ordered.get(i)));
             }
@@ -203,7 +231,7 @@ public class PersonCollection {
 
         if(!int1Ordered.isEmpty()) {
             int numberOfInterestedPersons = int1Ordered.size();
-            System.out.println("Willing (" + numberOfInterestedPersons + "):");
+            System.out.println("\nWilling (" + numberOfInterestedPersons + "):");
             for(int i = 0; i < numberOfInterestedPersons; i++) {
                 System.out.println("[1] " + thePersonMap.get(int1Ordered.get(i)));
             }
@@ -225,6 +253,10 @@ public class PersonCollection {
             }
         }
     }//Method viewExistingInterest
+
+    public HashMap<String, String> getTheInterestSpellingMap() {
+        return theInterestSpellingMap;
+    }
 
     public void listPersons() {
         int numberOfPersons = thePersonMap.size();
@@ -280,9 +312,37 @@ public class PersonCollection {
 
     }//Method listInterests
 
+    public boolean interestSpellingKeyExistsIgnoreCase(String k) {
+        return theInterestSpellingMap.containsKey(k.toLowerCase());
+    }//Method interestSpellingKeyExistsIgnoreCase
+
+    public void fillInterestCapitalisation(String s) {
+        theInterestSpellingMap.putIfAbsent(s.toLowerCase(), s);
+    }//Method fillInterestCapitalisation
+
     public String getInterestCorrectCase(String i) {
-        return theInterestSpellingMap.getOrDefault(i, i);
+        String iLower = i.toLowerCase();
+        return theInterestSpellingMap.getOrDefault(iLower, iLower);
     }//Method getInterestCorrectCase
+
+    public String userFindsExistingPersonKey(String h) {
+        Set<String> handleSet = thePersonMap.keySet();
+
+        if(CommonMethods.keyExistsIgnoreCase(h, handleSet)) return h.toLowerCase();
+
+        System.out.println("Enter existing handle name (/list to see all handles, /cancel to return to main menu)");
+        do {
+            System.out.print("- Enter handle: ");
+            h = userEntry.nextLine().strip().toLowerCase();
+
+            if(h.startsWith("/l")) listPersons();
+            else if(h.startsWith("/c")) return null;
+            else if(!handleSet.contains(h)) System.out.println("Non-existing or invalid handle.");
+        }
+        while(!CommonMethods.keyExistsIgnoreCase(h, handleSet));
+
+        return h;
+    }//Method userFindsExistingPersonKey
 
 //----------------------------------------------------------------
     public void storePersons() {

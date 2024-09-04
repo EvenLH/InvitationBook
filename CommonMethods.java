@@ -17,7 +17,7 @@ public abstract class CommonMethods {
     public static String[] commandStringToArray(String s, int maxSize) {
         if(s == null || s.isBlank()) return new String[0];
 
-        String[] initialArray = removeExtraSpaces(s).toLowerCase().split(" ");
+        String[] initialArray = removeExtraSpaces(s).split(" ");
         if(initialArray.length <= maxSize) return initialArray;
 
         String[] correctedArray = new String[maxSize];
@@ -47,7 +47,7 @@ public abstract class CommonMethods {
         return orderedStrings;
     }//Method stringSetToOrderedArrayList
 
-    public static void stringIntoOrderedArrayList(String s, ArrayList<String> l) {
+    public static void stringInsertedIntoOrderedArrayList(String s, ArrayList<String> l) {
         String sLower = s.toLowerCase();
 
         if(l.isEmpty()
@@ -62,7 +62,7 @@ public abstract class CommonMethods {
                 break;
             }
         }
-    }//Method stringIntoOrderedArrayList
+    }//Method stringInsertedIntoOrderedArrayList
 
     public static boolean stringIsInt(String s) {
         try {
@@ -102,17 +102,19 @@ public abstract class CommonMethods {
 
     public static boolean keyExistsIgnoreCase(String s, Set<String> keys) {
         if(s == null) return false;
+        return keys.contains(s.toLowerCase());
 
-        String candidateKey = s.toLowerCase();
+        /*String candidateKey = s.toLowerCase();
         for(String k: keys) {
             if(k.equals(candidateKey)) return true;
         }
 
-        return false;
+        return false;*/
     }//Method keyExistsIgnoreCase
 
-    public static boolean stringIsValidNewHandleName(String s, Set<String> keys) {
-        return stringIsSafeWithLength(s) && !s.contains(" ") && !keyExistsIgnoreCase(s, keys);
+    public static boolean stringIsValidNewHandleName(String suggestedKey, String originalKey, Set<String> keys) {
+        boolean keyIsAvailable = !(keyExistsIgnoreCase(suggestedKey, keys)) || suggestedKey.equalsIgnoreCase(originalKey);
+        return keyIsAvailable && stringIsSafeWithLength(suggestedKey) && !suggestedKey.contains(" ");
     }//Method stringIsValidNewHandleName
 
     public static void returnToMainPrint() {

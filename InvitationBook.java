@@ -43,6 +43,8 @@ public class InvitationBook {
             //Taking main menu commands from the user.
             System.out.print("\n- Main menu entry: ");
             mainEntryArray = CommonMethods.commandStringToArray(userEntry.nextLine(), 3);
+            if(mainEntryArray.length >= 1) mainEntryArray[0] = mainEntryArray[0].toLowerCase();
+            if(mainEntryArray.length >= 2) mainEntryArray[1] = mainEntryArray[1].toLowerCase();
 
             //Handling main menu commands from the user.
             if(mainEntryArray.length == 0) listCommands();
@@ -68,9 +70,38 @@ public class InvitationBook {
     }//Method close
 
 //----------------------------------------------------------------
-    public static void make() {}//Method make
+    public static void make() {
+        if(mainEntryArray.length <= 1) viewCommandMake();
+        else if(mainEntryArray[1].startsWith("p")) thePersonCollection.makePerson();
+        else if(mainEntryArray[1].startsWith("i")) {}
+        else if(mainEntryArray[1].startsWith("e")) {}
+        else viewCommandMake();
 
-    public static void edit() {}//Method edit
+        CommonMethods.returnToMainPrint();
+    }//Method make
+
+    public static void viewCommandMake() {}//Method viewCommandMake
+
+    public static void edit() {
+        if(mainEntryArray.length <= 1) viewCommandEdit();
+        else if(mainEntryArray[1].startsWith("p")) {
+            if(mainEntryArray.length == 2) thePersonCollection.editPerson(null);
+            else thePersonCollection.editPerson(mainEntryArray[2]);
+        }
+        else if(mainEntryArray[1].startsWith("i")) {
+            if(mainEntryArray.length == 2) {}
+            else {}
+        }
+        else if(mainEntryArray[1].startsWith("e")) {
+            if(mainEntryArray.length == 2) {}
+            else {}
+        }
+        else viewCommandEdit();
+
+        CommonMethods.returnToMainPrint();
+    }//Method edit
+
+    public static void viewCommandEdit() {}//Method viewCommandEdit
 
     public static void view() {
         if(mainEntryArray.length <= 1) viewCommandView();
@@ -110,7 +141,8 @@ public class InvitationBook {
                 "[*] For 'command': The name of an existing command.\n" +
                 "Examples:\n" +
                 "[*] /view person\n" +
-                "[*] /view person Odin");
+                "[*] /view person Odin"
+        );
     }//Method viewCommandView
 
     public static void list() {
@@ -133,7 +165,8 @@ public class InvitationBook {
                 "[*] events\n" +
                 "[*] commands\n" +
                 "Example:\n" +
-                "[*] /list events");
+                "[*] /list events"
+        );
     }//Method viewCommandList
 
     public static void viewCommand(String enteredCommand) {

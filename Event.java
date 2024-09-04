@@ -73,6 +73,14 @@ public class Event implements Comparable<Event> {
         return repString;
     }//Method toString
 
+    public void removePersonIfInvited(String p) {
+        invitationMap.remove(p);
+    }//Method removePersonIfInvited
+
+    public void updateHandleIfInvited(String oldHandle, String updatedHandle) {
+        if(invitationMap.containsKey(oldHandle)) invitationMap.put(updatedHandle, invitationMap.remove(oldHandle));
+    }//Method updateHandleIfInvited
+
     public String getDateString() {
         String dateString;
 

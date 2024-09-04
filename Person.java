@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Person implements Comparable<Person> {
 
-    ArrayList<String> nameArray;
+    ArrayList<String> nameArray; //Index 0-3: Handle, first, middle, last
     HashMap<String, Integer> interestMap;
 
     //Utilities
@@ -62,6 +62,188 @@ public class Person implements Comparable<Person> {
 
         return repString;
     }//Method toString
+
+    public String editThisPerson(Set<String> handleSet) {
+        final String handleNameAtStart = nameArray.get(0);
+
+        String editEntryCommand;
+        String[] editEntryArray;
+
+        do {
+            System.out.print("\n- Edit person entry: ");
+            editEntryCommand = userEntry.nextLine();
+
+            //Preparing the command for use.
+            if(editEntryCommand.toLowerCase().startsWith("/i")) {
+
+                //Not using this method exactly as it was made for, but it works.
+                String[] tempArray = CommonMethods.commandStringToArray(editEntryCommand, 2);
+
+                if(tempArray.length >= 2 && tempArray[1].contains(" ")) {
+                    int indexSeparatingNameAndValue = tempArray[1].lastIndexOf(" ");
+                    editEntryArray = new String[3];
+                    editEntryArray[0] = tempArray[0].toLowerCase();
+                    editEntryArray[1] = tempArray[1].substring(0, indexSeparatingNameAndValue);
+                    editEntryArray[2] = tempArray[1].substring(indexSeparatingNameAndValue+1);
+                }
+                else {
+                    System.out.println("/interest must be followed by the name of an interest (existing or new), and finally a value (0 to 3).");
+                    editEntryArray = new String[]{"?"};
+                    continue;
+                }
+
+            }
+            else if(editEntryCommand.toLowerCase().startsWith("/r")) editEntryArray = CommonMethods.commandStringToArray(editEntryCommand, 3);
+            else editEntryArray = CommonMethods.commandStringToArray(editEntryCommand, 2);
+
+            editEntryArray[0] = editEntryArray[0].toLowerCase();
+
+            //Performing the contents of the command.
+            if(editEntryArray[0].startsWith("/h")) {
+                if(editEntryArray.length == 2
+                && CommonMethods.stringIsValidNewHandleName(editEntryArray[1], handleNameAtStart, handleSet)) {
+                    nameArray.set(0, editEntryArray[1]);
+                    System.out.println("Handle name set: " + nameArray.get(0));
+                }
+                else
+                    System.out.println("Unavailable or invalid new handle name.");
+            }
+
+            else if(editEntryArray[0].startsWith("/f")) {
+                if(editEntryArray.length == 2
+                && CommonMethods.stringIsSafe(editEntryArray[1])) {
+                    nameArray.set(1, editEntryArray[1]);
+                    System.out.println("First names set: " + nameArray.get(1));
+                }
+                else if(editEntryArray.length == 2)
+                    System.out.println("Can't start with '/', contain ';' or be 'null' in any capitalisation.");
+                else
+                    System.out.println("To delete first names: /remove first");
+            }
+
+            else if(editEntryArray[0].startsWith("/m")) {
+                if(editEntryArray.length == 2
+                && CommonMethods.stringIsSafe(editEntryArray[1])) {
+                    nameArray.set(2, editEntryArray[1]);
+                    System.out.println("Middle names set: " + nameArray.get(2));
+                }
+                else if(editEntryArray.length == 2)
+                    System.out.println("Can't contain ';', start with '/', or be 'null' in any capitalisation.");
+                else
+                    System.out.println("To delete middle names: /remove middle");
+            }
+
+            else if(editEntryArray[0].startsWith("/l")) {
+                if(editEntryArray.length == 2
+                && CommonMethods.stringIsSafeNoSpace(editEntryArray[1])) {
+                    nameArray.set(3, editEntryArray[1]);
+                    System.out.println("Last name set: " + nameArray.get(3));
+                }
+                else if(editEntryArray.length == 2)
+                    System.out.println("Can't contain ';' or space, start with '/', or be 'null' in any capitalisation.");
+                else
+                    System.out.println("To delete last name: /remove last");
+            }
+
+            else if(editEntryArray[0].startsWith("/i")) {
+                if(editEntryArray.length == 3
+                && CommonMethods.stringIsSafeWithLength(editEntryArray[1])
+                && CommonMethods.stringIsIntInRange(editEntryArray[2], 0, 3)) {
+                    String interestNameLowerCase = editEntryArray[1].toLowerCase();
+                    interestMap.put(interestNameLowerCase, Integer.parseInt(editEntryArray[2]));
+                    myPersonCollection.fillInterestCapitalisation(editEntryArray[1]);
+                    System.out.println("Interest set: " + myPersonCollection.getInterestCorrectCase(editEntryArray[1]) +
+                            " - " + interestMap.get(interestNameLowerCase));
+                }
+                else if(editEntryArray.length == 3)
+                    System.out.println("Interest names must be at least one character, can't contain ';', start with '/', or be 'null' in any capitalisation.\n" +
+                            "Interest values must be a whole number ranging from 0 to 3.");
+                else
+                    System.out.println("To delete an interest: /remove interest [interest name]");
+            }
+
+            else if(editEntryArray[0].startsWith("/r")) {
+                if(editEntryArray.length >= 2) editEntryArray[1] = editEntryArray[1].toLowerCase();
+
+                if(editEntryArray.length == 2) {
+                    if(editEntryArray[1].startsWith("f")) {
+                        nameArray.set(1, null);
+                        System.out.println("Removed: First names");
+                    }
+                    else if(editEntryArray[1].startsWith("m")) {
+                        nameArray.set(2, null);
+                        System.out.println("Removed: Middle names");
+                    }
+                    else if(editEntryArray[1].startsWith("l")) {
+                        nameArray.set(3, null);
+                        System.out.println("Removed: Last name");
+                    }
+                    else System.out.println("/remove requires you to enter one of these options: First, middle, last or interest.\n" +
+                                "If interest, you must enter the name of an interest in this persons interest list.");
+                }
+                else if(editEntryArray.length == 3
+                && editEntryArray[1].startsWith("i")
+                && interestMap.containsKey(editEntryArray[2].toLowerCase())) {
+                    interestMap.remove(editEntryArray[2].toLowerCase());
+                    System.out.println("Removed interest: " + editEntryArray[2].toLowerCase());
+                }
+                else {
+                    System.out.println("/remove requires you to enter one of these options: 'First', 'middle', 'last' or 'interest'.\n" +
+                            "If interest, you must enter the name of an interest from this persons interest list.");
+                }
+            }
+
+            else if(editEntryArray[0].startsWith("/w")) {
+                if(editEntryArray.length == 2) {
+                    editEntryArray[1] = editEntryArray[1].toLowerCase();
+
+                    if(editEntryArray[1].startsWith("n")) {
+                        nameArray.set(1, null);
+                        nameArray.set(2, null);
+                        nameArray.set(3, null);
+                        System.out.println("Removed first names, middle names and last name.\n" +
+                                "Note: Handle name can't be deleted.");
+                    }
+                    else if(editEntryArray[1].startsWith("i")) {
+                        interestMap.clear();
+                        System.out.println("Removed all interest entries.");
+                    }
+                    else if(editEntryArray[1].startsWith("b")) {
+                        nameArray.set(1, null);
+                        nameArray.set(2, null);
+                        nameArray.set(3, null);
+                        interestMap.clear();
+                        System.out.println("Removed first names, middle names, last name and all interest entries.\n" +
+                                "Note: Handle name can't be deleted.");
+                    }
+                }
+            }
+
+            else if(editEntryArray[0].startsWith("/v")) {
+                viewThisPerson(myPersonCollection.getTheInterestSpellingMap());
+            }
+
+            else if(!editEntryArray[0].startsWith("/c")) listInternalCommandsEditPerson();
+
+        }
+        while(!editEntryArray[0].startsWith("/c"));
+
+        //The caller must know the current handle name.
+        return nameArray.get(0);
+    }//Method editThisPerson
+
+    public void listInternalCommandsEditPerson() {
+        System.out.println("Internal commands: Edit person\n" +
+                "[C] /handle [handleName]\n" +
+                "[C] /first [first names]\n" +
+                "[C] /middle [middle names]\n" +
+                "[C] /last [lastName]\n" +
+                "[C] /interest [interest name] [interestValue]\n" +
+                "[C] /remove first|middle|last|interest [interest: interest name]\n" +
+                "[C] /wipe names|interests|both\n" +
+                "[C] /view\n" +
+                "[C] /conclude");
+    }
 
     public void viewThisPerson(HashMap<String, String> interestSpellingMap) {
 
