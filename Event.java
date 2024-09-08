@@ -117,11 +117,160 @@ public class Event implements Comparable<Event> {
         String editEntryCommand;
         String[] editEntryArray;
 
+        do {
+            System.out.print("\n- Edit event entry: ");
+            editEntryCommand = userEntry.nextLine();
+
+            //Preparing the command for use.
+            if(editEntryCommand.toLowerCase().startsWith("/h")
+            || editEntryCommand.toLowerCase().startsWith("/i")
+            || editEntryCommand.toLowerCase().startsWith("/r")) {
+                editEntryArray = CommonMethods.commandStringToArray(editEntryCommand, 3);
+            }
+            else editEntryArray = CommonMethods.commandStringToArray(editEntryCommand, 2);
+
+            editEntryArray[0] = editEntryArray[0].toLowerCase();
+
+            //Performing the contents of the command.
+            if(editEntryArray[0].startsWith("/n")) {
+                if(editEntryArray.length == 2
+                && CommonMethods.stringIsSafeWithLength(editEntryArray[1])) {
+                    eventStrings.set(0, editEntryArray[1]);
+                    System.out.println("Event name set: " + eventStrings.get(0));
+                }
+                else if(editEntryArray.length == 2) {
+                    System.out.println("Must be at least one character long. Can't start with '/', contain ';' or be 'null' in any capitalisation.");
+                }
+                else
+                    System.out.println("/name requires you to enter a new name for this event.");
+            }
+
+            else if(editEntryArray[0].startsWith("/t")) {
+                if(editEntryArray.length == 2
+                && CommonMethods.stringIsSafeWithLength(editEntryArray[1])) {
+                    eventStrings.set(1, editEntryArray[1]);
+                    System.out.println("Event type set: " + eventStrings.get(1));
+                }
+                else if(editEntryArray.length == 2) {
+                    System.out.println("Must be at least one character long. Can't start with '/', contain ';' or be 'null' in any capitalisation.");
+                }
+                else
+                    System.out.println("/type requires you to enter a new type for this event.");
+            }
+
+            else if(editEntryArray[0].startsWith("/a")) {
+                if(editEntryArray.length == 2
+                && CommonMethods.stringIsSafeWithLength(editEntryArray[1])) {
+                    eventStrings.set(2, editEntryArray[1]);
+                    System.out.println("Event description set: " + eventStrings.get(2));
+                }
+                else if(editEntryArray.length == 2) {
+                    System.out.println("Must be at least one character long. Can't start with '/', contain ';' or be 'null' in any capitalisation.");
+                }
+                else
+                    System.out.println("/about requires you to enter a new description for this event.");
+            }
+
+            else if(editEntryArray[0].startsWith("/y")) {
+                if(editEntryArray.length == 2
+                && CommonMethods.stringIsIntInRange(editEntryArray[1], 1000, 9999)) {
+                    startTimeUnits.set(0, Integer.parseInt(editEntryArray[1]));
+                    System.out.println("Event year set: " + startTimeUnits.get(0));
+                }
+                else if(editEntryArray.length == 2) {
+                    System.out.println("Must be a number from 1000 to 9999.");
+                }
+                else
+                    System.out.println("/year requires you to enter a new start year for this event.");
+            }
+
+            else if(editEntryArray[0].startsWith("/m")) {
+                if(editEntryArray.length == 2
+                && CommonMethods.stringIsIntInRange(editEntryArray[1], 1, 12)) {
+                    startTimeUnits.set(1, Integer.parseInt(editEntryArray[1]));
+                    System.out.println("Event month set: " + startTimeUnits.get(1));
+                }
+                else if(editEntryArray.length == 2) {
+                    System.out.println("Must be a number from 1 to 12.");
+                }
+                else
+                    System.out.println("/month requires you to enter a new start month for this event.");
+            }
+
+            else if(editEntryArray[0].startsWith("/d")) {
+                if(editEntryArray.length == 2
+                && CommonMethods.stringIsIntInRange(editEntryArray[1], 1, 31)) {
+                    startTimeUnits.set(2, Integer.parseInt(editEntryArray[1]));
+                    System.out.println("Event day set: " + startTimeUnits.get(2));
+                }
+                else if(editEntryArray.length == 2) {
+                    System.out.println("Must be a number from 1 to 31.");
+                }
+                else
+                    System.out.println("/day requires you to enter a new start day for this event.");
+            }
+
+            else if(editEntryArray[0].startsWith("/h")) {}
+
+            else if(editEntryArray[0].startsWith("/i")) {}
+
+            else if(editEntryArray[0].startsWith("/r")) {}
+
+            else if(editEntryArray[0].startsWith("/w")) {
+                if(editEntryArray.length == 2) {
+                    editEntryArray[1] = editEntryArray[1].toLowerCase();
+
+                    if(editEntryArray[1].startsWith("/t")) {
+                        wipeTexts();
+                    }
+                    else if(editEntryArray[1].startsWith("/w")) {
+                        wipeStartTimes();
+                    }
+                    else if(editEntryArray[1].startsWith("/i")) {
+                        wipeInvitations();
+                    }
+                    else if(editEntryArray[1].startsWith("/a")) {
+                        wipeTexts();
+                        wipeStartTimes();
+                        wipeInvitations();
+                    }
+                }
+            }
+
+            else if(editEntryArray[0].startsWith("/v")) {
+                viewThisEvent(null);
+            }
+
+            else if(!editEntryArray[0].startsWith("/c")) {
+                listCommandsEditEvent();
+            }
+        }
+        while(!editEntryArray[0].startsWith("/c"));
+
         //Finishing
+        //Returning 'true' means it may need to be moved in the event array.
         setComparableString();
-        //Returning whether it was changed. True = it was changed.
         return !initialComparisonString.equals(comparableString);
     }//Method editThisEvent
+
+    public void wipeTexts() {
+        eventStrings.set(1, null);
+        eventStrings.set(2, null);
+        System.out.println("Removed event type and description.\n" +
+                "Note: Name can't be deleted.");
+    }//Method wipeTexts
+
+    public void wipeStartTimes() {
+        for(int i = 0; i <= 4; i++) {
+            startTimeUnits.set(i, null);
+        }
+        System.out.println("Removed starting year, month, day, hour and minute.");
+    }//Method wipeStartTimes
+
+    public void wipeInvitations() {
+        invitationMap.clear();
+        System.out.println("Removed all invitations.");
+    }//Method wipeInvitations
 
     public void listCommandsEditEvent() {
         System.out.println("Commands: Edit event\n" +
@@ -131,15 +280,15 @@ public class Event implements Comparable<Event> {
                 "[C] /year [number from 1000 to 9999]\n" +
                 "[C] /month [number from 1 to 12]\n" +
                 "[C] /day [number from 1 to 31]\n" +
-                "[C] /hourminute [number from 0 to 23] [number from 0 to 59]\n" +
-                "[C] /invite [personHandle] Opt:Attending|Pending|Declined\n" +
-                "[C] /remove type|about|year|month|day|hourminute|invite [invite: personHandle]\n" +
+                "[C] /hour [number from 0 to 23] [opt: number from 0 to 59]\n" +
+                "[C] /invite [personHandle] opt: Attending|Pending|Declined\n" +
+                "[C] /remove type|about|year|month|day|hour|invite [invite: personHandle]\n" +
                 "[C] /wipe texts|when|invitations|all\n" +
                 "[C] /view\n" +
                 "[C] /conclude\n");
     }//Method listCommandsEditEvent
 
-    public void viewThisEvent(int myIndex) {
+    public void viewThisEvent(Integer myIndex) {
         System.out.println("Event: " + eventStrings.get(0) +
                 "\n[*] Name: " + eventStrings.get(0));
 
@@ -148,7 +297,8 @@ public class Event implements Comparable<Event> {
 
         System.out.println("[*] Date: " + getDateString());
         System.out.println("[*] Time: " + getClockString());
-        System.out.println("[*] Index: " + myIndex);
+        if(myIndex == null) System.out.println("[*] Index: Unknown");
+        else System.out.println("[*] Index: " + myIndex);
 
         if(eventStrings.get(2) != null) System.out.println("\n" + eventStrings.get(2) + "\n");
 

@@ -105,8 +105,11 @@ public class Person implements Comparable<Person> {
                     nameArray.set(0, editEntryArray[1]);
                     System.out.println("Handle name set: " + nameArray.get(0));
                 }
-                else
+                else if(editEntryArray.length == 2) {
                     System.out.println("Unavailable or invalid new handle name.");
+                }
+                else
+                    System.out.println("/handle requires you to enter a new handle name for this person.");
             }
 
             else if(editEntryArray[0].startsWith("/f")) {
@@ -223,7 +226,9 @@ public class Person implements Comparable<Person> {
                 viewThisPerson(myPersonCollection.getTheInterestSpellingMap());
             }
 
-            else if(!editEntryArray[0].startsWith("/c")) listCommandsEditPerson();
+            else if(!editEntryArray[0].startsWith("/c")) {
+                listCommandsEditPerson();
+            }
 
         }
         while(!editEntryArray[0].startsWith("/c"));
