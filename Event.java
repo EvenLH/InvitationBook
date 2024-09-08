@@ -113,6 +113,14 @@ public class Event implements Comparable<Event> {
 
     public boolean editThisEvent() {
         final String initialComparisonString = comparableString;
+
+        String editEntryCommand;
+        String[] editEntryArray;
+
+        //Finishing
+        setComparableString();
+        //Returning whether it was changed. True = it was changed.
+        return !initialComparisonString.equals(comparableString);
     }//Method editThisEvent
 
     public void listCommandsEditEvent() {

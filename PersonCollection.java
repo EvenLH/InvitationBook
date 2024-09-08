@@ -328,7 +328,13 @@ public class PersonCollection {
     public String userFindsExistingPersonKey(String h) {
         Set<String> handleSet = thePersonMap.keySet();
 
-        if(CommonMethods.keyExistsIgnoreCase(h, handleSet)) return h.toLowerCase();
+        if(handleSet.isEmpty()) {
+            System.out.println("There are no persons.");
+            return null;
+        }
+        else if(CommonMethods.keyExistsIgnoreCase(h, handleSet)) {
+            return h.toLowerCase();
+        }
 
         System.out.println("Enter existing handle name (/list to see all handles, /cancel to return to main menu)");
         do {
@@ -337,7 +343,9 @@ public class PersonCollection {
 
             if(h.startsWith("/l")) listPersons();
             else if(h.startsWith("/c")) return null;
-            else if(!handleSet.contains(h)) System.out.println("Non-existing or invalid handle.");
+            else if(!handleSet.contains(h)) {
+                System.out.println("Non-existing or invalid handle.");
+            }
         }
         while(!CommonMethods.keyExistsIgnoreCase(h, handleSet));
 

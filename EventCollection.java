@@ -116,14 +116,25 @@ public class EventCollection {
 
         Event newEvent = new Event(initialStrings, this, userEntry);
         newEvent.editThisEvent();
-        newEvent.setComparableString(); //Should be in editThisEvent() in the end.
 
         insertEventIntoEventArray(newEvent);
-
         System.out.println("New event made: " + newEvent);
     }//Method makeEvent
 
-    public void editEvent(String eventIndexString) {}//Method editEvent
+    public void editEvent(String eventIndexString) {
+        final Integer selectedEventIndex = userFindsExistingEventIndex(eventIndexString);
+        if(selectedEventIndex == null) return;
+
+        Event editedEvent = theEventArray.get(selectedEventIndex);
+
+        boolean eventSortValueWasChanged = editedEvent.editThisEvent();
+        if(eventSortValueWasChanged) {
+            theEventArray.remove(editedEvent);
+            insertEventIntoEventArray(editedEvent);
+        }
+
+        System.out.println("Event edited: " + editedEvent);
+    }//Method editEvent
 
     public void insertEventIntoEventArray(Event theEvent) {
         if(theEventArray.isEmpty()) theEventArray.add(theEvent);
@@ -176,6 +187,34 @@ public class EventCollection {
             );
         }
     }//Method listEvents
+
+    public Integer userFindsExistingEventIndex(String i) {
+
+        if(theEventArray.isEmpty()) {
+            System.out.println("There are no events.");
+            return null;
+        }
+        else if(CommonMethods.stringIsIntInRange(i, 0, theEventArray.size()-1)) {
+            return Integer.parseInt(i);
+        }
+
+        listEvents();
+        System.out.println("Enter event number (/list to see all events, /cancel to return to main menu");
+        do {
+            System.out.print("- Enter number: ");
+            i = userEntry.nextLine().strip().toLowerCase();
+
+            if(i.startsWith("/l")) listEvents();
+            else if(i.startsWith("/c")) return null;
+            else if(!CommonMethods.stringIsIntInRange(i, 0, theEventArray.size())) {
+                System.out.println("The event number is the number in [] to the left. " +
+                        "You must enter a number from 0 to " + (theEventArray.size()-1) + ".");
+            }
+        }
+        while(!CommonMethods.stringIsIntInRange(i, 0, theEventArray.size()-1));
+
+        return Integer.parseInt(i);
+    }//Method userFindsExistingEventIndex
 
 //----------------------------------------------------------------
     public void storeEvents() {
