@@ -18,6 +18,7 @@ public class Event implements Comparable<Event> {
 
         //Utilities
         myEventCollection = ec;
+        comparableString = null;
         userEntry = ue;
 
         String[] temp = storageString.strip().split(";");
@@ -56,6 +57,7 @@ public class Event implements Comparable<Event> {
         invitationMap = new HashMap<>();
 
         myEventCollection = ec;
+        comparableString = null;
         userEntry = ue;
 
         for(int i = 0; i <= 4; i++) {
@@ -63,6 +65,10 @@ public class Event implements Comparable<Event> {
         }
 
     }//Method Event constructor 2
+
+    public void completeNewEventSetup() {
+        setComparableString();
+    }//Method completeEventSetup
 
 //----------------------------------------------------------------
     public String toString() {
@@ -106,12 +112,13 @@ public class Event implements Comparable<Event> {
 
         if(startTimeUnits.get(4) == null) clockString += ".??";
         else if(startTimeUnits.get(4) <= 9) clockString += ".0" + startTimeUnits.get(4);
-        else clockString = String.valueOf(startTimeUnits.get(4));
+        else clockString += "." + startTimeUnits.get(4);
 
         return clockString;
     }
 
     public boolean editThisEvent() {
+        setComparableString();
         final String initialComparisonString = comparableString;
 
         String editEntryCommand;
@@ -210,11 +217,108 @@ public class Event implements Comparable<Event> {
                     System.out.println("/day requires you to enter a new start day for this event.");
             }
 
-            else if(editEntryArray[0].startsWith("/h")) {}
+            else if(editEntryArray[0].startsWith("/h")) {
+                if(editEntryArray.length == 3) {
 
-            else if(editEntryArray[0].startsWith("/i")) {}
+                    if(CommonMethods.stringIsIntInRange(editEntryArray[1], 0, 23)
+                    && CommonMethods.stringIsIntInRange(editEntryArray[2], 0, 59)) {
+                        startTimeUnits.set(3, Integer.parseInt(editEntryArray[1]));
+                        startTimeUnits.set(4, Integer.parseInt(editEntryArray[2]));
+                    }
+                    else System.out.println("Hour must be a number from 0 to 23. If specifying minute, it must be a number from 0 to 59.");
+                }
+                else if(editEntryArray.length == 2) {
 
-            else if(editEntryArray[0].startsWith("/r")) {}
+                    if(CommonMethods.stringIsIntInRange(editEntryArray[1], 0, 23)) {
+                        startTimeUnits.set(3, Integer.parseInt(editEntryArray[1]));
+                        startTimeUnits.set(4, 0);
+                    }
+                    else System.out.println("Hour must be a number from 0 to 23.");
+                }
+                else System.out.println("/hour requires you to enter a new start hour for this event. Optionally, you may add another space and specify a minute.");
+            }
+
+            else if(editEntryArray[0].startsWith("/i")) {
+
+                if(editEntryArray.length == 3) {
+                    String existingHandle = myEventCollection.correspondingPersonCollection.userFindsExistingPersonKey(editEntryArray[1]);
+                    InvitationState invState = InvitationState.stringToEnum(editEntryArray[2]);
+
+                    if(existingHandle == null || invState == null) {
+                        System.out.println("/invite requires you to enter an existing person handle. If entering an answer, it must be 'attending', 'pending' or 'declined'.");
+                        continue;
+                    }
+                    else {
+                        invitationMap.put(existingHandle, invState);
+                    }
+                }
+                else if(editEntryArray.length == 2) {
+                    String existingHandle = myEventCollection.correspondingPersonCollection.userFindsExistingPersonKey(editEntryArray[1]);
+
+                    if(existingHandle == null) {
+                        System.out.println("/invite requires you to enter an existing person handle. The default answer is none is entered is that the answer is 'pending'.");
+                        continue;
+                    }
+                    else {
+                        invitationMap.put(existingHandle, InvitationState.Pending);
+                    }
+                }
+                else {
+                    System.out.println("/invite requires you to enter an existing person handle. If entering an answer, it must be 'attending', 'pending' or 'declined'.");
+                }
+            }
+
+            else if(editEntryArray[0].startsWith("/r")) {
+
+                if(editEntryArray.length >= 2) {
+
+                    if(editEntryArray[1].startsWith("t")) {
+                        eventStrings.set(1, null);
+                        System.out.println("Deleted event type.");
+                    }
+                    else if(editEntryArray[1].startsWith("a")) {
+                        eventStrings.set(2, null);
+                        System.out.println("Deleted event description.");
+                    }
+                    else if(editEntryArray[1].startsWith("y")) {
+                        startTimeUnits.set(0, null);
+                        System.out.println("Deleted starting year.");
+                    }
+                    else if(editEntryArray[1].startsWith("m")) {
+                        startTimeUnits.set(1, null);
+                        System.out.println("Deleted starting month.");
+                    }
+                    else if(editEntryArray[1].startsWith("d")) {
+                        startTimeUnits.set(2, null);
+                        System.out.println("Deleted starting day.");
+                    }
+                    else if(editEntryArray[1].startsWith("h")) {
+                        startTimeUnits.set(3, null);
+                        startTimeUnits.set(4, null);
+                        System.out.println("Deleted starting hour and minute.");
+                    }
+                    else if(editEntryArray[1].startsWith("i")) {
+                        if(editEntryArray.length == 3) {
+                            String existingHandle = myEventCollection.correspondingPersonCollection.userFindsExistingPersonKey(editEntryArray[2]);
+
+                            if(existingHandle == null) {
+                                System.out.println("For /remove invite, you must also enter an existing person's handle name.\n" +
+                                        "Example: /remove invite SigridK");
+                            }
+                            else {
+                                invitationMap.remove(existingHandle);
+                                System.out.println("Deleted invitation: " + myEventCollection.correspondingPersonCollection.getPersonsToString(existingHandle));
+                            }
+                        }
+                        else System.out.println("For /remove invite, you must also enter an existing person's handle name.\n" +
+                                "Example: /remove invite Erik");
+                    }
+                }
+                else {
+                    System.out.println("/remove must be followed by 'type', 'about', 'year', 'month', 'day', 'hour' or 'invite'.\n" +
+                            "If 'invite', you must also enter an existing person's handle name.");
+                }
+            }
 
             else if(editEntryArray[0].startsWith("/w")) {
                 if(editEntryArray.length == 2) {
@@ -222,17 +326,23 @@ public class Event implements Comparable<Event> {
 
                     if(editEntryArray[1].startsWith("/t")) {
                         wipeTexts();
+                        System.out.println("Removed event type and description.\n" +
+                                "Note: Event name can't be deleted (only changed).");
                     }
                     else if(editEntryArray[1].startsWith("/w")) {
                         wipeStartTimes();
+                        System.out.println("Removed all event times.");
                     }
                     else if(editEntryArray[1].startsWith("/i")) {
                         wipeInvitations();
+                        System.out.println("Removed all invitations to this event.");
                     }
                     else if(editEntryArray[1].startsWith("/a")) {
                         wipeTexts();
                         wipeStartTimes();
                         wipeInvitations();
+                        System.out.println("Removed event type, description, all event times and all invitations to this event.\n" +
+                                "Note: Event name can't be deleted (only changed).");
                     }
                 }
             }
@@ -300,13 +410,13 @@ public class Event implements Comparable<Event> {
         if(myIndex == null) System.out.println("[*] Index: Unknown");
         else System.out.println("[*] Index: " + myIndex);
 
-        if(eventStrings.get(2) != null) System.out.println("\n" + eventStrings.get(2) + "\n");
+        if(eventStrings.get(2) != null) System.out.println("\n" + eventStrings.get(2));
 
         //Printing invited persons - headline
         int numberOfInvitations = invitationMap.size();
         if(numberOfInvitations == 0) return;
-        else if(numberOfInvitations == 1) System.out.println("Invited person (1)");
-        else System.out.println("Invited persons (" + numberOfInvitations + ")");
+        else if(numberOfInvitations == 1) System.out.println("\nInvited person (1)");
+        else System.out.println("\nInvited persons (" + numberOfInvitations + ")");
 
         //Printing invitations - each invitation
         HashSet<String> attendingSet = new HashSet<>();

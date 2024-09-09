@@ -25,10 +25,6 @@ public class InvitationBook {
         thePersonCollection = new PersonCollection("storedPersons.txt", "storedInterests.txt", userEntry);
         theEventCollection = new EventCollection("storedEvents.txt", userEntry);
 
-        thePersonCollection.loadPersons();
-        thePersonCollection.loadInterests();
-        theEventCollection.loadEvents();
-
         thePersonCollection.completeSetup(theEventCollection);
         theEventCollection.completeSetup(thePersonCollection);
     }//Method open

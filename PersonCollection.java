@@ -70,6 +70,8 @@ public class PersonCollection {
     }//Methods loadInterests
 
     public void completeSetup(EventCollection ec) {
+        loadPersons();
+        loadInterests();
         correspondingEventCollection = ec;
     }//Method completeSetup
 
@@ -274,6 +276,9 @@ public class PersonCollection {
     }//Method listPersons
 
     public String getPersonsToString(String p) {
+        if(!CommonMethods.keyExistsIgnoreCase(p, thePersonMap.keySet())) {
+            return "No person found.";
+        }
         return thePersonMap.get(p).toString();
     }//Method getPersonsToString
 
@@ -329,7 +334,7 @@ public class PersonCollection {
         Set<String> handleSet = thePersonMap.keySet();
 
         if(handleSet.isEmpty()) {
-            System.out.println("There are no persons.");
+            System.out.println("There are no persons in the person list.");
             return null;
         }
         else if(CommonMethods.keyExistsIgnoreCase(h, handleSet)) {

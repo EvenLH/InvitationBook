@@ -38,14 +38,14 @@ public class EventCollection {
         //Loading the 1st stored Event.
         if(eventReader.hasNextLine()) {
             Event firstLoadedEvent = new Event(eventReader.nextLine().strip(), this, userEntry);
-            firstLoadedEvent.setComparableString();
+            firstLoadedEvent.completeNewEventSetup();
             theEventArray.add(firstLoadedEvent);
         }
 
         //Loading any events after the 1st.
         while(eventReader.hasNextLine()) {
             Event loadedEvent = new Event(eventReader.nextLine().strip(), this, userEntry);
-            loadedEvent.setComparableString();
+            loadedEvent.completeNewEventSetup();
             int numberOfLoadedEvents = theEventArray.size();
 
             /*Small optimization: Since events should be stored in order in the .txt file,
@@ -70,6 +70,7 @@ public class EventCollection {
     }//Method loadEvents
 
     public void completeSetup(PersonCollection pc) {
+        loadEvents();
         correspondingPersonCollection = pc;
     }//Method completeSetup
 
@@ -96,7 +97,7 @@ public class EventCollection {
 
         System.out.println("Enter a name for the new event (/list to view events, /cancel to return to main menu)");
         do {
-            System.out.println("- Enter name: ");
+            System.out.print("- Enter name: ");
             initialName = userEntry.nextLine().strip();
 
             if(initialName.toLowerCase().startsWith("/l")) {
@@ -115,6 +116,7 @@ public class EventCollection {
         for(int i = 1; i <= 2; i++) initialStrings.add(null);
 
         Event newEvent = new Event(initialStrings, this, userEntry);
+        newEvent.completeNewEventSetup();
         newEvent.editThisEvent();
 
         insertEventIntoEventArray(newEvent);
