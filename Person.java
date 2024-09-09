@@ -347,6 +347,10 @@ public class Person implements Comparable<Person> {
         interestMap.remove(interestLowerCase);
     }//Method removeAnInterest
 
+    public void wipePersonalInterests() {
+        interestMap.clear();
+    }//Method wipePersonalInterests
+
     @Override
     public int compareTo(Person p) {
         return this.nameArray.get(0).toLowerCase().compareTo(p.nameArray.get(0).toLowerCase());

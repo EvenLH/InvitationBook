@@ -79,13 +79,13 @@ public class Event implements Comparable<Event> {
         return repString;
     }//Method toString
 
-    public void removePersonIfInvited(String p) {
-        invitationMap.remove(p);
-    }//Method removePersonIfInvited
-
     public void updateHandleIfInvited(String oldHandle, String updatedHandle) {
         if(invitationMap.containsKey(oldHandle)) invitationMap.put(updatedHandle, invitationMap.remove(oldHandle));
     }//Method updateHandleIfInvited
+
+    public void removePersonIfInvited(String p) {
+        invitationMap.remove(p);
+    }//Method removePersonIfInvited
 
     public String getDateString() {
         String dateString;
@@ -325,23 +325,23 @@ public class Event implements Comparable<Event> {
                     editEntryArray[1] = editEntryArray[1].toLowerCase();
 
                     if(editEntryArray[1].startsWith("/t")) {
-                        wipeTexts();
+                        wipeEventTexts();
                         System.out.println("Removed event type and description.\n" +
                                 "Note: Event name can't be deleted (only changed).");
                     }
                     else if(editEntryArray[1].startsWith("/w")) {
-                        wipeStartTimes();
+                        wipeEventStartTimes();
                         System.out.println("Removed all event times.");
                     }
                     else if(editEntryArray[1].startsWith("/i")) {
-                        wipeInvitations();
-                        System.out.println("Removed all invitations to this event.");
+                        wipeEventInvitations();
+                        System.out.println("Removed all invitations.");
                     }
                     else if(editEntryArray[1].startsWith("/a")) {
-                        wipeTexts();
-                        wipeStartTimes();
-                        wipeInvitations();
-                        System.out.println("Removed event type, description, all event times and all invitations to this event.\n" +
+                        wipeEventTexts();
+                        wipeEventStartTimes();
+                        wipeEventInvitations();
+                        System.out.println("Removed event type, description, all event times and all invitations.\n" +
                                 "Note: Event name can't be deleted (only changed).");
                     }
                 }
@@ -363,24 +363,20 @@ public class Event implements Comparable<Event> {
         return !initialComparisonString.equals(comparableString);
     }//Method editThisEvent
 
-    public void wipeTexts() {
+    public void wipeEventTexts() {
         eventStrings.set(1, null);
         eventStrings.set(2, null);
-        System.out.println("Removed event type and description.\n" +
-                "Note: Name can't be deleted.");
-    }//Method wipeTexts
+    }//Method wipeEventTexts
 
-    public void wipeStartTimes() {
+    public void wipeEventStartTimes() {
         for(int i = 0; i <= 4; i++) {
             startTimeUnits.set(i, null);
         }
-        System.out.println("Removed starting year, month, day, hour and minute.");
-    }//Method wipeStartTimes
+    }//Method wipeEventStartTimes
 
-    public void wipeInvitations() {
+    public void wipeEventInvitations() {
         invitationMap.clear();
-        System.out.println("Removed all invitations.");
-    }//Method wipeInvitations
+    }//Method wipeEventInvitations
 
     public void listCommandsEditEvent() {
         System.out.println("Commands: Edit event\n" +

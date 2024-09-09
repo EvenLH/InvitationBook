@@ -84,13 +84,17 @@ public class EventCollection {
         else return "Events: " + numberOfEvents;
     }//Method toString
 
+    public void updateHandleWhereInvited(String oldHandle, String updatedHandle) {
+        for(Event e: theEventArray) e.updateHandleIfInvited(oldHandle, updatedHandle);
+    }//Method updateHandleWhereInvited
+
     public void removePersonWhereInvited(String p) {
         for(Event e: theEventArray) e.removePersonIfInvited(p);
     }//Method removePersonWhereInvited
 
-    public void updateHandleWhereInvited(String oldHandle, String updatedHandle) {
-        for(Event e: theEventArray) e.updateHandleIfInvited(oldHandle, updatedHandle);
-    }//Method updateHandleWhereInvited
+    public void wipeInvitationsAllEvents() {
+        for(Event e: theEventArray) e.wipeEventInvitations();
+    }//Method wipeInvitationsAllEvents
 
     public void makeEvent() {
 
@@ -186,6 +190,15 @@ public class EventCollection {
             while(!enteredIndex.startsWith("/c"));
         }
     }//Method viewEvent
+
+    public void wipeEvents() {
+        if(theEventArray.isEmpty()) {
+            System.out.println("There were no events to delete.");
+        }
+
+        theEventArray.clear();
+        System.out.println("Removed all events.");
+    }//Method wipeEvents
 
     public void listEvents() {
         int numberOfEvents = theEventArray.size();

@@ -297,6 +297,17 @@ public class PersonCollection {
         return theInterestSpellingMap;
     }
 
+    public void wipePersons() {
+        if(thePersonMap.isEmpty()) {
+            System.out.println("There were no persons to delete.");
+            return;
+        }
+
+        correspondingEventCollection.wipeInvitationsAllEvents();
+        thePersonMap.clear();
+        System.out.println("Removed all persons and all their event invitations.");
+    }//Method wipePersons
+
     public void listPersons() {
         int numberOfPersons = thePersonMap.size();
 
@@ -318,6 +329,15 @@ public class PersonCollection {
         }
         return thePersonMap.get(p).toString();
     }//Method getPersonsToString
+
+    public void wipeInterests() {
+        for(Person p: thePersonMap.values()) {
+            p.wipePersonalInterests();
+        }
+
+        theInterestSpellingMap.clear();
+        System.out.println("Removed all interests.");
+    }//Method wipeInterests
 
     public void listInterests() {
         HashMap<String, Integer> tempCountMap = new HashMap<>();

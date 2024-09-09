@@ -49,6 +49,7 @@ public class InvitationBook {
             else if(mainEntryArray[0].startsWith("/e")) edit();
             else if(mainEntryArray[0].startsWith("/r")) remove();
             else if(mainEntryArray[0].startsWith("/v")) view();
+            else if(mainEntryArray[0].startsWith("/w")) wipe();
             else if(mainEntryArray[0].startsWith("/l")) list();
             else listCommands();
         }
@@ -136,7 +137,8 @@ public class InvitationBook {
                 "[*] For 'event': The index of an existing event.\n" +
                 "Examples:\n" +
                 "[*] /remove person\n" +
-                "[*] /remove person Zeus");
+                "[*] /remove person Zeus"
+        );
     }//Method viewCommandRemove
 
     public static void view() {
@@ -181,6 +183,28 @@ public class InvitationBook {
         );
     }//Method viewCommandView
 
+    public static void wipe() {
+        if(mainEntryArray.length <= 1) viewCommandWipe();
+        else if(mainEntryArray[1].startsWith("p")) thePersonCollection.wipePersons();
+        else if(mainEntryArray[1].startsWith("i")) thePersonCollection.wipeInterests();
+        else if(mainEntryArray[1].startsWith("e")) theEventCollection.wipeEvents();
+        else viewCommandWipe();
+
+        CommonMethods.returnToMainPrint();
+    }//Method wipe
+
+    public static void viewCommandWipe() {
+        System.out.println("View command: WIPE\n" +
+                "This command deletes all persons, interests or events.\n" +
+                "The /wipe command should be followed by a space and one of these words:\n" +
+                "[*] persons\n" +
+                "[*] interests\n" +
+                "[*] events\n" +
+                "Example:\n" +
+                "[*] /wipe events"
+        );
+    }//Method viewCommandWipe
+
     public static void list() {
         if(mainEntryArray.length <= 1) viewCommandList();
         else if(mainEntryArray[1].startsWith("p")) thePersonCollection.listPersons();
@@ -216,6 +240,7 @@ public class InvitationBook {
                 "[C] /edit person|interest|event [opt: handle|interest name|index]\n" +
                 "[C] /remove person|interest|event [opt: handle|interest name|index]\n" +
                 "[C] /view person|interest|event|command [opt: handle|interest name|index|command]\n" +
+                "[C] /wipe persons|interests|events\n" +
                 "[C] /list persons|interests|events|commands"
         );
     }//Method listCommands
