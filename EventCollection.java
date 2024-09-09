@@ -23,6 +23,12 @@ public class EventCollection {
         userEntry = ue;
     }//Method EventCollection constructor
 
+    public void completeSetup(PersonCollection pc) {
+        correspondingPersonCollection = pc;
+
+        loadEvents();
+    }//Method completeSetup
+
     public void loadEvents() {
         File eventFile = new File(eventFileName);
         Scanner eventReader;
@@ -68,11 +74,6 @@ public class EventCollection {
 
         eventReader.close();
     }//Method loadEvents
-
-    public void completeSetup(PersonCollection pc) {
-        loadEvents();
-        correspondingPersonCollection = pc;
-    }//Method completeSetup
 
 //----------------------------------------------------------------
     public String toString() {
@@ -152,6 +153,16 @@ public class EventCollection {
             }
         }
     }//Method insertEventIntoEventArray
+
+    public void removeEvent(String enteredIndex) {
+        final Integer selectedEventIndex = userFindsExistingEventIndex(enteredIndex);
+
+        if(selectedEventIndex == null) return;
+
+        Event selectedEvent = theEventArray.get(selectedEventIndex);
+        System.out.println("Removed event: [" + selectedEventIndex + "] " + selectedEvent);
+        theEventArray.remove(selectedEvent);
+    }//Method removeEvent
 
     public void viewEvent(String enteredIndex) {
 

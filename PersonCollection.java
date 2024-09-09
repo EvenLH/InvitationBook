@@ -26,6 +26,13 @@ public class PersonCollection {
         userEntry = ue;
     }//Method PersonCollection constructor
 
+    public void completeSetup(EventCollection ec) {
+        correspondingEventCollection = ec;
+
+        loadPersons();
+        loadInterests();
+    }//Method completeSetup
+
     public void loadPersons() {
         File personFile = new File(personFileName);
         Scanner personReader;
@@ -68,12 +75,6 @@ public class PersonCollection {
 
         interestReader.close();
     }//Methods loadInterests
-
-    public void completeSetup(EventCollection ec) {
-        loadPersons();
-        loadInterests();
-        correspondingEventCollection = ec;
-    }//Method completeSetup
 
 //----------------------------------------------------------------
     public String toString() {
@@ -131,6 +132,15 @@ public class PersonCollection {
         }
     }//Method editPerson
 
+    public void removePerson(String enteredHandle) {
+        String existingPersonKey = userFindsExistingPersonKey(enteredHandle);
+
+        if(existingPersonKey == null) return;
+
+        correspondingEventCollection.removePersonWhereInvited(existingPersonKey);
+        System.out.println("Removed person: " + thePersonMap.remove(existingPersonKey));
+    }//Method removePerson
+
     public void viewPerson(String enteredHandle) {
         String existingPersonKey = userFindsExistingPersonKey(enteredHandle);
 
@@ -138,6 +148,33 @@ public class PersonCollection {
 
         thePersonMap.get(existingPersonKey).viewThisPerson(theInterestSpellingMap);
     }//Method viewPerson
+
+    public void removeInterest(String enteredInterestName) {
+        String interestNameLowerCase = enteredInterestName.toLowerCase();
+
+        //Removing the interest from each person.
+        boolean someoneHadThisInterest = false;
+        for(Person p: thePersonMap.values()) {
+
+            if(!(someoneHadThisInterest) && p.getInterestExistence(interestNameLowerCase)) {
+                someoneHadThisInterest = true;
+            }
+
+            p.removeAnInterest(interestNameLowerCase);
+        }
+
+        //Removing the interest capitalisation.
+        String correctCap = theInterestSpellingMap.remove(interestNameLowerCase);
+
+        //Giving feedback to user.
+        if(correctCap != null) {
+            System.out.println("Interest removed: " + correctCap);
+        }
+        else if(someoneHadThisInterest) {
+            System.out.println("Interest removed: " + interestNameLowerCase);
+        }
+        else System.out.println("Interest didn't exist: " + enteredInterestName);
+    }//Method removeInterest
 
     public void viewInterest(String enteredInterest) {
 

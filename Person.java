@@ -343,6 +343,10 @@ public class Person implements Comparable<Person> {
         return interestMap.containsKey(interestLowerCase);
     }//Method getInterestExistence
 
+    public void removeAnInterest(String interestLowerCase) {
+        interestMap.remove(interestLowerCase);
+    }//Method removeAnInterest
+
     @Override
     public int compareTo(Person p) {
         return this.nameArray.get(0).toLowerCase().compareTo(p.nameArray.get(0).toLowerCase());

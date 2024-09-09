@@ -47,6 +47,7 @@ public class InvitationBook {
             else if(mainEntryArray[0].startsWith("/c")) {}
             else if(mainEntryArray[0].startsWith("/m")) make();
             else if(mainEntryArray[0].startsWith("/e")) edit();
+            else if(mainEntryArray[0].startsWith("/r")) remove();
             else if(mainEntryArray[0].startsWith("/v")) view();
             else if(mainEntryArray[0].startsWith("/l")) list();
             else listCommands();
@@ -69,14 +70,16 @@ public class InvitationBook {
     public static void make() {
         if(mainEntryArray.length <= 1) viewCommandMake();
         else if(mainEntryArray[1].startsWith("p")) thePersonCollection.makePerson();
-        else if(mainEntryArray[1].startsWith("i")) {}
+        else if(mainEntryArray[1].startsWith("i")) System.out.println("Not yet written: make() for interest");
         else if(mainEntryArray[1].startsWith("e")) theEventCollection.makeEvent();
         else viewCommandMake();
 
         CommonMethods.returnToMainPrint();
     }//Method make
 
-    public static void viewCommandMake() {}//Method viewCommandMake
+    public static void viewCommandMake() {
+        System.out.println("Not yet written: viewCommandMake()");
+    }//Method viewCommandMake
 
     public static void edit() {
         if(mainEntryArray.length <= 1) viewCommandEdit();
@@ -85,8 +88,8 @@ public class InvitationBook {
             else thePersonCollection.editPerson(mainEntryArray[2]);
         }
         else if(mainEntryArray[1].startsWith("i")) {
-            if(mainEntryArray.length == 2) {}
-            else {}
+            if(mainEntryArray.length == 2) System.out.println("Not yet written: edit() for interest");
+            else System.out.println("Not yet written: edit() for interest");
         }
         else if(mainEntryArray[1].startsWith("e")) {
             if(mainEntryArray.length == 2) theEventCollection.editEvent(null);
@@ -97,7 +100,44 @@ public class InvitationBook {
         CommonMethods.returnToMainPrint();
     }//Method edit
 
-    public static void viewCommandEdit() {}//Method viewCommandEdit
+    public static void viewCommandEdit() {
+        System.out.println("Not yet written: viewCommandEdit()");
+    }//Method viewCommandEdit
+
+    public static void remove() {
+        if(mainEntryArray.length <= 1) viewCommandRemove();
+        else if(mainEntryArray[1].startsWith("p")) {
+            if(mainEntryArray.length == 2) thePersonCollection.removePerson(null);
+            else thePersonCollection.removePerson(mainEntryArray[2]);
+        }
+        else if(mainEntryArray[1].startsWith("i")) {
+            if(mainEntryArray.length == 2) thePersonCollection.removeInterest(null);
+            else thePersonCollection.removeInterest(mainEntryArray[2]);
+        }
+        else if(mainEntryArray[1].startsWith("e")) {
+            if(mainEntryArray.length == 2) theEventCollection.removeEvent(null);
+            else theEventCollection.removeEvent(mainEntryArray[2]);
+        }
+        else viewCommandRemove();
+
+        CommonMethods.returnToMainPrint();
+    }//Method remove
+
+    public static void viewCommandRemove() {
+        System.out.println("View command: REMOVE\n" +
+                "This command deletes a person, interest or event.\n" +
+                "The /remove command should be followed by a space and one of these words:\n" +
+                "[*] person\n" +
+                "[*] interest\n" +
+                "[*] event\n" +
+                "The chosen word may be followed by a space and an entry:\n" +
+                "[*] For 'person': The handle name of an existing person.\n" +
+                "[*] For 'interest': The name of an interest.\n" +
+                "[*] For 'event': The index of an existing event.\n" +
+                "Examples:\n" +
+                "[*] /remove person\n" +
+                "[*] /remove person Zeus");
+    }//Method viewCommandRemove
 
     public static void view() {
         if(mainEntryArray.length <= 1) viewCommandView();
@@ -174,6 +214,7 @@ public class InvitationBook {
         System.out.println("Main menu commands:\n" +
                 "[C] /make person|interest|event\n" +
                 "[C] /edit person|interest|event [opt: handle|interest name|index]\n" +
+                "[C] /remove person|interest|event [opt: handle|interest name|index]\n" +
                 "[C] /view person|interest|event|command [opt: handle|interest name|index|command]\n" +
                 "[C] /list persons|interests|events|commands"
         );
