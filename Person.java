@@ -343,6 +343,10 @@ public class Person implements Comparable<Person> {
         return interestMap.containsKey(interestNameLowerCase);
     }//Method hasInterest
 
+    public void addInterest(String n, Integer v) {
+        interestMap.put(n, v);
+    }//Method addInterest
+
     public void removeAnInterest(String interestLowerCase) {
         interestMap.remove(interestLowerCase);
     }//Method removeAnInterest

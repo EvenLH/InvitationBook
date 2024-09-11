@@ -85,6 +85,7 @@ public abstract class CommonMethods {
     public static boolean stringIsSafe(String s) {
         if(s == null
         || s.equalsIgnoreCase("null")
+        || s.equalsIgnoreCase("cancel")
         || s.startsWith("/")
         || s.contains(";"))
             return false;

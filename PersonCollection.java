@@ -158,27 +158,103 @@ public class PersonCollection {
             System.out.print("- Enter interest: ");
             selectedInterestLowerCase = userEntry.nextLine().strip().toLowerCase();
 
-            if(selectedInterestLowerCase.startsWith("/l")) listInterests();
-            else if(selectedInterestLowerCase.startsWith("/c")) return;
-            else if(!CommonMethods.stringIsSafeWithLength(selectedInterestLowerCase)) {
+            if(selectedInterestLowerCase.startsWith("/l")) {
+                listInterests();
+                continue;
+            }
+            else if(selectedInterestLowerCase.startsWith("/c")) {
+                return;
+            }
+            else if(CommonMethods.stringIsSafeWithLength(selectedInterestLowerCase)) {
+                if(interestExists(selectedInterestLowerCase)) {
+                    System.out.println("You have selected an existing interest. Continue managing this interest?");
+                }
+                else {
+                    System.out.println("You have entered a new interest. Continue making a new interest?");
+                }
+            }
+            else {
                 System.out.println("That is not a valid interest name.");
+                continue;
             }
-            else if(interestExists(selectedInterestLowerCase)) {
-                System.out.println("You have selected an existing interest. Continue managing this interest?");
-            }
-            else System.out.println("You have entered a new interest. Continue making a new interest?");
+
             System.out.print("- Enter answer (yes / no): ");
             String ans = userEntry.nextLine().strip().toLowerCase();
             if(ans.startsWith("y")) userIsStillDeciding = false;
         }
         while(userIsStillDeciding);
 
-        if(interestExists(selectedInterestLowerCase)) {}
-        else {}
-
+        if(interestExists(selectedInterestLowerCase)) editInterest(selectedInterestLowerCase);
+        else makeInterest(selectedInterestLowerCase);
     }//Method manageInterest
 
-    public void makeInterest(String newInterestName) {}//Method makeInterest
+    public void makeInterest(String newInterestNameLowerCase) {
+        String newSpelling = null;
+        Integer sweepingValue = null;
+
+        System.out.println("New interest: " + newInterestNameLowerCase + "\n" +
+                "Commands:\n" +
+                "[C] /spelling [interest name how you want it capitalised, or 'clear']\n" +
+                "[C] /all [number 0-3, or 'clear'] (gives all persons the interest with this interest level. 'Cancel' if you don't want to do this after all.)\n" +
+                "[C] /examine (shows you the values you have currently entered)" +
+                "[C] /conclude (applies changes and returns to main menu)\n"
+        );
+
+        String commandEntry;
+        String[] commandArray;
+        do {
+            System.out.print("- Enter command: ");
+            commandEntry = userEntry.nextLine().strip();
+            commandArray = CommonMethods.commandStringToArray(commandEntry, 2);
+
+            if(commandEntry.toLowerCase().startsWith("/s")) {
+                if(commandArray.length <= 1) System.out.println("/spelling must be followed by the name of the interest, except that you should use the capitalisation you want.");
+                else if(commandArray[1].equalsIgnoreCase(newInterestNameLowerCase)) {
+                    newSpelling = commandArray[1];
+                }
+                else if(commandArray[1].toLowerCase().startsWith("c")) {
+                    newSpelling = null;
+                }
+                else System.out.println("/spelling must be followed by the name of the interest, except that you should use the capitalisation you want.");
+            }
+            else if(commandEntry.toLowerCase().startsWith("/a")) {
+                if(commandArray.length <= 1) System.out.println("/all must be followed by a number from 0 to 3, or the 'cancel' option.");
+                else if(CommonMethods.stringIsIntInRange(commandArray[1], 0, 3)) {
+                    sweepingValue = Integer.parseInt(commandArray[1]);
+                }
+                else if(commandArray[1].toLowerCase().startsWith("c")) {
+                    sweepingValue = null;
+                }
+                else System.out.println("/all must be followed by a number from 0 to 3, or the 'cancel' option.");
+            }
+            else if(commandEntry.toLowerCase().startsWith("/e")) {
+                if(newSpelling == null) System.out.println("[*] Capitalisation: " + newInterestNameLowerCase);
+                else System.out.println("[*] Capitalisation: " + newSpelling);
+                if(sweepingValue == null) System.out.println("No persons will receive a value for this interest.");
+                else System.out.println("[*] Interest value set for all persons: " + sweepingValue);
+            }
+            else if(!commandEntry.toLowerCase().startsWith("/c")) {
+                System.out.println("New interest: " + newSpelling + "\n" +
+                        "Commands:\n" +
+                        "[C] /spelling [interest name how you want it capitalised, or 'clear']\n" +
+                        "[C] /all [number 0-3, or 'clear'] (gives all persons the interest with this interest level. 'Cancel' if you don't want to do this after all.)\n" +
+                        "[C] /examine (shows you the values you have currently entered)" +
+                        "[C] /conclude (applies any changes and returns to main menu)\n"
+                );
+            }
+        }
+        while(!commandEntry.toLowerCase().startsWith("/c"));
+
+        if(newSpelling != null) theInterestSpellingMap.put(newInterestNameLowerCase, newSpelling);
+        if(sweepingValue != null) {
+            for(Person p: thePersonMap.values()) {
+                p.addInterest(newInterestNameLowerCase, sweepingValue);
+            }
+        }
+
+        if(sweepingValue == null) System.out.println("Finished adding interest: " + newInterestNameLowerCase);
+        else System.out.println("Finished added interest: " + newSpelling);
+    }//Method makeInterest
 
     public void editInterest(String existingInterestName) {}//Method editInterest
 
