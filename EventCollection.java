@@ -194,6 +194,7 @@ public class EventCollection {
     public void wipeEvents() {
         if(theEventArray.isEmpty()) {
             System.out.println("There were no events to delete.");
+            return;
         }
 
         theEventArray.clear();

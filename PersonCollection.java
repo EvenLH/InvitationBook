@@ -96,7 +96,6 @@ public class PersonCollection {
 
             if(newHandle.toLowerCase().startsWith("/l")) {
                 listPersons();
-                continue;
             }
             else if(newHandle.toLowerCase().startsWith("/c")) {
                 System.out.println("Canceling making a new person.");
@@ -149,6 +148,40 @@ public class PersonCollection {
         thePersonMap.get(existingPersonKey).viewThisPerson(theInterestSpellingMap);
     }//Method viewPerson
 
+    public void manageInterest() {
+
+        String selectedInterestLowerCase;
+        boolean userIsStillDeciding = true;
+
+        System.out.println("Enter a new or existing interest (/list to see all interests, /cancel to return to main menu).");
+        do {
+            System.out.print("- Enter interest: ");
+            selectedInterestLowerCase = userEntry.nextLine().strip().toLowerCase();
+
+            if(selectedInterestLowerCase.startsWith("/l")) listInterests();
+            else if(selectedInterestLowerCase.startsWith("/c")) return;
+            else if(!CommonMethods.stringIsSafeWithLength(selectedInterestLowerCase)) {
+                System.out.println("That is not a valid interest name.");
+            }
+            else if(interestExists(selectedInterestLowerCase)) {
+                System.out.println("You have selected an existing interest. Continue managing this interest?");
+            }
+            else System.out.println("You have entered a new interest. Continue making a new interest?");
+            System.out.print("- Enter answer (yes / no): ");
+            String ans = userEntry.nextLine().strip().toLowerCase();
+            if(ans.startsWith("y")) userIsStillDeciding = false;
+        }
+        while(userIsStillDeciding);
+
+        if(interestExists(selectedInterestLowerCase)) {}
+        else {}
+
+    }//Method manageInterest
+
+    public void makeInterest(String newInterestName) {}//Method makeInterest
+
+    public void editInterest(String existingInterestName) {}//Method editInterest
+
     public void removeInterest(String enteredInterestName) {
         String interestNameLowerCase = enteredInterestName.toLowerCase();
 
@@ -156,7 +189,7 @@ public class PersonCollection {
         boolean someoneHadThisInterest = false;
         for(Person p: thePersonMap.values()) {
 
-            if(!(someoneHadThisInterest) && p.getInterestExistence(interestNameLowerCase)) {
+            if(!(someoneHadThisInterest) && p.hasInterest(interestNameLowerCase)) {
                 someoneHadThisInterest = true;
             }
 
@@ -185,14 +218,14 @@ public class PersonCollection {
             String enteredInterestLowerCase = enteredInterest.toLowerCase();
 
             for(Person p: thePersonMap.values()) {
-                if(p.getInterestExistence(enteredInterestLowerCase)) {
+                if(p.hasInterest(enteredInterestLowerCase)) {
                     viewExistingInterest(enteredInterestLowerCase);
                     return;
                 }
             }
         }
 
-        /*If no valid and existing interest entry was entered, we show the user all existing interests,
+        /*If no existing interest entry was entered, we show the user all existing interests,
         then ask them to enter one of them (any case).
         This could possibly be written cleaner, but testing seems to show that it works as intended.
         Probably not important.*/
@@ -206,7 +239,7 @@ public class PersonCollection {
 
             if(!enteredInterestLowerCase.startsWith("/c")) {
                 for(Person p: thePersonMap.values()) {
-                    if(p.getInterestExistence(enteredInterestLowerCase)) {
+                    if(p.hasInterest(enteredInterestLowerCase)) {
                         viewExistingInterest(enteredInterestLowerCase);
                         return;
                     }
@@ -374,10 +407,6 @@ public class PersonCollection {
 
     }//Method listInterests
 
-    public boolean interestSpellingKeyExistsIgnoreCase(String k) {
-        return theInterestSpellingMap.containsKey(k.toLowerCase());
-    }//Method interestSpellingKeyExistsIgnoreCase
-
     public void fillInterestCapitalisation(String s) {
         theInterestSpellingMap.putIfAbsent(s.toLowerCase(), s);
     }//Method fillInterestCapitalisation
@@ -413,6 +442,16 @@ public class PersonCollection {
 
         return h;
     }//Method userFindsExistingPersonKey
+
+    public boolean interestExists(String interestNameLowerCase) {
+        if(theInterestSpellingMap.containsKey(interestNameLowerCase)) return true;
+
+        for(Person p: thePersonMap.values()) {
+            if(p.hasInterest(interestNameLowerCase)) return true;
+        }
+
+        return false;
+    }//Method interestExists
 
 //----------------------------------------------------------------
     public void storePersons() {

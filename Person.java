@@ -339,9 +339,9 @@ public class Person implements Comparable<Person> {
         return interestMap.getOrDefault(interestLowerCase, null);
     }//Method getInterestValue
 
-    public boolean getInterestExistence(String interestLowerCase) {
-        return interestMap.containsKey(interestLowerCase);
-    }//Method getInterestExistence
+    public boolean hasInterest(String interestNameLowerCase) {
+        return interestMap.containsKey(interestNameLowerCase);
+    }//Method hasInterest
 
     public void removeAnInterest(String interestLowerCase) {
         interestMap.remove(interestLowerCase);

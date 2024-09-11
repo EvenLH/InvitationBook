@@ -44,14 +44,14 @@ public class InvitationBook {
 
             //Handling main menu commands from the user.
             if(mainEntryArray.length == 0) listCommands();
-            else if(mainEntryArray[0].startsWith("/c")) {}
             else if(mainEntryArray[0].startsWith("/m")) make();
             else if(mainEntryArray[0].startsWith("/e")) edit();
             else if(mainEntryArray[0].startsWith("/r")) remove();
             else if(mainEntryArray[0].startsWith("/v")) view();
             else if(mainEntryArray[0].startsWith("/w")) wipe();
             else if(mainEntryArray[0].startsWith("/l")) list();
-            else listCommands();
+            else if(mainEntryArray[0].startsWith("/a")) about();
+            else if(!mainEntryArray[0].startsWith("/c")) listCommands();
         }
         while(!mainEntryArray[0].startsWith("/c"));
     }//Method readAndWrite
@@ -71,7 +71,7 @@ public class InvitationBook {
     public static void make() {
         if(mainEntryArray.length <= 1) viewCommandMake();
         else if(mainEntryArray[1].startsWith("p")) thePersonCollection.makePerson();
-        else if(mainEntryArray[1].startsWith("i")) System.out.println("Not yet written: make() for interest");
+        else if(mainEntryArray[1].startsWith("i")) thePersonCollection.manageInterest();
         else if(mainEntryArray[1].startsWith("e")) theEventCollection.makeEvent();
         else viewCommandMake();
 
@@ -79,7 +79,13 @@ public class InvitationBook {
     }//Method make
 
     public static void viewCommandMake() {
-        System.out.println("Not yet written: viewCommandMake()");
+        System.out.println("View command: MAKE\n" +
+                "This command lets you add a new person or event. You can also add or manage an interest.\n" +
+                "The /make command must be followed by a space and one of these words:\n" +
+                "[*] person\n" +
+                "[*] interest\n" +
+                "[*] event\n"
+        );
     }//Method viewCommandMake
 
     public static void edit() {
@@ -87,10 +93,6 @@ public class InvitationBook {
         else if(mainEntryArray[1].startsWith("p")) {
             if(mainEntryArray.length == 2) thePersonCollection.editPerson(null);
             else thePersonCollection.editPerson(mainEntryArray[2]);
-        }
-        else if(mainEntryArray[1].startsWith("i")) {
-            if(mainEntryArray.length == 2) System.out.println("Not yet written: edit() for interest");
-            else System.out.println("Not yet written: edit() for interest");
         }
         else if(mainEntryArray[1].startsWith("e")) {
             if(mainEntryArray.length == 2) theEventCollection.editEvent(null);
@@ -102,7 +104,18 @@ public class InvitationBook {
     }//Method edit
 
     public static void viewCommandEdit() {
-        System.out.println("Not yet written: viewCommandEdit()");
+        System.out.println("View command: EDIT\n" +
+                "This command lets you edit a person or event.\n" +
+                "The /edit command must be followed by a space and one of these options:\n" +
+                "[*] person\n" +
+                "[*] event\n" +
+                "The chosen option may be followed by a space and a value:\n" +
+                "[*] For 'person': The handle name of an existing person.\n" +
+                "[*] For 'event': The index of an existing event.\n" +
+                "Examples:\n" +
+                "[*] /remove person\n" +
+                "[*] /remove person Zeus"
+        );
     }//Method viewCommandEdit
 
     public static void remove() {
@@ -229,6 +242,102 @@ public class InvitationBook {
         );
     }//Method viewCommandList
 
+    public static void about() {
+        if(mainEntryArray.length <= 1) viewCommandAbout();
+        else if(mainEntryArray[1].startsWith("t")
+        || mainEntryArray[1].startsWith("b")) {
+            System.out.println("The Invitation Book\n" +
+                    "The Invitation Book is a simple event and invitation planner. The user can add persons and events\n" +
+                    "to the program. Then they can manage what people have been invited to their events, and what each\n" +
+                    "person has answered. The program looks for .txt files to load saved data from when it starts. When\n" +
+                    "shutting down, it updates those same files with new data.\n\n" +
+                    "[*] Program version: 0.?\n" +
+                    "[*] Version date: ?\n" +
+                    "[*] Author: Even Lindell Heggø\n" +
+                    "[*] Programming language: Java\n"
+            );
+        }
+        else if(mainEntryArray[1].startsWith("u")) {
+            System.out.println("Usage\n" +
+                    "The user interacts with the program by entering commands and values.\n\n" +
+                    "Values are pieces of information you enter for storage and future use. They must conform to certain\n" +
+                    "criteria, depending on what kind of information you are entering. If you are entering something\n" +
+                    "that doesn't begin with a '/', it is a value. Values are sometimes entered as part of a command.\n\n" +
+                    "Commands are the main way to interact with the program. Each command starts with a command word,\n" +
+                    "and may then be followed by entering options and/or values, depending in the command. If you are\n" +
+                    "entering something that begins with a '/', it is a command.\n" +
+                    "[*] Command words: Starts with a '/' and then a word.\n" +
+                    "    Example: /close\n" +
+                    "[*] Options: Enter one word from a selection, with possibilities separated by '|'.\n" +
+                    "    Example: person|interest|event\n" +
+                    "[*] Values: Shown in [], with a description of what you need to enter inside. Values may be\n" +
+                    "            optional, or only required in certain cases. If so, this is shown inside the [], before\n" +
+                    "            a ':'." +
+                    "    Example: [number from 1 to 12]\n" +
+                    "    Example: [opt: handle|interest name|index]\n\n" +
+                    "Both command words and options can be shortened to their initial letter, and it will still work.\n\n" +
+                    "Complete examples:" +
+                    "[E] /close\n" +
+                    "    The /close command doesn't require any options or values to be entered.\n" +
+                    "[E] /view person|interest|event|command [opt: handle|interest name|index|command]\n" +
+                    "    The /view command must be followed by one of four options. You may then enter a value\n" +
+                    "    corresponding to the option you selected if you wish to. It might look like one of these:\n" +
+                    "    /view person\n" +
+                    "    /view person IsaacN\n" +
+                    "    /v p IsaacN\n"
+            );
+        }
+        else if(mainEntryArray[1].startsWith("p")) {
+            System.out.println("Persons\n\n" +
+                    "Persons consist of values: Names and interests. Only handle names are mandatory.\n" +
+                    "\n" +
+                    "Person\n" +
+                    "[*] Handle name: Each person must have exactly one handle name (no spaces). This is the name you\n" +
+                    "    use to specify a person.\n" +
+                    "[*] First names: A person can have any number of first names.\n" +
+                    "[*] Middle names: A person can have any number of middle names.\n" +
+                    "[*] Last name: A person can have up to one last name (no spaces).\n" +
+                    "[*] Interests: A person can have any number of interest entries.\n" +
+                    "    [*] Interest entry: [interest name] [interest level from 0 to 3]"
+            );
+        }
+        else if(mainEntryArray[1].startsWith("i")) {
+            System.out.println("Interests\n" +
+                    "Persons have interests.\n" +
+                    "\n" +
+                    "A person has a list of interests. Each interest entry must have a name for the interest that is at\n" +
+                    "least one character long. It must also have an interest level. The interest level says how\n" +
+                    "interested that person is in that activity." +
+                    "\n" +
+                    "Interest levels:\n" +
+                    "[3] Highly interested\n" +
+                    "[2] Interested\n" +
+                    "[1] Willing\n" +
+                    "[0] Uninterested\n" +
+                    "\n" +
+                    "You can also define how a given interest is capitalised, so that it always looks good however you write it."
+            );
+        }
+        else if(mainEntryArray[1].startsWith("e")) {}
+        else viewCommandAbout();
+
+        CommonMethods.returnToMainPrint();
+    }//Method about
+
+    public static void viewCommandAbout() {
+        System.out.println("Command: ABOUT\n" +
+                "This command shows information about a subject.\n" +
+                "The /about command should be followed by a space and one of these words:\n" +
+                "[*] theBook\n" +
+                "[*] usage\n" +
+                "[*] persons\n" +
+                "[*] interests\n" +
+                "[*] events\n" +
+                "Example:\n" +
+                "[*] /about theBook"
+        );
+    }//Method viewCommandAbout
+
     public static void viewCommand(String enteredCommand) {
         //I'll write this method last.
         System.out.println("Method not implemented: viewCommand(String enteredCommand)");
@@ -237,11 +346,13 @@ public class InvitationBook {
     public static void listCommands() {
         System.out.println("Main menu commands:\n" +
                 "[C] /make person|interest|event\n" +
-                "[C] /edit person|interest|event [opt: handle|interest name|index]\n" +
+                "[C] /edit person|event [opt: handle|index]\n" +
                 "[C] /remove person|interest|event [opt: handle|interest name|index]\n" +
                 "[C] /view person|interest|event|command [opt: handle|interest name|index|command]\n" +
                 "[C] /wipe persons|interests|events\n" +
-                "[C] /list persons|interests|events|commands"
+                "[C] /list persons|interests|events|commands\n" +
+                "[C] /about theBook|usage|persons|interests|events\n" +
+                "[C] /close"
         );
     }//Method listCommands
 
