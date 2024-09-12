@@ -189,16 +189,17 @@ public class PersonCollection {
     }//Method manageInterest
 
     public void makeInterest(String newInterestNameLowerCase) {
-        String newSpelling = null;
-        Integer sweepingValue = null;
 
-        System.out.println("New interest: " + newInterestNameLowerCase + "\n" +
+        System.out.println("Making interest: " + newInterestNameLowerCase + "\n" +
                 "Commands:\n" +
                 "[C] /spelling [interest name how you want it capitalised, or 'clear']\n" +
-                "[C] /all [number 0-3, or 'clear'] (gives all persons the interest with this interest level. 'Cancel' if you don't want to do this after all.)\n" +
+                "[C] /all [number 0-3, or 'clear'] (gives all persons the interest with this interest level. 'Clear' if you don't want to do this after all.)\n" +
                 "[C] /examine (shows you the values you have currently entered)" +
                 "[C] /conclude (applies changes and returns to main menu)\n"
         );
+
+        String newSpelling = null;
+        Integer sweepingValue = null;
 
         String commandEntry;
         String[] commandArray;
@@ -234,7 +235,7 @@ public class PersonCollection {
                 else System.out.println("[*] Interest value set for all persons: " + sweepingValue);
             }
             else if(!commandEntry.toLowerCase().startsWith("/c")) {
-                System.out.println("New interest: " + newSpelling + "\n" +
+                System.out.println("Making interest: " + newSpelling + "\n" +
                         "Commands:\n" +
                         "[C] /spelling [interest name how you want it capitalised, or 'clear']\n" +
                         "[C] /all [number 0-3, or 'clear'] (gives all persons the interest with this interest level. 'Cancel' if you don't want to do this after all.)\n" +
@@ -246,17 +247,130 @@ public class PersonCollection {
         while(!commandEntry.toLowerCase().startsWith("/c"));
 
         if(newSpelling != null) theInterestSpellingMap.put(newInterestNameLowerCase, newSpelling);
+
         if(sweepingValue != null) {
             for(Person p: thePersonMap.values()) {
                 p.addInterest(newInterestNameLowerCase, sweepingValue);
             }
         }
 
-        if(sweepingValue == null) System.out.println("Finished adding interest: " + newInterestNameLowerCase);
-        else System.out.println("Finished added interest: " + newSpelling);
+        System.out.println("Finished making interest: " + theInterestSpellingMap.getOrDefault(newInterestNameLowerCase, newInterestNameLowerCase));
     }//Method makeInterest
 
-    public void editInterest(String existingInterestName) {}//Method editInterest
+    public void editInterest(String existingInterestNameLowerCase) {
+
+        System.out.println("Managing interest: " + theInterestSpellingMap.get(existingInterestNameLowerCase) + "\n" +
+                "Commands:\n" +
+                "[C] /spelling [interest name how you want it capitalised, or 'clear']\n" +
+                "[C] /all [number 0-3, or 'clear'] (gives all persons the interest with this interest level. 'Clear' if you don't want to do this after all.)\n" +
+                "[C] /defined [number 0-3, or 'clear'] (applies only to the persons who already have the interest.)\n" +
+                "[C] /undefined [number 0-3, or 'clear'] (applies only to the persons who don't have the interest.)\n" +
+                "[C] /examine (shows you the values you have currently entered)" +
+                "[C] /conclude (applies changes and returns to main menu)\n"
+        );
+
+        String newSpelling = null;
+        Integer alreadyDefinedNewValue = null;
+        Integer undefinedNewValue = null;
+
+        String commandEntry;
+        String[] commandArray;
+        do {
+            System.out.print("- Enter command: ");
+            commandEntry = userEntry.nextLine().strip();
+            commandArray = CommonMethods.commandStringToArray(commandEntry, 2);
+
+            if(commandEntry.toLowerCase().startsWith("/s")) {
+                if(commandArray.length <= 1) System.out.println("/spelling must be followed by the name of the interest, except that you should use the capitalisation you want.");
+                else if(commandArray[1].equalsIgnoreCase(existingInterestNameLowerCase)) {
+                    newSpelling = commandArray[1];
+                }
+                else if(commandArray[1].toLowerCase().startsWith("c")) {
+                    newSpelling = null;
+                }
+                else System.out.println("/spelling must be followed by the name of the interest, except that you should use the capitalisation you want.");
+            }
+            else if(commandEntry.toLowerCase().startsWith("/a")) {
+                if(commandArray.length <= 1) System.out.println("/all must be followed by a number from 0 to 3, or the 'cancel' option.");
+                else if(CommonMethods.stringIsIntInRange(commandArray[1], 0, 3)) {
+                    alreadyDefinedNewValue = Integer.parseInt(commandArray[1]);
+                    undefinedNewValue = Integer.parseInt(commandArray[1]);
+                }
+                else if(commandArray[1].toLowerCase().startsWith("c")) {
+                    alreadyDefinedNewValue = null;
+                    undefinedNewValue = null;
+                }
+                else System.out.println("/all must be followed by a number from 0 to 3, or the 'cancel' option.");
+            }
+            else if(commandEntry.toLowerCase().startsWith("/d")) {
+                if(commandArray.length <= 1) System.out.println("/defined must be followed by a number from 0 to 3, or the 'cancel' option.");
+                else if(CommonMethods.stringIsIntInRange(commandArray[1], 0, 3)) {
+                    alreadyDefinedNewValue = Integer.parseInt(commandArray[1]);
+                }
+                else if(commandArray[1].toLowerCase().startsWith("c")) {
+                    alreadyDefinedNewValue = null;
+                }
+                else System.out.println("/defined must be followed by a number from 0 to 3, or the 'cancel' option.");
+            }
+            else if(commandEntry.toLowerCase().startsWith("/u")) {
+                if(commandArray.length <= 1) System.out.println("/undefined must be followed by a number from 0 to 3, or the 'cancel' option.");
+                else if(CommonMethods.stringIsIntInRange(commandArray[1], 0, 3)) {
+                    undefinedNewValue = Integer.parseInt(commandArray[1]);
+                }
+                else if(commandArray[1].toLowerCase().startsWith("c")) {
+                    undefinedNewValue = null;
+                }
+                else System.out.println("/undefined must be followed by a number from 0 to 3, or the 'cancel' option.");
+            }
+            else if(commandEntry.toLowerCase().startsWith("/e")) {
+                if(newSpelling == null) System.out.println("[*] Capitalisation: " + existingInterestNameLowerCase);
+                else System.out.println("[*] Capitalisation: " + newSpelling);
+                if(alreadyDefinedNewValue == null) System.out.println("No existing interest entries will have their value changed for this interest.");
+                else System.out.println("[*] Interest value changed for all persons who already had the interest: " + alreadyDefinedNewValue);
+                if(undefinedNewValue == null) System.out.println("No new persons will receive a value for this interest.");
+                else System.out.println("[*] Interest value set for all persons who did not have the interest: " + undefinedNewValue);
+            }
+            else if(!commandEntry.toLowerCase().startsWith("/c")) {
+                System.out.println("Managing interest: " + newSpelling + "\n" +
+                        "Commands:\n" +
+                        "[C] /spelling [interest name how you want it capitalised, or 'clear']\n" +
+                        "[C] /all [number 0-3, or 'clear'] (gives all persons the interest with this interest level. 'Clear' if you don't want to do this after all.)\n" +
+                        "[C] /defined [number 0-3, or 'clear'] (applies only to the persons who already have the interest.)\n" +
+                        "[C] /undefined [number 0-3, or 'clear'] (applies only to the persons who don't have the interest.)\n" +
+                        "[C] /examine (shows you the values you have currently entered)" +
+                        "[C] /conclude (applies changes and returns to main menu)\n"
+                );
+            }
+        }
+        while(!commandEntry.toLowerCase().startsWith("/c"));
+
+        if(newSpelling != null) theInterestSpellingMap.put(existingInterestNameLowerCase, newSpelling);
+
+        if(alreadyDefinedNewValue != null && alreadyDefinedNewValue == undefinedNewValue) {
+            for(Person p: thePersonMap.values()) {
+                p.addInterest(existingInterestNameLowerCase, alreadyDefinedNewValue);
+            }
+        }
+        else {
+            if(alreadyDefinedNewValue != null) {
+                for(Person p: thePersonMap.values()) {
+                    if(p.hasInterest(existingInterestNameLowerCase)) {
+                        p.addInterest(existingInterestNameLowerCase, alreadyDefinedNewValue);
+                    }
+                }
+            }
+
+            if(undefinedNewValue != null) {
+                for(Person p: thePersonMap.values()) {
+                    if(!p.hasInterest(existingInterestNameLowerCase)) {
+                        p.addInterest(existingInterestNameLowerCase, undefinedNewValue);
+                    }
+                }
+            }
+        }
+
+        System.out.println("Finished managing interest: " + theInterestSpellingMap.getOrDefault(existingInterestNameLowerCase, existingInterestNameLowerCase));
+    }//Method editInterest
 
     public void removeInterest(String enteredInterestName) {
         String interestNameLowerCase = enteredInterestName.toLowerCase();
