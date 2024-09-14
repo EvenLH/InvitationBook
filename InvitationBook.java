@@ -248,66 +248,83 @@ public class InvitationBook {
         || mainEntryArray[1].startsWith("b")) {
             System.out.println("The Invitation Book\n" +
                     "The Invitation Book is a simple event and invitation planner. The user can add persons and events\n" +
-                    "to the program. Then they can manage what people have been invited to their events, and what each\n" +
-                    "person has answered. The program looks for .txt files to load saved data from when it starts. When\n" +
-                    "shutting down, it updates those same files with new data.\n\n" +
-                    "[*] Program version: 0.?\n" +
-                    "[*] Version date: ?\n" +
+                    "to the program. They can then manage which persons are invited to what events, and other aspects of\n" +
+                    "the persons and events they have added. The program uses .txt files to store data when not running.\n" +
+                    "\n" +
+                    "[*] Version:\n" +
+                    "[*] Date:\n" +
                     "[*] Author: Even Lindell Heggø\n" +
-                    "[*] Programming language: Java\n"
+                    "[*] Programming language: Java"
             );
         }
         else if(mainEntryArray[1].startsWith("u")) {
             System.out.println("Usage\n" +
-                    "The user interacts with the program by entering commands and values.\n\n" +
-                    "Values are pieces of information you enter for storage and future use. They must conform to certain\n" +
-                    "criteria, depending on what kind of information you are entering. If you are entering something\n" +
-                    "that doesn't begin with a '/', it is a value. Values are sometimes entered as part of a command.\n\n" +
-                    "Commands are the main way to interact with the program. Each command starts with a command word,\n" +
-                    "and may then be followed by entering options and/or values, depending in the command. If you are\n" +
-                    "entering something that begins with a '/', it is a command.\n" +
-                    "[*] Command words: Starts with a '/' and then a word.\n" +
-                    "    Example: /close\n" +
-                    "[*] Options: Enter one word from a selection, with possibilities separated by '|'.\n" +
-                    "    Example: person|interest|event\n" +
-                    "[*] Values: Shown in [], with a description of what you need to enter inside. Values may be\n" +
-                    "            optional, or only required in certain cases. If so, this is shown inside the [], before\n" +
-                    "            a ':'." +
-                    "    Example: [number from 1 to 12]\n" +
-                    "    Example: [opt: handle|interest name|index]\n\n" +
-                    "Both command words and options can be shortened to their initial letter, and it will still work.\n\n" +
-                    "Complete examples:" +
-                    "[E] /close\n" +
-                    "    The /close command doesn't require any options or values to be entered.\n" +
-                    "[E] /view person|interest|event|command [opt: handle|interest name|index|command]\n" +
-                    "    The /view command must be followed by one of four options. You may then enter a value\n" +
-                    "    corresponding to the option you selected if you wish to. It might look like one of these:\n" +
-                    "    /view person\n" +
-                    "    /view person IsaacN\n" +
-                    "    /v p IsaacN\n"
+                    "The user interacts with the program through the keyboard. Anything the user enters is either a\n" +
+                    "value (information, data) or a command. The program will let you know whether it is ready to\n" +
+                    "receive only a value, only a command, or either one.\n" +
+                    "\n" +
+                    "[*] Values: Never start with a '/'. There are some basic rules all values must follow, and some\n" +
+                    "    values have additional requirements.\n" +
+                    "[*] Commands: Always start with a '/'. Some commands allow or require the user to enter options\n" +
+                    "    and/or values with the command."
             );
+        }
+        else if(mainEntryArray[1].startsWith("v")) {
+            System.out.println("Values\n" +
+                    "Values are pieces of information you enter into the program, like someones first name, or how\n" +
+                    "interested they are in football.\n" +
+                    "\n" +
+                    "All values must follow these rules:\n" +
+                    "[*] They can't be exactly the words 'null' or 'cancel', in any capitalisation.\n" +
+                    "[*] They can't begin with '/'.\n" +
+                    "[*] They can't contain ';'.\n" +
+                    "\n" +
+                    "Some types of data have additional requirements. For example, if you are entering a month, it must\n" +
+                    "be a whole number from 1 to 12. The program will guide you if you make a mistake, so there is no\n" +
+                    "need to learn all the requirements by heart.");
+        }
+        else if(mainEntryArray[1].startsWith("c")) {
+            System.out.println("Commands\n" +
+                    "Commands tell the program what you want to do. Commands contain one or more term. The first term is\n" +
+                    "always a command word, and each of the remaining terms will be either options or values.\n" +
+                    "\n" +
+                    "Command terms can be:\n" +
+                    "[*] A command word: The command starts with a '/' and a command word.\n" +
+                    "    Example: /close\n" +
+                    "[*] An option: This is one word from a selection, with each possibility separated by a '|'.\n" +
+                    "    Example: person|interest|event\n" +
+                    "[*] A value: Some commands allow or require you to enter a value with the command. When a command\n" +
+                    "    lets you enter a value, it is show as [] with a description inside.\n" +
+                    "    Example: [first name]\n" +
+                    "\n" +
+                    "There may be words telling you something about how to use an option or a value. In particular, the\n" +
+                    "term 'opt' means that entering the option or value in question is optional. Both command words and\n" +
+                    "command options can be shortened to their initial letter. Values must always be written out.\n" +
+                    "\n" +
+                    "Example:\n" +
+                    "[*] /view person|interest|event|command [opt: handle|interest name|index|command]\n" +
+                    "    Example entry: /view person\n" +
+                    "    Example entry: /view person AdaL\n" +
+                    "    Example entry: /v p AdaL");
         }
         else if(mainEntryArray[1].startsWith("p")) {
-            System.out.println("Persons\n\n" +
-                    "Persons consist of values: Names and interests. Only handle names are mandatory.\n" +
+            System.out.println("Persons\n" +
+                    "Persons have names and interests.\n" +
                     "\n" +
-                    "Person\n" +
-                    "[*] Handle name: Each person must have exactly one handle name (no spaces). This is the name you\n" +
-                    "    use to specify a person.\n" +
-                    "[*] First names: A person can have any number of first names.\n" +
-                    "[*] Middle names: A person can have any number of middle names.\n" +
-                    "[*] Last name: A person can have up to one last name (no spaces).\n" +
-                    "[*] Interests: A person can have any number of interest entries.\n" +
-                    "    [*] Interest entry: [interest name] [interest level from 0 to 3]"
-            );
-        }
-        else if(mainEntryArray[1].startsWith("i")) {
-            System.out.println("Interests\n" +
-                    "Persons have interests.\n" +
+                    "[*] Handle name\n" +
+                    "[*] First names\n" +
+                    "[*] Middle names\n" +
+                    "[*] Last name\n" +
+                    "[*] Interests:\n" +
+                    "    [*] Interest name & interest value\n" +
+                    "    [*] Interest name & interest value\n" +
                     "\n" +
-                    "A person has a list of interests. Each interest entry must have a name for the interest that is at\n" +
-                    "least one character long. It must also have an interest level. The interest level says how\n" +
-                    "interested that person is in that activity." +
+                    "All persons must have a handle name. This is the name you use when you want to manage an existing\n" +
+                    "person. All other values are optional.\n" +
+                    "\n" +
+                    "A person may have any number of first names and middle names (separated by spaces when entered),\n" +
+                    "but at most one last name. Interests have a name (which may contain spaces), as well as a number\n" +
+                    "value from 0 to 3.\n" +
                     "\n" +
                     "Interest levels:\n" +
                     "[3] Highly interested\n" +
@@ -315,10 +332,71 @@ public class InvitationBook {
                     "[1] Willing\n" +
                     "[0] Uninterested\n" +
                     "\n" +
-                    "You can also define how a given interest is capitalised, so that it always looks good however you write it."
-            );
+                    "Example person:\n" +
+                    "[*] Handle name: IsaacN\n" +
+                    "[*] First names: Isaac\n" +
+                    "[*] Middle names:\n" +
+                    "[*] Last name: Newton\n" +
+                    "[*] Interests:\n" +
+                    "    [*] Mathematics - 3\n" +
+                    "    [*] Law - 1");
         }
-        else if(mainEntryArray[1].startsWith("e")) {}
+        else if(mainEntryArray[1].startsWith("i")) {
+            System.out.println("Interests\n" +
+                    "Persons can have interests, where each interest is associated with an interest level from 0 to 3.\n" +
+                    "\n" +
+                    "Interest levels:\n" +
+                    "[3] Highly interested\n" +
+                    "[2] Interested\n" +
+                    "[1] Willing\n" +
+                    "[0] Uninterested\n" +
+                    "\n" +
+                    "It is also possible to define a capitalisation for a given interest. For example, we can define\n" +
+                    "that 'west coast swing' should always be shown as \"West Coast Swing'.");
+        }
+        else if(mainEntryArray[1].startsWith("e")) {
+            System.out.println("Events\n" +
+                    "\n" +
+                    "[*] Name\n" +
+                    "[*] Type\n" +
+                    "[*] Description\n" +
+                    "[*] Starting year\n" +
+                    "[*] Starting month\n" +
+                    "[*] Starting day\n" +
+                    "[*] Starting hour\n" +
+                    "[*] Starting minute\n" +
+                    "[*] Index\n" +
+                    "[*] Invitations:\n" +
+                    "    [*] Person - invitationState\n" +
+                    "    [*] Person - invitationState\n" +
+                    "\n" +
+                    "All events must have a name. They also always have a number (index) in the event list. This number\n" +
+                    "is set by the program, and is the way you select which event you wish to interact with. All other\n" +
+                    "values are optional.\n" +
+                    "\n" +
+                    "Name, type and description require you to enter text. The starting times are all numbers.\n" +
+                    "Invitations consist of the handle name of a person and an invitation state.\n" +
+                    "\n" +
+                    "Invitation states:\n" +
+                    "[*] Attending\n" +
+                    "[*] Pending\n" +
+                    "[*] Declined\n" +
+                    "\n" +
+                    "Example event:\n" +
+                    "[*] Name: Constitution day\n" +
+                    "[*] Type: National day\n" +
+                    "[*] Description: Celebrating constitution day all day!\n" +
+                    "[*] Starting year: 2025\n" +
+                    "[*] Starting month: 05\n" +
+                    "[*] Starting day: 17\n" +
+                    "[*] Starting hour: 05\n" +
+                    "[*] Starting minute: 30\n" +
+                    "[*] Index: 17\n" +
+                    "[*] Invitations:\n" +
+                    "    [*] LarsK - Attending\n" +
+                    "    [*] Sigurd - Attending\n" +
+                    "    [*] BigJens - Pending");
+        }
         else viewCommandAbout();
 
         CommonMethods.returnToMainPrint();
@@ -351,7 +429,7 @@ public class InvitationBook {
                 "[C] /view person|interest|event|command [opt: handle|interest name|index|command]\n" +
                 "[C] /wipe persons|interests|events\n" +
                 "[C] /list persons|interests|events|commands\n" +
-                "[C] /about theBook|usage|persons|interests|events\n" +
+                "[C] /about theBook|usage|values|commands|persons|interests|events\n" +
                 "[C] /close"
         );
     }//Method listCommands

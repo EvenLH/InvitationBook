@@ -372,7 +372,9 @@ public class PersonCollection {
         System.out.println("Finished managing interest: " + theInterestSpellingMap.getOrDefault(existingInterestNameLowerCase, existingInterestNameLowerCase));
     }//Method editInterest
 
+    //Do I want to give the user the chance to find an existing interest for this method?
     public void removeInterest(String enteredInterestName) {
+        if(enteredInterestName == null) return;
         String interestNameLowerCase = enteredInterestName.toLowerCase();
 
         //Removing the interest from each person.
