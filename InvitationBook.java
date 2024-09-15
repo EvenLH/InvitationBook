@@ -263,9 +263,9 @@ public class InvitationBook {
                     "value (information, data) or a command. The program will let you know whether it is ready to\n" +
                     "receive only a value, only a command, or either one.\n" +
                     "\n" +
-                    "[*] Values: Never start with a '/'. There are some basic rules all values must follow, and some\n" +
-                    "    values have additional requirements.\n" +
-                    "[*] Commands: Always start with a '/'. Some commands allow or require the user to enter options\n" +
+                    "[*] Values: Never starts with a '/'. There are basic rules all values must follow, and some values\n" +
+                    "    have additional requirements.\n" +
+                    "[*] Commands: Always starts with a '/'. Some commands allow or require the user to enter options\n" +
                     "    and/or values with the command."
             );
         }

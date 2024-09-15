@@ -372,33 +372,23 @@ public class PersonCollection {
         System.out.println("Finished managing interest: " + theInterestSpellingMap.getOrDefault(existingInterestNameLowerCase, existingInterestNameLowerCase));
     }//Method editInterest
 
-    //Do I want to give the user the chance to find an existing interest for this method?
     public void removeInterest(String enteredInterestName) {
-        if(enteredInterestName == null) return;
-        String interestNameLowerCase = enteredInterestName.toLowerCase();
+        String existingInterestLowerCase = userFindsExistingInterestKey(enteredInterestName);
+
+        if(existingInterestLowerCase == null) return;
 
         //Removing the interest from each person.
-        boolean someoneHadThisInterest = false;
         for(Person p: thePersonMap.values()) {
-
-            if(!(someoneHadThisInterest) && p.hasInterest(interestNameLowerCase)) {
-                someoneHadThisInterest = true;
-            }
-
-            p.removeAnInterest(interestNameLowerCase);
+            p.removeAnInterest(existingInterestLowerCase);
         }
 
         //Removing the interest capitalisation.
-        String correctCap = theInterestSpellingMap.remove(interestNameLowerCase);
+        String correctCase = theInterestSpellingMap.remove(existingInterestLowerCase);
 
-        //Giving feedback to user.
-        if(correctCap != null) {
-            System.out.println("Interest removed: " + correctCap);
+        if(correctCase == null) {
+            System.out.println("Interest removed: " + existingInterestLowerCase);
         }
-        else if(someoneHadThisInterest) {
-            System.out.println("Interest removed: " + interestNameLowerCase);
-        }
-        else System.out.println("Interest didn't exist: " + enteredInterestName);
+        else System.out.println("Interest removed: " + correctCase);
     }//Method removeInterest
 
     public void viewInterest(String enteredInterest) {
@@ -564,8 +554,14 @@ public class PersonCollection {
         System.out.println("Removed all interests.");
     }//Method wipeInterests
 
+    //Let's look at this method. What if spelling exists, but no one has the interest?
     public void listInterests() {
         HashMap<String, Integer> tempCountMap = new HashMap<>();
+
+        //Ensuring interests are included when a capitalisation is defined for them, even if no one has that interest.
+        for(String iCaseKey: theInterestSpellingMap.keySet()) {
+            tempCountMap.put(iCaseKey, 0);
+        }
 
         //Determining number of willing participants in each interest
         for(Person person: thePersonMap.values()) {
@@ -634,6 +630,31 @@ public class PersonCollection {
 
         return h;
     }//Method userFindsExistingPersonKey
+
+    public String userFindsExistingInterestKey(String i) {
+        String iLower;
+
+        if(i != null) {
+            iLower = i.toLowerCase();
+
+            if(interestExists(iLower)) return iLower;
+        }
+
+        System.out.println("Enter existing interest (/list to see all interests, /cancel to return to main menu)");
+        do {
+            System.out.print("- Enter interest: ");
+            iLower = userEntry.nextLine().strip().toLowerCase();
+
+            if(iLower.startsWith("/l")) listInterests();
+            else if(iLower.startsWith("/c")) return null;
+            else if(!interestExists(iLower)) {
+                System.out.print("Non-existing or invalid interest name.");
+            }
+        }
+        while(!interestExists(iLower));
+
+        return iLower;
+    }//Method userFindsExistingInterestKey
 
     public boolean interestExists(String interestNameLowerCase) {
         if(theInterestSpellingMap.containsKey(interestNameLowerCase)) return true;
