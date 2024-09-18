@@ -250,6 +250,7 @@ public class Event implements Comparable<Event> {
                     }
                     else {
                         invitationMap.put(existingHandle, invState);
+                        System.out.println("Invitation set: " + existingHandle + " - " + invState);
                     }
                 }
                 else if(editEntryArray.length == 2) {
@@ -261,6 +262,7 @@ public class Event implements Comparable<Event> {
                     }
                     else {
                         invitationMap.put(existingHandle, InvitationState.Pending);
+                        System.out.println("Invitation set: " + existingHandle + " - Pending");
                     }
                 }
                 else {
