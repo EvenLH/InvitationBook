@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class InvitationBook {
@@ -7,6 +8,7 @@ public class InvitationBook {
 
     static Scanner userEntry;
     static String[] mainEntryArray;
+    static ArrayList<String> allMainCommandsArray;
 
     public static void main(String[] args) {
         open();
@@ -21,6 +23,11 @@ public class InvitationBook {
 
         userEntry = new Scanner(System.in);
         mainEntryArray = new String[3];
+        allMainCommandsArray = new ArrayList<>(8);
+        allMainCommandsArray.add("m"); allMainCommandsArray.add("e");
+        allMainCommandsArray.add("r"); allMainCommandsArray.add("v");
+        allMainCommandsArray.add("w"); allMainCommandsArray.add("l");
+        allMainCommandsArray.add("a"); allMainCommandsArray.add("c");
 
         thePersonCollection = new PersonCollection("storedPersons.txt", "storedInterests.txt", userEntry);
         theEventCollection = new EventCollection("storedEvents.txt", userEntry);
@@ -79,9 +86,9 @@ public class InvitationBook {
     }//Method make
 
     public static void viewCommandMake() {
-        System.out.println("View command: MAKE\n" +
+        System.out.println("Command: MAKE\n" +
                 "This command lets you add a new person or event. You can also add or manage an interest.\n" +
-                "The /make command must be followed by a space and one of these words:\n" +
+                "The /make command must be followed by a space and one of these options:\n" +
                 "[*] person\n" +
                 "[*] interest\n" +
                 "[*] event\n"
@@ -104,7 +111,7 @@ public class InvitationBook {
     }//Method edit
 
     public static void viewCommandEdit() {
-        System.out.println("View command: EDIT\n" +
+        System.out.println("Command: EDIT\n" +
                 "This command lets you edit a person or event.\n" +
                 "The /edit command must be followed by a space and one of these options:\n" +
                 "[*] person\n" +
@@ -113,8 +120,8 @@ public class InvitationBook {
                 "[*] For 'person': The handle name of an existing person.\n" +
                 "[*] For 'event': The index of an existing event.\n" +
                 "Examples:\n" +
-                "[*] /remove person\n" +
-                "[*] /remove person Zeus"
+                "[*] /edit person\n" +
+                "[*] /edit person Zeus"
         );
     }//Method viewCommandEdit
 
@@ -140,11 +147,11 @@ public class InvitationBook {
     public static void viewCommandRemove() {
         System.out.println("View command: REMOVE\n" +
                 "This command deletes a person, interest or event.\n" +
-                "The /remove command should be followed by a space and one of these words:\n" +
+                "The /remove command must be followed by a space and one of these options:\n" +
                 "[*] person\n" +
                 "[*] interest\n" +
                 "[*] event\n" +
-                "The chosen word may be followed by a space and an entry:\n" +
+                "The chosen option may be followed by a space and a value:\n" +
                 "[*] For 'person': The handle name of an existing person.\n" +
                 "[*] For 'interest': The name of an interest.\n" +
                 "[*] For 'event': The index of an existing event.\n" +
@@ -180,7 +187,7 @@ public class InvitationBook {
     public static void viewCommandView() {
         System.out.println("Command: VIEW\n" +
                 "This command shows all information about a given entry." +
-                "The /view command should be followed by a space and one of these words:\n" +
+                "The /view command must be followed by a space and one of these options:\n" +
                 "[*] person\n" +
                 "[*] interest\n" +
                 "[*] event\n" +
@@ -189,7 +196,7 @@ public class InvitationBook {
                 "[*] For 'person': The handle name of an existing person.\n" +
                 "[*] For 'interest': The name of an existing interest.\n" +
                 "[*] For 'event': The index of an existing event.\n" +
-                "[*] For 'command': The name of an existing command.\n" +
+                "[*] For 'command': The name of an existing command, without a '/'.\n" +
                 "Examples:\n" +
                 "[*] /view person\n" +
                 "[*] /view person Odin"
@@ -209,7 +216,7 @@ public class InvitationBook {
     public static void viewCommandWipe() {
         System.out.println("View command: WIPE\n" +
                 "This command deletes all persons, interests or events.\n" +
-                "The /wipe command should be followed by a space and one of these words:\n" +
+                "The /wipe command must be followed by a space and one of these options:\n" +
                 "[*] persons\n" +
                 "[*] interests\n" +
                 "[*] events\n" +
@@ -232,7 +239,7 @@ public class InvitationBook {
     public static void viewCommandList() {
         System.out.println("Command: LIST\n" +
                 "This command lists all entries of a given type.\n" +
-                "The /list command should be followed by a space and one of these words:\n" +
+                "The /list command must be followed by a space and one of these options:\n" +
                 "[*] persons\n" +
                 "[*] interests\n" +
                 "[*] events\n" +
@@ -405,9 +412,11 @@ public class InvitationBook {
     public static void viewCommandAbout() {
         System.out.println("Command: ABOUT\n" +
                 "This command shows information about a subject.\n" +
-                "The /about command should be followed by a space and one of these words:\n" +
+                "The /about command must be followed by a space and one of these options:\n" +
                 "[*] theBook\n" +
                 "[*] usage\n" +
+                "[*] values\n" +
+                "[*] commands\n" +
                 "[*] persons\n" +
                 "[*] interests\n" +
                 "[*] events\n" +
@@ -416,9 +425,25 @@ public class InvitationBook {
         );
     }//Method viewCommandAbout
 
+    public static void viewCommandClose() {
+        System.out.println("Command: CLOSE\n" +
+                "The /close command stores all current information about persons, interests and events. Then it closes\n" +
+                "the program.");
+    }//Method viewCommandClose
+
     public static void viewCommand(String enteredCommand) {
-        //I'll write this method last.
-        System.out.println("Method not implemented: viewCommand(String enteredCommand)");
+        String existingCommandWordLowerMinimal = userFindsExistingCommand(enteredCommand);
+
+        if(existingCommandWordLowerMinimal == null) return;
+
+        if(existingCommandWordLowerMinimal.startsWith("m")) viewCommandMake();
+        else if(existingCommandWordLowerMinimal.startsWith("e")) viewCommandEdit();
+        else if(existingCommandWordLowerMinimal.startsWith("r")) viewCommandRemove();
+        else if(existingCommandWordLowerMinimal.startsWith("v")) viewCommandView();
+        else if(existingCommandWordLowerMinimal.startsWith("w")) viewCommandWipe();
+        else if(existingCommandWordLowerMinimal.startsWith("l")) viewCommandList();
+        else if(existingCommandWordLowerMinimal.startsWith("a")) viewCommandAbout();
+        else if(existingCommandWordLowerMinimal.startsWith("c")) viewCommandClose();
     }//Method viewCommand
 
     public static void listCommands() {
@@ -433,6 +458,32 @@ public class InvitationBook {
                 "[C] /close"
         );
     }//Method listCommands
+
+    public static String userFindsExistingCommand(String c) {
+        String cLower;
+
+        if(c != null && !(c.isEmpty())) {
+            cLower = c.toLowerCase().substring(0, 1);
+
+            if(allMainCommandsArray.contains(cLower)) return cLower;
+        }
+
+        System.out.println("Enter existing command word without a '/' (/list to see all interests, /cancel to return to main menu)");
+        do {
+            System.out.print("- Enter command word: ");
+            cLower = userEntry.nextLine().strip().toLowerCase();
+
+            if(cLower.startsWith("/l")) listCommands();
+            else if(cLower.startsWith("/c")) return null;
+            else if(cLower.isEmpty()
+            || !allMainCommandsArray.contains(cLower.substring(0, 1))) {
+                System.out.println("Non-existing, invalid or empty command word.");
+            }
+        }
+        while(!allMainCommandsArray.contains(cLower.substring(0, 1)));
+
+        return cLower.substring(0, 1);
+    }//Method userFindsExistingCommand
 
 //----------------------------------------------------------------
 }//Class InvitationBook
