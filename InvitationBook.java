@@ -316,22 +316,22 @@ public class InvitationBook {
         }
         else if(mainEntryArray[1].startsWith("p")) {
             System.out.println("Persons\n" +
-                    "Persons have names and interests.\n" +
-                    "\n" +
-                    "[*] Handle name\n" +
-                    "[*] First names\n" +
-                    "[*] Middle names\n" +
-                    "[*] Last name\n" +
-                    "[*] Interests:\n" +
-                    "    [*] Interest name & interest value\n" +
-                    "    [*] Interest name & interest value\n" +
+                    "Persons have names and interests.\n\n" +
+                    "Names\n" +
+                    "[*] Handle\n" +
+                    "[*] First\n" +
+                    "[*] Middle\n" +
+                    "[*] Last\n\n" +
+                    "Interests:\n" +
+                    "[*] Interest name & interest level\n" +
+                    "[*] Interest name & interest level\n" +
                     "\n" +
                     "All persons must have a handle name. This is the name you use when you want to manage an existing\n" +
                     "person. All other values are optional.\n" +
                     "\n" +
                     "A person may have any number of first names and middle names (separated by spaces when entered),\n" +
-                    "but at most one last name. Interests have a name (which may contain spaces), as well as a number\n" +
-                    "value from 0 to 3.\n" +
+                    "but at most one last name. Interests have an interest name (which may contain spaces), as well as\n" +
+                    "an interest level from 0 to 3.\n" +
                     "\n" +
                     "Interest levels:\n" +
                     "[3] Highly interested\n" +
@@ -339,14 +339,23 @@ public class InvitationBook {
                     "[1] Willing\n" +
                     "[0] Uninterested\n" +
                     "\n" +
-                    "Example person:\n" +
-                    "[*] Handle name: IsaacN\n" +
-                    "[*] First names: Isaac\n" +
-                    "[*] Middle names:\n" +
-                    "[*] Last name: Newton\n" +
-                    "[*] Interests:\n" +
-                    "    [*] Mathematics - 3\n" +
-                    "    [*] Law - 1");
+                    "Example person!\n" +
+                    "Person: SigvaldF\n" +
+                    "Names\n" +
+                    "[*] Handle: SigvaldF\n" +
+                    "[*] First: Sigvald\n" +
+                    "[*] Middle:\n" +
+                    "[*] Last: Fjellstuen\n\n" +
+                    "Interests (5)\n" +
+                    "Highly interested:\n" +
+                    "[3] Animal husbandry\n" +
+                    "[3] Swing dancing\n" +
+                    "Interested:\n" +
+                    "[2] Mathematics\n" +
+                    "Willing:\n" +
+                    "[1] Cooking\n\n" +
+                    "Uninterested:\n" +
+                    "[0] Travel");
         }
         else if(mainEntryArray[1].startsWith("i")) {
             System.out.println("Interests\n" +
