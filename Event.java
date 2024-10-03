@@ -124,6 +124,7 @@ public class Event implements Comparable<Event> {
         String editEntryCommand;
         String[] editEntryArray;
 
+        listCommandsEditEvent();
         do {
             System.out.print("\n- Edit event entry: ");
             editEntryCommand = userEntry.nextLine();

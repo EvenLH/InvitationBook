@@ -19,7 +19,8 @@ public class InvitationBook {
 //----------------------------------------------------------------
     public static void open() {
         System.out.println("----------------------------------------------------------------\n" +
-                "Invitation Book opening");
+                "Invitation Book opening\n\n" +
+                "Add yourself and your friends, make events, and add people to their invitation lists!\n");
 
         userEntry = new Scanner(System.in);
         mainEntryArray = new String[3];
@@ -258,8 +259,8 @@ public class InvitationBook {
                     "to the program. They can then manage which persons are invited to what events, and other aspects of\n" +
                     "the persons and events they have added. The program uses .txt files to store data when not running.\n" +
                     "\n" +
-                    "[*] Version:\n" +
-                    "[*] Date:\n" +
+                    "[*] Version: 1.0\n" +
+                    "[*] Date: 22024-10-03\n" +
                     "[*] Author: Even Lindell Heggø\n" +
                     "[*] Programming language: Java"
             );

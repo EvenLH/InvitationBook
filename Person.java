@@ -69,6 +69,7 @@ public class Person implements Comparable<Person> {
         String editEntryCommand;
         String[] editEntryArray;
 
+        listCommandsEditPerson();
         do {
             System.out.print("\n- Edit person entry: ");
             editEntryCommand = userEntry.nextLine();
